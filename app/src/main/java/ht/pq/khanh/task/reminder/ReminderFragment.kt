@@ -1,4 +1,4 @@
-package ht.pq.khanh.task
+package ht.pq.khanh.task.reminder
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -11,13 +11,22 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import com.pawegio.kandroid.IntentFor
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.model.DummyData
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.DetailActivity
 import ht.pq.khanh.multitask.R
 
-class ReminderFragment : Fragment() {
+class ReminderFragment : Fragment(), ReminderContract.View {
+    private val REQUEST_CODE = 117
+    override fun loadAllReminder() {
+
+    }
+
+    override fun loadChange() {
+    }
+
     @BindView(R.id.list_reminder)
     lateinit var recyclerRemind: RecyclerView
     private var remindAdapter : ReminderAdapter? = null
@@ -47,5 +56,7 @@ class ReminderFragment : Fragment() {
     }
     @OnClick(R.id.fab_remind)
     fun createReminder(){
+        val intent = IntentFor<DetailActivity>(activity)
+        startActivityForResult(intent, REQUEST_CODE)
     }
 }

@@ -8,11 +8,10 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.view.Menu
 import android.view.MenuItem
 import ht.pq.khanh.multitask.forecast.ForecastFragment
 import ht.pq.khanh.multitask.weather.WeatherFragment
-import ht.pq.khanh.task.ReminderFragment
+import ht.pq.khanh.task.reminder.ReminderFragment
 import ht.pq.khanh.task.alarm.AlarmFragment
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {

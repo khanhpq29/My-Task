@@ -67,6 +67,7 @@ dependencies {
     compile 'com.andkulikov:transitionseverywhere:1.7.6'
     testCompile 'junit:junit:4.12'
     kapt 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'com.pawegio.kandroid:kandroid:0.8.4@aar'
 }
 repositories {
     mavenCentral()

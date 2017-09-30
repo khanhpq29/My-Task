@@ -12,8 +12,7 @@ import android.view.MenuItem;
 import ht.pq.khanh.extension.ExtensionKt;
 import ht.pq.khanh.multitask.forecast.ForecastFragment;
 import ht.pq.khanh.multitask.weather.WeatherFragment;
-import ht.pq.khanh.task.ReminderFragment;
-import ht.pq.khanh.task.alarm.AlarmFragment;
+import ht.pq.khanh.task.reminder.ReminderFragment;
 
 public class MainActivity extends AppCompatActivity {
     private boolean isBackPress = false;

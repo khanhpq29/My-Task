@@ -1,4 +1,4 @@
-package ht.pq.khanh.task
+package ht.pq.khanh.task.reminder
 
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
@@ -44,7 +44,7 @@ class ReminderAdapter(val listRemind : MutableList<Reminder>) : RecyclerView.Ada
     class ReminderHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @BindView(R.id.imgText)
         lateinit var imgText : ImageView
-        @BindView(R.id.tvTime)
+        @BindView(R.id.tv_date)
         lateinit var tvTime : TextView
         @BindView(R.id.tvTitle)
         lateinit var tvTitle : TextView
