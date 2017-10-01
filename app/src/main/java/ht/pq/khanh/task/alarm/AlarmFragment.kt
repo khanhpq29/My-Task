@@ -3,6 +3,7 @@ package ht.pq.khanh.task.alarm
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import butterknife.OnClick
 import ht.pq.khanh.dialog.TimePickerDialogFragment
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.model.Alarm
+import ht.pq.khanh.model.DummyData
 import ht.pq.khanh.multitask.R
 
 /**
@@ -51,6 +53,11 @@ class AlarmFragment : Fragment(), AlarmContract.View{
     private fun initData() {
         presenter = AlarmPresenter()
         alarmAdapter = AlarmAdapter()
+        alarms = DummyData.dummyAlarm()
+        recyclerAlarm.apply {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = AlarmAdapter(alarms)
+        }
     }
 
 }

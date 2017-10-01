@@ -8,7 +8,7 @@
             android:title="Reminder" />
         <item
             android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_wb_sunny_black_24dp"
             android:title="Current Weather" />
         <item
             android:id="@+id/nav_slideshow"

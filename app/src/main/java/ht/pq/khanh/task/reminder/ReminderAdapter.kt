@@ -14,9 +14,6 @@ import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import android.graphics.Typeface
 
-
-
-
 /**
  * Created by khanhpq on 9/29/17.
  */

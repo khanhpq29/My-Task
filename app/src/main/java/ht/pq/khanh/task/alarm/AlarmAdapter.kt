@@ -1,10 +1,13 @@
 package ht.pq.khanh.task.alarm
 
 import android.graphics.Color
+import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.amulyakhare.textdrawable.TextDrawable
@@ -18,6 +21,7 @@ import ht.pq.khanh.multitask.R
 class AlarmAdapter(val alarmList: List<Alarm> = arrayListOf()) : RecyclerView.Adapter<AlarmAdapter.AlarmHolder>(){
     override fun onBindViewHolder(holder: AlarmHolder?, position: Int) {
         setDay(holder!!)
+        val alarm = alarmList[position]
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AlarmHolder {
@@ -30,20 +34,28 @@ class AlarmAdapter(val alarmList: List<Alarm> = arrayListOf()) : RecyclerView.Ad
     }
 
     private fun setDay(holder: AlarmHolder){
-        val tm = TextDrawable.builder().buildRoundRect("M", Color.BLUE, 10)
+        val tm = setTextDrawable("M")
         holder.imgMon.setImageDrawable(tm)
-        val tt = TextDrawable.builder().buildRoundRect("M", Color.BLUE, 10)
+        val tt = setTextDrawable("T")
         holder.imgTues.setImageDrawable(tt)
-        val tw = TextDrawable.builder().buildRoundRect("M", Color.BLUE, 10)
+        val tw = setTextDrawable("W")
         holder.imgWed.setImageDrawable(tw)
-        val tth = TextDrawable.builder().buildRoundRect("M", Color.BLUE, 10)
+        val tth = setTextDrawable("T")
         holder.imgThu.setImageDrawable(tth)
-        val tf = TextDrawable.builder().buildRoundRect("M", Color.BLUE, 10)
+        val tf = setTextDrawable("F")
         holder.imgFri.setImageDrawable(tf)
-        val ts = TextDrawable.builder().buildRoundRect("M", Color.BLUE, 10)
+        val ts = setTextDrawable("S")
         holder.imgSat.setImageDrawable(ts)
-        val tsu = TextDrawable.builder().buildRoundRect("M", Color.BLUE, 10)
+        val tsu = setTextDrawable("S")
         holder.imgSun.setImageDrawable(tsu)
+    }
+    private fun setTextDrawable(day : String) : TextDrawable{
+        return TextDrawable.builder().beginConfig()
+                .textColor(Color.WHITE)
+                .useFont(Typeface.DEFAULT)
+                .toUpperCase()
+                .endConfig()
+                .buildRound(day, Color.BLUE)
     }
     class AlarmHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         @BindView(R.id.imageView2)
@@ -60,6 +72,12 @@ class AlarmAdapter(val alarmList: List<Alarm> = arrayListOf()) : RecyclerView.Ad
         lateinit var imgSat : ImageView
         @BindView(R.id.imageView8)
         lateinit var imgSun : ImageView
+        @BindView(R.id.tvRingAlarm)
+        lateinit var tvRingAlarm : TextView
+        @BindView(R.id.cbVibrate)
+        lateinit var cbVibrate : CheckBox
+        @BindView(R.id.tvTimeAlarm)
+        lateinit var tvTimeAlarm : TextView
         init {
             ButterKnife.bind(this, itemView)
         }

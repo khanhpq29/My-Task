@@ -13,6 +13,7 @@ import ht.pq.khanh.multitask.forecast.ForecastFragment
 import ht.pq.khanh.multitask.weather.WeatherFragment
 import ht.pq.khanh.task.reminder.ReminderFragment
 import ht.pq.khanh.task.alarm.AlarmFragment
+import ht.pq.khanh.task.sleepawake.SleepAwakeFragment
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -55,7 +56,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_manage ->
                 navigateToFragment(AlarmFragment())
             else ->
-                navigateToFragment(ReminderFragment())
+                navigateToFragment(SleepAwakeFragment())
         }
         item.isChecked = true
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
@@ -73,7 +74,4 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         transaction.commit()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }
