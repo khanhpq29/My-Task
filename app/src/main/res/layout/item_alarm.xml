@@ -34,69 +34,76 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/imageView3"
             app:layout_constraintTop_toBottomOf="@+id/tvTimeAlarm"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+            app:srcCompat="@mipmap/ic_launcher_round"
+            android:layout_marginRight="8dp" />
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
             app:layout_constraintLeft_toRightOf="@+id/imageView2"
             app:layout_constraintRight_toLeftOf="@+id/imageView4"
-            app:srcCompat="@mipmap/ic_launcher" />
+            app:srcCompat="@mipmap/ic_launcher"
+            android:layout_marginBottom="0dp" />
 
         <ImageView
             android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView3"
             app:layout_constraintLeft_toRightOf="@+id/imageView3"
             app:layout_constraintRight_toLeftOf="@+id/imageView5"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+            app:srcCompat="@mipmap/ic_launcher_round"
+            android:layout_marginBottom="0dp" />
 
         <ImageView
             android:id="@+id/imageView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView4"
             app:layout_constraintLeft_toRightOf="@+id/imageView4"
             app:layout_constraintRight_toLeftOf="@+id/imageView6"
-            app:srcCompat="@mipmap/ic_launcher" />
+            app:srcCompat="@mipmap/ic_launcher"
+            android:layout_marginBottom="0dp" />
 
         <ImageView
             android:id="@+id/imageView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView5"
             app:layout_constraintLeft_toRightOf="@+id/imageView5"
             app:layout_constraintRight_toLeftOf="@+id/imageView7"
-            app:srcCompat="@mipmap/ic_launcher" />
+            app:srcCompat="@mipmap/ic_launcher"
+            android:layout_marginBottom="0dp" />
 
         <ImageView
             android:id="@+id/imageView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView6"
             app:layout_constraintLeft_toRightOf="@+id/imageView6"
             app:layout_constraintRight_toLeftOf="@+id/imageView8"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+            app:srcCompat="@mipmap/ic_launcher_round"
+            android:layout_marginBottom="0dp" />
 
         <ImageView
             android:id="@+id/imageView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView7"
             app:layout_constraintLeft_toRightOf="@+id/imageView7"
             app:layout_constraintRight_toRightOf="parent"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+            app:srcCompat="@mipmap/ic_launcher_round"
+            android:layout_marginBottom="0dp" />
 
         <CheckBox
             android:id="@+id/cbVibrate"

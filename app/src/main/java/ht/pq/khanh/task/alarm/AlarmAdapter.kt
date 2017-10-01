@@ -2,6 +2,7 @@ package ht.pq.khanh.task.alarm
 
 import android.graphics.Color
 import android.graphics.Typeface
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,11 @@ class AlarmAdapter(val alarmList: List<Alarm> = arrayListOf()) : RecyclerView.Ad
     override fun onBindViewHolder(holder: AlarmHolder?, position: Int) {
         setDay(holder!!)
         val alarm = alarmList[position]
+        holder.tvTimeAlarm.text = "${alarm.hour}:${alarm.minute}"
+        holder.imgMon.setOnClickListener({
+            val tm = setTextDrawable("M", Color.WHITE, Color.BLUE)
+            holder.imgMon.setImageDrawable(tm)
+        })
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AlarmHolder {
@@ -49,13 +55,13 @@ class AlarmAdapter(val alarmList: List<Alarm> = arrayListOf()) : RecyclerView.Ad
         val tsu = setTextDrawable("S")
         holder.imgSun.setImageDrawable(tsu)
     }
-    private fun setTextDrawable(day : String) : TextDrawable{
+    private fun setTextDrawable(day : String, colorText : Int = Color.BLUE, colorRound : Int = Color.WHITE) : TextDrawable{
         return TextDrawable.builder().beginConfig()
-                .textColor(Color.WHITE)
+                .textColor(colorText)
                 .useFont(Typeface.DEFAULT)
                 .toUpperCase()
                 .endConfig()
-                .buildRound(day, Color.BLUE)
+                .buildRound(day, colorRound)
     }
     class AlarmHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         @BindView(R.id.imageView2)
@@ -78,6 +84,8 @@ class AlarmAdapter(val alarmList: List<Alarm> = arrayListOf()) : RecyclerView.Ad
         lateinit var cbVibrate : CheckBox
         @BindView(R.id.tvTimeAlarm)
         lateinit var tvTimeAlarm : TextView
+        @BindView(R.id.constraintLayout)
+        lateinit var changeRington : ConstraintLayout
         init {
             ButterKnife.bind(this, itemView)
         }
