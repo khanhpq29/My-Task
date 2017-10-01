@@ -3,12 +3,8 @@ package ht.pq.khanh.multitask
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SwitchCompat
-import android.support.v7.widget.Toolbar
-import android.view.View
 import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.TextView
@@ -18,7 +14,6 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import ht.pq.khanh.dialog.DateDialogFragment
 import ht.pq.khanh.dialog.TimePickerDialogFragment
-import ht.pq.khanh.task.alarm.TimePickerCallback
 
 class DetailActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
