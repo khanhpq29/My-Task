@@ -4,32 +4,22 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
-import ht.pq.khanh.bus.RxBus
-import ht.pq.khanh.bus.TimeEvent
 import ht.pq.khanh.dialog.TimePickerDialogFragment
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.model.Alarm
-
 import ht.pq.khanh.multitask.R
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by khanhpq on 9/25/17.
  */
 
-class AlarmFragment : Fragment(), AlarmContract.View, TimePickerCallback {
-    override fun setTimeAlarm(hour: Int, minute: Int) {
-        Log.e("time", hour.toString() + minute.toString())
-    }
-
+class AlarmFragment : Fragment(), AlarmContract.View{
     @BindView(R.id.fab_set_alarm)
     lateinit var fabAlarm: FloatingActionButton
     @BindView(R.id.alarms)

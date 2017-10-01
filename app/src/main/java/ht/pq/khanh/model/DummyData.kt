@@ -6,7 +6,7 @@ package ht.pq.khanh.model
 object DummyData {
     fun dummyReminder() : MutableList<Reminder>{
         val listReminder : MutableList<Reminder> = arrayListOf()
-        listReminder.add(Reminder("kotlin", "new android", null))
+        listReminder.add(Reminder("kotlin", "new android", null, false))
         return listReminder
     }
 }
