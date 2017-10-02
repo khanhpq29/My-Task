@@ -1,9 +1,23 @@
 package ht.pq.khanh.model
 
-import android.media.Ringtone
-import java.util.*
+import io.realm.RealmObject
 
 /**
- * Created by khanhpq on 9/25/17.
+ * Created by khanhpq on 10/2/17.
  */
-data class Alarm(val hour: Int, val minute: Int,val isActive : Boolean, val isVibrate : Boolean/*, val alarmRingtone: Ringtone, val date: Date*/)
+
+open class Alarm : RealmObject {
+    var hour: Int = 0
+    var minute: Int = 0
+    var isActive: Boolean = false
+    var isVibrate: Boolean = false
+
+    constructor() {}
+
+    constructor(hour: Int, minute: Int, isActive: Boolean, isVibrate: Boolean) {
+        this.hour = hour
+        this.minute = minute
+        this.isActive = isActive
+        this.isVibrate = isVibrate
+    }
+}

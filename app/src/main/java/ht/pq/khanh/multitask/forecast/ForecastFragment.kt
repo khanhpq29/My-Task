@@ -46,10 +46,9 @@ class ForecastFragment : Fragment(), ForecastContract.View{
         swipeLayout.isRefreshing = true
         forecastAdapter = ForecastAdapter(listForecast)
         presenter = ForecastPresenter(this, disposal)
-        recyclerForecast.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = forecastAdapter
-        }
+        val linearManager = LinearLayoutManager(context)
+        recyclerForecast.layoutManager = linearManager
+        recyclerForecast.adapter = forecastAdapter
         presenter.fetchData()
     }
 
@@ -64,13 +63,6 @@ class ForecastFragment : Fragment(), ForecastContract.View{
     override fun loadForecast() {
         forecastAdapter?.notifyDataSetChanged()
         swipeLayout.isRefreshing = false
-        if (listForecast.size == 0){
-            recyclerForecast.visibility = View.GONE
-            noLayout.visibility = View.VISIBLE
-        }else{
-            recyclerForecast.visibility = View.VISIBLE
-            noLayout.visibility = View.GONE
-        }
     }
 
     override fun onDestroyView() {

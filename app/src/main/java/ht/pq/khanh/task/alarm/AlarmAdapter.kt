@@ -20,7 +20,7 @@ import ht.pq.khanh.multitask.R
 /**
  * Created by khanhpq on 9/25/17.
  */
-class AlarmAdapter(val alarmList: List<Alarm> = arrayListOf()) : RecyclerView.Adapter<AlarmAdapter.AlarmHolder>() {
+class AlarmAdapter(val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<AlarmAdapter.AlarmHolder>() {
     private var isMonOn = true
     private var isTueOn = true
     private var isWedOn = true
@@ -41,16 +41,12 @@ class AlarmAdapter(val alarmList: List<Alarm> = arrayListOf()) : RecyclerView.Ad
 
     private fun handleListener(holder: AlarmHolder) {
         holder.tvTimeAlarm.setOnClickListener {
-            callBack?.onChangeDay()
-        }
-        holder.switchAlarm.setOnCheckedChangeListener { buttonView, isChecked ->
-            callBack?.onChangeOnOff(isChecked)
-        }
-        holder.cbVibrate.setOnCheckedChangeListener { buttonView, isChecked ->
-            callBack?.onIsVibrate(isChecked)
+            callBack?.onChangeTime()
         }
     }
-
+    fun setOnChangeDate(listener: AlarmCallback?){
+        callBack = listener
+    }
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AlarmHolder {
         val view = parent!!.inflateLayout(R.layout.item_alarm)
         return AlarmHolder(view)
@@ -159,14 +155,6 @@ class AlarmAdapter(val alarmList: List<Alarm> = arrayListOf()) : RecyclerView.Ad
         }
     }
 
-    //    @OnClick(R.id.imageView2, R.id.imageView3, R.id.imageView4, R.id.imageView5, R.id.imageView5, R.id.imageView6, R.id.imageView7, R.id.imageView8)
-//    fun changeState() {
-//        if (isOn) {
-//
-//        } else {
-//
-//        }
-//    }
     class AlarmHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @BindView(R.id.imageView2)
         lateinit var imgMon: ImageView

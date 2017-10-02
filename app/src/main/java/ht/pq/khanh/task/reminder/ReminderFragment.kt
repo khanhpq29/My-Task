@@ -12,11 +12,13 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
+import ht.pq.khanh.extension.findAllRemind
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.model.DummyData
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.DetailActivity
 import ht.pq.khanh.multitask.R
+import io.realm.Realm
 
 class ReminderFragment : Fragment(), ReminderContract.View {
     private val REQUEST_CODE = 117
@@ -30,7 +32,8 @@ class ReminderFragment : Fragment(), ReminderContract.View {
     @BindView(R.id.list_reminder)
     lateinit var recyclerRemind: RecyclerView
     private var remindAdapter : ReminderAdapter? = null
-    private var listReminder : MutableList<Reminder> = DummyData.dummyReminder()
+    private var listReminder : MutableList<Reminder> = arrayListOf()
+    private val realm : Realm by lazy { Realm.getDefaultInstance() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
@@ -42,11 +45,13 @@ class ReminderFragment : Fragment(), ReminderContract.View {
         // Inflate the layout for this fragment
         val view = container!!.inflateLayout(R.layout.reminder_fragment)
         ButterKnife.bind(this, view)
+        Realm.init(context)
         return view
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        listReminder = realm.copyFromRealm(realm.findAllRemind())
         remindAdapter = ReminderAdapter(listReminder)
 
         recyclerRemind.apply {
@@ -58,5 +63,10 @@ class ReminderFragment : Fragment(), ReminderContract.View {
     fun createReminder(){
         val intent = IntentFor<DetailActivity>(activity)
         startActivityForResult(intent, REQUEST_CODE)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        realm.close()
     }
 }

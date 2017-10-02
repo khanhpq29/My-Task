@@ -14,6 +14,9 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import ht.pq.khanh.dialog.DateDialogFragment
 import ht.pq.khanh.dialog.TimePickerDialogFragment
+import ht.pq.khanh.extension.insertRemind
+import ht.pq.khanh.model.Reminder
+import io.realm.Realm
 
 class DetailActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
@@ -32,17 +35,21 @@ class DetailActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetListener, 
     lateinit var edtTitle : EditText
     @BindView(R.id.switch_reminder)
     lateinit var switchRemind : SwitchCompat
-    private var isAlarm = false
+    private val realm : Realm by lazy { Realm.getDefaultInstance() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
         ButterKnife.bind(this)
+        Realm.init(this)
     }
     @OnClick(R.id.fab)
     fun saveToData(){
-        val titleRemind = edtTitle.text
-        val contentRemind = edtContent.text
-
+        val titleRemind = edtTitle.text.toString()
+        val contentRemind = edtContent.text.toString()
+        val isAlarm = switchRemind.isChecked
+        val remind = Reminder(titleRemind, contentRemind, null, isAlarm)
+        realm.insertRemind(remind)
+        finish()
     }
 
     @OnClick(R.id.btnDate)
@@ -54,5 +61,10 @@ class DetailActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetListener, 
     fun showTimePickerDialog(){
         val timeDialog = TimePickerDialogFragment()
         timeDialog.show(supportFragmentManager, "timepicker")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        realm.close()
     }
 }
