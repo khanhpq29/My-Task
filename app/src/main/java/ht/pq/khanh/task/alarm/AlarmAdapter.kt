@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SwitchCompat
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
@@ -19,15 +20,35 @@ import ht.pq.khanh.multitask.R
 /**
  * Created by khanhpq on 9/25/17.
  */
-class AlarmAdapter(val alarmList: List<Alarm> = arrayListOf()) : RecyclerView.Adapter<AlarmAdapter.AlarmHolder>(){
-    override fun onBindViewHolder(holder: AlarmHolder?, position: Int) {
-        setDay(holder!!)
+class AlarmAdapter(val alarmList: List<Alarm> = arrayListOf()) : RecyclerView.Adapter<AlarmAdapter.AlarmHolder>() {
+    private var isMonOn = true
+    private var isTueOn = true
+    private var isWedOn = true
+    private var isThuOn = true
+    private var isFriON = true
+    private var isSatOn = true
+    private var isSunOn = true
+    private var callBack: AlarmCallback? = null
+    override fun onBindViewHolder(holder: AlarmHolder, position: Int) {
+        setDay(holder)
         val alarm = alarmList[position]
         holder.tvTimeAlarm.text = "${alarm.hour}:${alarm.minute}"
-        holder.imgMon.setOnClickListener({
-            val tm = setTextDrawable("M", Color.WHITE, Color.BLUE)
-            holder.imgMon.setImageDrawable(tm)
-        })
+        holder.switchAlarm.isChecked = !alarm.isActive
+        holder.cbVibrate.isChecked = !alarm.isVibrate
+        handleListener(holder)
+        changeDayAlarm(holder)
+    }
+
+    private fun handleListener(holder: AlarmHolder) {
+        holder.tvTimeAlarm.setOnClickListener {
+            callBack?.onChangeDay()
+        }
+        holder.switchAlarm.setOnCheckedChangeListener { buttonView, isChecked ->
+            callBack?.onChangeOnOff(isChecked)
+        }
+        holder.cbVibrate.setOnCheckedChangeListener { buttonView, isChecked ->
+            callBack?.onIsVibrate(isChecked)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AlarmHolder {
@@ -39,7 +60,7 @@ class AlarmAdapter(val alarmList: List<Alarm> = arrayListOf()) : RecyclerView.Ad
         return alarmList.size
     }
 
-    private fun setDay(holder: AlarmHolder){
+    private fun setDay(holder: AlarmHolder) {
         val tm = setTextDrawable("M")
         holder.imgMon.setImageDrawable(tm)
         val tt = setTextDrawable("T")
@@ -55,7 +76,8 @@ class AlarmAdapter(val alarmList: List<Alarm> = arrayListOf()) : RecyclerView.Ad
         val tsu = setTextDrawable("S")
         holder.imgSun.setImageDrawable(tsu)
     }
-    private fun setTextDrawable(day : String, colorText : Int = Color.BLUE, colorRound : Int = Color.WHITE) : TextDrawable{
+
+    private fun setTextDrawable(day: String, colorText: Int = Color.BLUE, colorRound: Int = Color.WHITE): TextDrawable {
         return TextDrawable.builder().beginConfig()
                 .textColor(colorText)
                 .useFont(Typeface.DEFAULT)
@@ -63,29 +85,114 @@ class AlarmAdapter(val alarmList: List<Alarm> = arrayListOf()) : RecyclerView.Ad
                 .endConfig()
                 .buildRound(day, colorRound)
     }
-    class AlarmHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+
+    private fun changeDayAlarm(holder: AlarmHolder) {
+        holder.imgMon.setOnClickListener {
+            if (isMonOn) {
+                val textDrawable = setTextDrawable("M", Color.WHITE, Color.BLUE)
+                holder.imgMon.setImageDrawable(textDrawable)
+                isMonOn = false
+            } else {
+                setDay(holder)
+                isMonOn = true
+            }
+        }
+        holder.imgTues.setOnClickListener {
+            if (isTueOn) {
+                val textDrawable = setTextDrawable("T", Color.WHITE, Color.BLUE)
+                holder.imgTues.setImageDrawable(textDrawable)
+                isTueOn = false
+            } else {
+                setDay(holder)
+                isTueOn = true
+            }
+        }
+        holder.imgWed.setOnClickListener {
+            if (isWedOn) {
+                val textDrawable = setTextDrawable("W", Color.WHITE, Color.BLUE)
+                holder.imgWed.setImageDrawable(textDrawable)
+                isWedOn = false
+            } else {
+                setDay(holder)
+                isWedOn = true
+            }
+        }
+        holder.imgThu.setOnClickListener {
+            if (isThuOn) {
+                val textDrawable = setTextDrawable("T", Color.WHITE, Color.BLUE)
+                holder.imgThu.setImageDrawable(textDrawable)
+                isThuOn = false
+            } else {
+                setDay(holder)
+                isThuOn = true
+            }
+        }
+        holder.imgFri.setOnClickListener {
+            if (isFriON) {
+                val textDrawable = setTextDrawable("F", Color.WHITE, Color.BLUE)
+                holder.imgFri.setImageDrawable(textDrawable)
+                isFriON = false
+            } else {
+                setDay(holder)
+                isFriON = true
+            }
+        }
+        holder.imgSat.setOnClickListener {
+            if (isSatOn) {
+                val textDrawable = setTextDrawable("S", Color.WHITE, Color.BLUE)
+                holder.imgSat.setImageDrawable(textDrawable)
+                isSatOn = false
+            } else {
+                setDay(holder)
+                isSatOn = true
+            }
+        }
+        holder.imgSun.setOnClickListener {
+            if (isSunOn) {
+                val textDrawable = setTextDrawable("S", Color.WHITE, Color.BLUE)
+                holder.imgSun.setImageDrawable(textDrawable)
+                isSunOn = false
+            } else {
+                setDay(holder)
+                isSunOn = true
+            }
+        }
+    }
+
+    //    @OnClick(R.id.imageView2, R.id.imageView3, R.id.imageView4, R.id.imageView5, R.id.imageView5, R.id.imageView6, R.id.imageView7, R.id.imageView8)
+//    fun changeState() {
+//        if (isOn) {
+//
+//        } else {
+//
+//        }
+//    }
+    class AlarmHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @BindView(R.id.imageView2)
-        lateinit var imgMon : ImageView
+        lateinit var imgMon: ImageView
         @BindView(R.id.imageView3)
-        lateinit var imgTues : ImageView
+        lateinit var imgTues: ImageView
         @BindView(R.id.imageView4)
-        lateinit var imgWed : ImageView
+        lateinit var imgWed: ImageView
         @BindView(R.id.imageView5)
-        lateinit var imgThu : ImageView
+        lateinit var imgThu: ImageView
         @BindView(R.id.imageView6)
-        lateinit var imgFri : ImageView
+        lateinit var imgFri: ImageView
         @BindView(R.id.imageView7)
-        lateinit var imgSat : ImageView
+        lateinit var imgSat: ImageView
         @BindView(R.id.imageView8)
-        lateinit var imgSun : ImageView
+        lateinit var imgSun: ImageView
         @BindView(R.id.tvRingAlarm)
-        lateinit var tvRingAlarm : TextView
+        lateinit var tvRingAlarm: TextView
         @BindView(R.id.cbVibrate)
-        lateinit var cbVibrate : CheckBox
+        lateinit var cbVibrate: CheckBox
         @BindView(R.id.tvTimeAlarm)
-        lateinit var tvTimeAlarm : TextView
+        lateinit var tvTimeAlarm: TextView
         @BindView(R.id.constraintLayout)
-        lateinit var changeRington : ConstraintLayout
+        lateinit var changeRington: ConstraintLayout
+        @BindView(R.id.switch_alarm)
+        lateinit var switchAlarm: SwitchCompat
+
         init {
             ButterKnife.bind(this, itemView)
         }

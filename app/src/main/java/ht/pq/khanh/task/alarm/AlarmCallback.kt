@@ -7,6 +7,6 @@ interface AlarmCallback {
     fun onChangeRington()
     fun onChangeTime()
     fun onChangeDay()
-    fun onChangeOnOff()
-    fun onIsVibrate()
+    fun onChangeOnOff(isOff : Boolean)
+    fun onIsVibrate(isVibrate : Boolean)
 }

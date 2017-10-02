@@ -42,8 +42,8 @@ class AlarmFragment : Fragment(), AlarmContract.View{
 
     @OnClick(R.id.fab_set_alarm)
     fun showTimeDialog() {
-        val timeDialog = TimePickerDialogFragment()
-        timeDialog.show(childFragmentManager, "timepicker")
+//        val timeDialog = TimePickerDialogFragment()
+//        timeDialog.show(childFragmentManager, "timepicker")
     }
 
     override fun display() {
