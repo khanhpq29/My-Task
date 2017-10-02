@@ -1,5 +1,7 @@
 package ht.pq.khanh.task.reminder
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -34,6 +36,7 @@ class ReminderFragment : Fragment(), ReminderContract.View {
     private var remindAdapter : ReminderAdapter? = null
     private var listReminder : MutableList<Reminder> = arrayListOf()
     private val realm : Realm by lazy { Realm.getDefaultInstance() }
+    private lateinit var reminder : Reminder
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
@@ -53,11 +56,8 @@ class ReminderFragment : Fragment(), ReminderContract.View {
         super.onViewCreated(view, savedInstanceState)
         listReminder = realm.copyFromRealm(realm.findAllRemind())
         remindAdapter = ReminderAdapter(listReminder)
-
-        recyclerRemind.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = remindAdapter
-        }
+        recyclerRemind.layoutManager = LinearLayoutManager(context)
+        recyclerRemind.adapter = remindAdapter
     }
     @OnClick(R.id.fab_remind)
     fun createReminder(){
@@ -65,6 +65,16 @@ class ReminderFragment : Fragment(), ReminderContract.View {
         startActivityForResult(intent, REQUEST_CODE)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
+            if (data != null)
+                reminder = data.getParcelableExtra<Reminder>("reminder")
+
+            listReminder.add(reminder)
+            remindAdapter?.notifyDataSetChanged()
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         realm.close()

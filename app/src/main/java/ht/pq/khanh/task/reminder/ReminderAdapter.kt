@@ -13,6 +13,7 @@ import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import android.graphics.Typeface
+import ht.pq.khanh.util.Common
 
 /**
  * Created by khanhpq on 9/29/17.
@@ -32,7 +33,7 @@ class ReminderAdapter(val listRemind : MutableList<Reminder>) : RecyclerView.Ada
                 .useFont(Typeface.DEFAULT)
                 .toUpperCase()
                 .endConfig()
-                .buildRound(remind.title.substring(0, 1), Color.BLUE)
+                .buildRound(remind.title.substring(0, 1), Common.randomColor())
         holder.imgText.setImageDrawable(myDrawable)
     }
 
