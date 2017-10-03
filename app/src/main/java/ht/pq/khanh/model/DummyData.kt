@@ -13,8 +13,8 @@ object DummyData {
 
     fun dummyAlarm() : MutableList<Alarm> {
         val listAlarm : MutableList<Alarm> = arrayListOf()
-        listAlarm.add(Alarm(8, 30, false, true))
-        listAlarm.add(Alarm(10, 45, true, false))
+        listAlarm.add(Alarm(8302, false, true))
+        listAlarm.add(Alarm(9899, true, false))
         return listAlarm
     }
 }

@@ -3,6 +3,7 @@ package ht.pq.khanh.task.alarm
 import android.graphics.Color
 import android.graphics.Typeface
 import android.support.constraint.ConstraintLayout
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SwitchCompat
 import android.view.View
@@ -16,6 +17,7 @@ import com.amulyakhare.textdrawable.TextDrawable
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.model.Alarm
 import ht.pq.khanh.multitask.R
+import ht.pq.khanh.util.AlarmDiffUtil
 
 /**
  * Created by khanhpq on 9/25/17.
@@ -32,7 +34,7 @@ class AlarmAdapter(val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<Ala
     override fun onBindViewHolder(holder: AlarmHolder, position: Int) {
         setDay(holder)
         val alarm = alarmList[position]
-        holder.tvTimeAlarm.text = "${alarm.hour}:${alarm.minute}"
+        holder.tvTimeAlarm.text = "${alarm.time}"
         holder.switchAlarm.isChecked = !alarm.isActive
         holder.cbVibrate.isChecked = !alarm.isVibrate
         handleListener(holder)
@@ -153,6 +155,13 @@ class AlarmAdapter(val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<Ala
                 isSunOn = true
             }
         }
+    }
+    fun addChange(alarms : MutableList<Alarm>){
+        val diffCallback = AlarmDiffUtil(alarmList, alarms)
+        val diffAlarm = DiffUtil.calculateDiff(diffCallback)
+        alarmList.clear()
+        alarmList.addAll(alarms)
+        diffAlarm.dispatchUpdatesTo(this)
     }
 
     class AlarmHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

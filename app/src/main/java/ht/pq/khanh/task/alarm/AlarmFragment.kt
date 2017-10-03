@@ -4,6 +4,7 @@ import android.app.TimePickerDialog
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateFormat
@@ -57,9 +58,13 @@ class AlarmFragment : Fragment(), AlarmContract.View {
     }
 
     private val onTimeSet = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-        val alarm = Alarm(hourOfDay, minute, false, true)
+        val time = Calendar.getInstance()
+        time.set(Calendar.HOUR_OF_DAY, hourOfDay)
+        time.set(Calendar.MINUTE, minute)
+
+        val alarm = Alarm(time.timeInMillis, false, true)
         alarms.add(alarm)
-        alarmAdapter.notifyDataSetChanged()
+        alarmAdapter.addChange(alarms)
         Log.d("alarm size", "${alarms.size}")
         realm.insertAlarm(alarm)
     }
@@ -72,13 +77,16 @@ class AlarmFragment : Fragment(), AlarmContract.View {
         presenter = AlarmPresenter()
         alarms = realm.copyFromRealm(realm.findAllAlarm())
         alarmAdapter = AlarmAdapter(alarms)
-        val linearManager = LinearLayoutManager(activity)
-        recyclerAlarm.layoutManager = linearManager
-        recyclerAlarm.adapter = AlarmAdapter(alarms)
+        recyclerAlarm.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = AlarmAdapter(alarms)
+            setHasFixedSize(true)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        Log.d("destroy alarm", "destroy")
         realm.close()
     }
 

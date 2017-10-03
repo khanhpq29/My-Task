@@ -11,24 +11,17 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.widget.TimePicker
+import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.dialog.TimePickerDialogFragment
 import ht.pq.khanh.multitask.forecast.ForecastFragment
 import ht.pq.khanh.multitask.weather.WeatherFragment
 import ht.pq.khanh.task.alarm.AlarmCallback
-import ht.pq.khanh.task.reminder.ReminderFragment
 import ht.pq.khanh.task.alarm.AlarmFragment
+import ht.pq.khanh.task.reminder.ReminderFragment
 import ht.pq.khanh.task.sleepawake.SleepAwakeFragment
 
+
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, AlarmCallback, TimePickerDialog.OnTimeSetListener {
-    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-
-    }
-
-    override fun onChangeTime() {
-        val timeDialog = TimePickerDialogFragment()
-        timeDialog.show(supportFragmentManager, "timepicker")
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
@@ -74,6 +67,21 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+
+    }
+
+    override fun onChangeTime() {
+        val timeDialog = TimePickerDialogFragment()
+        timeDialog.show(supportFragmentManager, "time picker")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val ref = TaskApplication().getRefWatcher(this)
+        ref.watch(ref)
     }
 
     private fun navigateToFragment(fragment: Fragment) {
