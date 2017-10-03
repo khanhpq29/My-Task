@@ -18,6 +18,7 @@ import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.model.Alarm
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.util.AlarmDiffUtil
+import java.text.SimpleDateFormat
 
 /**
  * Created by khanhpq on 9/25/17.
@@ -31,20 +32,23 @@ class AlarmAdapter(val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<Ala
     private var isSatOn = true
     private var isSunOn = true
     private var callBack: AlarmCallback? = null
+    private val timeFormatString = "hh:mm a"
     override fun onBindViewHolder(holder: AlarmHolder, position: Int) {
         setDay(holder)
         val alarm = alarmList[position]
-        holder.tvTimeAlarm.text = "${alarm.time}"
+        val timeFormat = SimpleDateFormat(timeFormatString)
+        holder.tvTimeAlarm.text = "${timeFormat.format(alarm.time)}"
         holder.switchAlarm.isChecked = !alarm.isActive
         holder.cbVibrate.isChecked = !alarm.isVibrate
         handleListener(holder)
         changeDayAlarm(holder)
+        holder.tvTimeAlarm.setOnClickListener {
+            callBack?.onChangeTime(alarm)
+        }
     }
 
     private fun handleListener(holder: AlarmHolder) {
-        holder.tvTimeAlarm.setOnClickListener {
-            callBack?.onChangeTime()
-        }
+
     }
     fun setOnChangeDate(listener: AlarmCallback?){
         callBack = listener

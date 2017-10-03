@@ -7,6 +7,7 @@ import ht.pq.khanh.model.Reminder
  */
 class ReminderPresenter(val view: ReminderContract.View) : ReminderContract.Presenter {
     override fun initReminder() {
+
         view.loadAllReminder()
     }
 

@@ -31,6 +31,7 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
     private var remindAdapter: ReminderAdapter? = null
     private var listReminder: MutableList<Reminder> = arrayListOf()
     private val realm: Realm by lazy { Realm.getDefaultInstance() }
+    private lateinit var reminderPresenter : ReminderPresenter
     private lateinit var reminder: Reminder
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +41,6 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         val view = container!!.inflateLayout(R.layout.reminder_fragment)
         ButterKnife.bind(this, view)
         Realm.init(context)
@@ -49,7 +49,8 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listReminder = realm.copyFromRealm(realm.findAllRemind())
+        reminderPresenter = ReminderPresenter(this)
+        reminderPresenter.initReminder()
         remindAdapter = ReminderAdapter(listReminder)
         val itemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         recyclerRemind.apply {
@@ -74,15 +75,16 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
                 reminder = data.getParcelableExtra<Reminder>("reminder")
 
             listReminder.add(reminder)
-            remindAdapter?.swipeReminder(listReminder)
+            reminderPresenter.addReminder(reminder)
         }
     }
 
     override fun loadAllReminder() {
-
+        listReminder = realm.copyFromRealm(realm.findAllRemind())
     }
 
     override fun loadChange() {
+        remindAdapter?.swipeReminder(listReminder)
     }
 
     override fun onChangeItem(position: Int) {

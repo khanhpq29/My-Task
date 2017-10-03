@@ -27,7 +27,8 @@ import java.util.*
  * Created by khanhpq on 9/25/17.
  */
 
-class AlarmFragment : Fragment(), AlarmContract.View {
+class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
+
     @BindView(R.id.fab_set_alarm)
     lateinit var fabAlarm: FloatingActionButton
     @BindView(R.id.alarms)
@@ -46,6 +47,7 @@ class AlarmFragment : Fragment(), AlarmContract.View {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
+        alarmAdapter.setOnChangeDate(this)
     }
 
     @OnClick(R.id.fab_set_alarm)
@@ -57,7 +59,13 @@ class AlarmFragment : Fragment(), AlarmContract.View {
         timePicker.show()
     }
 
-    private val onTimeSet = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+    override fun onChangeTime(alarm: Alarm) {
+        val time = alarm.time
+
+        val timePicker = TimePickerDialog(activity, onTimeSet, 3, 5, DateFormat.is24HourFormat(activity))
+        timePicker.show()
+    }
+    private val onTimeSet = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
         val time = Calendar.getInstance()
         time.set(Calendar.HOUR_OF_DAY, hourOfDay)
         time.set(Calendar.MINUTE, minute)

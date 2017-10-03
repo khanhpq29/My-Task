@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.widget.TimePicker
+import butterknife.BindView
+import butterknife.ButterKnife
 import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.dialog.TimePickerDialogFragment
 import ht.pq.khanh.multitask.forecast.ForecastFragment
@@ -21,26 +23,30 @@ import ht.pq.khanh.task.reminder.ReminderFragment
 import ht.pq.khanh.task.sleepawake.SleepAwakeFragment
 
 
-class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, AlarmCallback, TimePickerDialog.OnTimeSetListener {
+class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener {
+    @BindView(R.id.toolbar)
+    lateinit var toolbar : Toolbar
+    @BindView(R.id.drawer_layout)
+    lateinit var drawer : DrawerLayout
+    @BindView(R.id.nav_view)
+    lateinit var navigationView : NavigationView
+    private lateinit var title : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        ButterKnife.bind(this)
         setSupportActionBar(toolbar)
-        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         val toggle = ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer.addDrawerListener(toggle)
         toggle.syncState()
 
-        val navigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
         val item = navigationView.menu.getItem(0)
         onNavigationItemSelected(item)
     }
 
     override fun onBackPressed() {
-        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
@@ -52,19 +58,29 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         val id = item.itemId
         when (id) {
-            R.id.nav_camera ->
+            R.id.nav_camera ->{
                 navigateToFragment(ReminderFragment())
-            R.id.nav_gallery ->
+                title = "Reminder"
+            }
+            R.id.nav_gallery ->{
                 navigateToFragment(WeatherFragment())
-            R.id.nav_slideshow ->
+                title = "Current weather"
+            }
+            R.id.nav_slideshow ->{
                 navigateToFragment(ForecastFragment())
-            R.id.nav_manage ->
+                title = "Weather Forecast"
+            }
+            R.id.nav_manage ->{
                 navigateToFragment(AlarmFragment())
-            else ->
+                title = "Alarm"
+            }
+            else -> {
                 navigateToFragment(SleepAwakeFragment())
+                title = "Setting"
+            }
         }
+        supportActionBar?.title = title
         item.isChecked = true
-        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
@@ -73,14 +89,9 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    override fun onChangeTime() {
-        val timeDialog = TimePickerDialogFragment()
-        timeDialog.show(supportFragmentManager, "time picker")
-    }
-
     override fun onDestroy() {
         super.onDestroy()
-        val ref = TaskApplication().getRefWatcher(this)
+        val ref = TaskApplication().getRefWatcher(applicationContext)
         ref.watch(ref)
     }
 

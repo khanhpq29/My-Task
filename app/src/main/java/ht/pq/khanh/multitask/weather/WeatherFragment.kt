@@ -2,9 +2,7 @@ package ht.pq.khanh.multitask.weather
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
@@ -36,6 +34,7 @@ class WeatherFragment : Fragment(), WeatherContact.View {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = container!!.inflateLayout(R.layout.fragment_weather)
         ButterKnife.bind(this, view)
+        setHasOptionsMenu(true)
         return view
     }
 
@@ -54,6 +53,16 @@ class WeatherFragment : Fragment(), WeatherContact.View {
     override fun showError() {
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.weather_menu, menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.wSearch){
+
+        }
+        return super.onOptionsItemSelected(item)
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         disposal.clear()
