@@ -1,10 +1,15 @@
 
 package ht.pq.khanh.api.forecast;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class List {
+import java.util.ArrayList;
+
+public class List implements Parcelable {
 
     @SerializedName("dt")
     @Expose
@@ -21,15 +26,9 @@ public class List {
     @SerializedName("wind")
     @Expose
     private Wind wind;
-    @SerializedName("sys")
-    @Expose
-    private Sys sys;
     @SerializedName("dt_txt")
     @Expose
     private String dtTxt;
-    @SerializedName("rain")
-    @Expose
-    private Rain rain;
 
     public Integer getDt() {
         return dt;
@@ -71,14 +70,6 @@ public class List {
         this.wind = wind;
     }
 
-    public Sys getSys() {
-        return sys;
-    }
-
-    public void setSys(Sys sys) {
-        this.sys = sys;
-    }
-
     public String getDtTxt() {
         return dtTxt;
     }
@@ -87,12 +78,44 @@ public class List {
         this.dtTxt = dtTxt;
     }
 
-    public Rain getRain() {
-        return rain;
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setRain(Rain rain) {
-        this.rain = rain;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.dt);
+        dest.writeParcelable(this.main, flags);
+        dest.writeList(this.weather);
+        dest.writeParcelable(this.clouds, flags);
+        dest.writeParcelable(this.wind, flags);
+        dest.writeString(this.dtTxt);
     }
 
+    public List() {
+    }
+
+    protected List(Parcel in) {
+        this.dt = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.main = in.readParcelable(Main.class.getClassLoader());
+        this.weather = new ArrayList<Weather>();
+        in.readList(this.weather, Weather.class.getClassLoader());
+        this.clouds = in.readParcelable(Clouds.class.getClassLoader());
+        this.wind = in.readParcelable(Wind.class.getClassLoader());
+        this.dtTxt = in.readString();
+    }
+
+    public static final Parcelable.Creator<List> CREATOR = new Parcelable.Creator<List>() {
+        @Override
+        public List createFromParcel(Parcel source) {
+            return new List(source);
+        }
+
+        @Override
+        public List[] newArray(int size) {
+            return new List[size];
+        }
+    };
 }

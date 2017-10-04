@@ -86,7 +86,8 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_detail">DetailActivity</string>
-    <string name="wind">Wind</string><string name="pressure">Pressure</string>
+    <string name="wind">Wind</string>
+    <string name="pressure">Pressure</string>
     <!-- Pressure format CHAR LIMIT=25] -->
     <string name="humidity">Humidity</string>
     <string name="detail_icon_transition_name" translatable="false">TN_DetailIcon</string>

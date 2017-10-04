@@ -63,7 +63,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 title = "Reminder"
             }
             R.id.nav_gallery ->{
-                navigateToFragment(WeatherFragment())
+                navigateToFragment(SleepAwakeFragment())
                 title = "Current weather"
             }
             R.id.nav_slideshow ->{

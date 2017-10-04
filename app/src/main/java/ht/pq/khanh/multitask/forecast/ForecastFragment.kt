@@ -1,5 +1,6 @@
 package ht.pq.khanh.multitask.forecast
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
@@ -12,17 +13,19 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.pawegio.kandroid.IntentFor
 import ht.pq.khanh.api.forecast.Forecast
 import ht.pq.khanh.api.forecast.List
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.multitask.R
+import ht.pq.khanh.multitask.weather.WeatherDetailActivity
 import io.reactivex.disposables.CompositeDisposable
 
 /**
  * Created by khanhpq on 9/25/17.
  */
 
-class ForecastFragment : Fragment(), ForecastContract.View{
+class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWeatherItemClickListener{
     @BindView(R.id.listForecast)
     lateinit var recyclerForecast : RecyclerView
     @BindView(R.id.no_layout)
@@ -50,6 +53,7 @@ class ForecastFragment : Fragment(), ForecastContract.View{
         recyclerForecast.layoutManager = linearManager
         recyclerForecast.adapter = forecastAdapter
         presenter.fetchData()
+        forecastAdapter?.setOnWeatherItemClickListener(this)
     }
 
     override fun showForecast(forecast: Forecast) {
@@ -69,5 +73,11 @@ class ForecastFragment : Fragment(), ForecastContract.View{
         super.onDestroyView()
         swipeLayout.isRefreshing = false
         disposal.clear()
+    }
+    override fun onWeatherItemClick(position: Int) {
+        val item = listForecast[position]
+        val intent = IntentFor<WeatherDetailActivity>(activity)
+        intent.putExtra("weather_detail", item)
+        startActivity(intent)
     }
 }

@@ -23,7 +23,7 @@
             android:layout_marginEnd="16dp"
             android:id="@+id/textInputLayout">
 
-            <EditText
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/edTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:id="@+id/textInputLayout2">
 
-            <EditText
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/edMsg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

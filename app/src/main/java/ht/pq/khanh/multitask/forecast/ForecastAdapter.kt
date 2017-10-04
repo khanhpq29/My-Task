@@ -16,7 +16,8 @@ import ht.pq.khanh.util.Common
 /**
  * Created by khanhpq on 9/29/17.
  */
-class ForecastAdapter(val forecast : MutableList<List>) : RecyclerView.Adapter<ForecastAdapter.ForecastHolder>(){
+class ForecastAdapter(val forecast: MutableList<List>) : RecyclerView.Adapter<ForecastAdapter.ForecastHolder>() {
+    private var listener: OnWeatherItemClickListener? = null
     override fun onBindViewHolder(holder: ForecastHolder, position: Int) {
         val main = forecast[position].main
         val weather = forecast[position].weather
@@ -35,20 +36,31 @@ class ForecastAdapter(val forecast : MutableList<List>) : RecyclerView.Adapter<F
         return ForecastHolder(view)
     }
 
-    class ForecastHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    fun setOnWeatherItemClickListener(callBack: OnWeatherItemClickListener?) {
+        this.listener = callBack
+    }
+
+    inner class ForecastHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @BindView(R.id.tv_item_forecast)
-        lateinit var tvDescript : TextView
+        lateinit var tvDescript: TextView
         @BindView(R.id.list_item_icon)
-        lateinit var imgIcon : ImageView
+        lateinit var imgIcon: ImageView
         @BindView(R.id.list_item_date_textview)
-        lateinit var tvDate : TextView
+        lateinit var tvDate: TextView
         @BindView(R.id.tv_hight_temp)
-        lateinit var tvHighTemp : TextView
+        lateinit var tvHighTemp: TextView
         @BindView(R.id.tv_low_temp)
-        lateinit var tvLowTemp : TextView
+        lateinit var tvLowTemp: TextView
+
         init {
             ButterKnife.bind(this, itemView)
+            itemView.setOnClickListener {
+                listener?.onWeatherItemClick(adapterPosition)
+            }
         }
     }
 
+    interface OnWeatherItemClickListener {
+        fun onWeatherItemClick(position: Int)
+    }
 }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.support.design.widget.TextInputEditText
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SwitchCompat
 import android.util.Log
@@ -25,9 +26,9 @@ class DetailActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetListener, 
     @BindView(R.id.tvDayReminder)
     lateinit var tvDateTime: TextView
     @BindView(R.id.edMsg)
-    lateinit var edtContent: EditText
+    lateinit var edtContent: TextInputEditText
     @BindView(R.id.edTitle)
-    lateinit var edtTitle: EditText
+    lateinit var edtTitle: TextInputEditText
     @BindView(R.id.switch_reminder)
     lateinit var switchRemind: SwitchCompat
     private val realm: Realm by lazy { Realm.getDefaultInstance() }

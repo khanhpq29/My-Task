@@ -21,6 +21,7 @@ import ht.pq.khanh.multitask.R
 import io.realm.Realm
 import android.support.v7.widget.DividerItemDecoration
 import android.util.Log
+import ht.pq.khanh.TaskApplication
 
 class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAlterItemRecyclerView {
 
@@ -98,5 +99,7 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
         super.onDestroyView()
         Log.d("destroy remind", "destroy")
         realm.close()
+        val ref = TaskApplication().getRefWatcher(context)
+        ref.watch(ref)
     }
 }
