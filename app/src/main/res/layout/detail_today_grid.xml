@@ -22,7 +22,7 @@
     android:background="@android:color/white"
     app:columnCount="2">
 
-    <android.support.v7.widget.Space
+    <Space
         android:layout_height="16dp"
         app:layout_columnSpan="2"
         app:layout_columnWeight="1"
@@ -39,7 +39,7 @@
         app:layout_columnSpan="2"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal"
-        tools:text="Today, April 03" />
+        android:text="Today, April 03" />
 
     <ImageView
         android:id="@+id/detail_icon"
@@ -71,7 +71,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textColor="@color/secondary_text"
         app:layout_columnWeight="1"
-        tools:text="Rainy" />
+        android:text="Rainy" />
 
     <TextView
         android:id="@+id/detail_low_textview"
@@ -84,7 +84,7 @@
         app:layout_columnWeight="1"
         tools:text="10" />
 
-    <android.support.v7.widget.Space
+    <Space
         android:layout_height="16dp"
         app:layout_columnSpan="2"
         app:layout_columnWeight="1"

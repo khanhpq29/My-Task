@@ -6,14 +6,15 @@
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_notifications_black_24dp"
             android:title="Reminder" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_wb_sunny_black_24dp"
-            android:title="Current Weather" />
+
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_filter_vintage"
+            android:icon="@drawable/ic_wb_sunny_black_24dp"
             android:title="Forecast" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_filter_vintage"
+            android:title="Schedule phone" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_access_alarms_black"
@@ -24,13 +25,14 @@
             android:icon="@drawable/ic_menu_share"
             android:title="Share" />
         <item
-            android:id="@+id/nav_send"
-            android:icon="@drawable/ic_menu_send"
-            android:title="Setting" />
-        <item
             android:id="@+id/nav_setting"
             android:icon="@drawable/ic_settings_black"
             android:title="Setting" />
+        <item
+            android:id="@+id/nav_send"
+            android:icon="@drawable/ic_menu_send"
+            android:title="About" />
+
     </group>
 
 </menu>

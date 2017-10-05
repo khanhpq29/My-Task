@@ -30,11 +30,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetailActivity"
+            android:name="ht.pq.khanh.task.reminder.RemindDetailActivity"
             android:label="@string/title_activity_detail"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MenuActivity" />
+        </activity>
         <activity android:name="ht.pq.khanh.task.alarm.AlarmChangeActivity" />
-        <activity android:name=".weather.WeatherDetailActivity"></activity>
+        <activity android:name=".weather.WeatherDetailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MenuActivity" />
+        </activity>
     </application>
 
 </manifest>

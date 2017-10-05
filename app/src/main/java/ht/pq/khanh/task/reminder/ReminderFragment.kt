@@ -16,7 +16,6 @@ import com.pawegio.kandroid.IntentFor
 import ht.pq.khanh.extension.findAllRemind
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.model.Reminder
-import ht.pq.khanh.multitask.DetailActivity
 import ht.pq.khanh.multitask.R
 import io.realm.Realm
 import android.support.v7.widget.DividerItemDecoration
@@ -65,7 +64,8 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
 
     @OnClick(R.id.fab_remind)
     fun createReminder() {
-        val intent = IntentFor<DetailActivity>(activity)
+        val intent = IntentFor<RemindDetailActivity>(activity)
+        intent.putExtra("reminder_data", Reminder())
         startActivityForResult(intent, REQUEST_CODE_CREATE)
     }
 
@@ -73,7 +73,7 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_EDIT) {
             if (data != null)
-                reminder = data.getParcelableExtra<Reminder>("reminder")
+                reminder = data.getParcelableExtra("reminder")
 
             listReminder.add(reminder)
             reminderPresenter.addReminder(reminder)
@@ -90,7 +90,7 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
 
     override fun onChangeItem(position: Int) {
         val item = listReminder[position]
-        val intent = IntentFor<DetailActivity>(activity)
+        val intent = IntentFor<RemindDetailActivity>(activity)
         intent.putExtra("reminder_data", item)
         startActivityForResult(intent, REQUEST_CODE_EDIT)
     }

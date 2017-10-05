@@ -2,6 +2,7 @@ package ht.pq.khanh.multitask.weather
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.NavUtils
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
@@ -26,17 +27,25 @@ class WeatherFragment : Fragment() {
     lateinit var tvAdd: TextView
     @BindView(R.id.tvDay)
     lateinit var tvDay: TextView
-    @BindView(R.id.tvDescription)
+    @BindView(R.id.detail_forecast_textview)
     lateinit var tvDescription: TextView
-    @BindView(R.id.imageIcon)
+    @BindView(R.id.detail_icon)
     lateinit var imgIcon: ImageView
+    @BindView(R.id.tvMinTemp)
+    lateinit var tvMinTemp : TextView
+    @BindView(R.id.detail_humidity_textview)
+    lateinit var tvHumid : TextView
+    @BindView(R.id.detail_pressure_textview)
+    lateinit var tvPressure : TextView
+    @BindView(R.id.detail_wind_textview)
+    lateinit var tvWind : TextView
     private lateinit var presenter: WeatherPresenter
     private var itemList : List? = null
     private val disposal: CompositeDisposable by lazy { CompositeDisposable() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            itemList = arguments.getParcelable<List>("fragment_key")
+            itemList = arguments.getParcelable("fragment_key")
         }
     }
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -53,9 +62,13 @@ class WeatherFragment : Fragment() {
 
     private fun initLayout() {
         tvAdd.text = "London"
-        tvDay.text = "21/9/2017"
+        tvDay.text = "${itemList!!.main.tempMax}°"
+        tvMinTemp.text = "${itemList!!.main.tempMin}°"
         imgIcon.loadImage("${Common.URl_ICON}${itemList!!.weather[0].icon}.png")
         tvDescription.text = itemList!!.weather[0].description
+        tvWind.text = "${itemList!!.wind.speed} km/h NW"
+        tvHumid.text = "${itemList!!.main.humidity} %"
+        tvPressure.text = "${itemList!!.main.pressure} hPa"
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater?) {
