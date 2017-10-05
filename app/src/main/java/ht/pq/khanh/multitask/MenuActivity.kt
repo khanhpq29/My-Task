@@ -14,10 +14,9 @@ import android.widget.TimePicker
 import butterknife.BindView
 import butterknife.ButterKnife
 import ht.pq.khanh.TaskApplication
-import ht.pq.khanh.dialog.TimePickerDialogFragment
+import ht.pq.khanh.multitask.about.AboutFragment
 import ht.pq.khanh.multitask.forecast.ForecastFragment
-import ht.pq.khanh.multitask.weather.WeatherFragment
-import ht.pq.khanh.task.alarm.AlarmCallback
+import ht.pq.khanh.multitask.setting.SettingFragment
 import ht.pq.khanh.task.alarm.AlarmFragment
 import ht.pq.khanh.task.reminder.ReminderFragment
 import ht.pq.khanh.task.sleepawake.SleepAwakeFragment
@@ -58,25 +57,33 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         val id = item.itemId
         when (id) {
-            R.id.nav_camera ->{
+            R.id.nav_reminder ->{
                 navigateToFragment(ReminderFragment())
                 title = "Reminder"
             }
-            R.id.nav_gallery ->{
+            R.id.nav_schedule ->{
                 navigateToFragment(SleepAwakeFragment())
-                title = "Current weather"
+                title = "Schedule"
             }
-            R.id.nav_slideshow ->{
+            R.id.nav_forecast ->{
                 navigateToFragment(ForecastFragment())
                 title = "Weather Forecast"
             }
-            R.id.nav_manage ->{
+            R.id.nav_alarm ->{
                 navigateToFragment(AlarmFragment())
                 title = "Alarm"
             }
+            R.id.nav_about ->{
+                navigateToFragment(AboutFragment())
+                title = "About"
+            }
+            R.id.nav_setting ->{
+                navigateToFragment(SettingFragment())
+                title = "Setting"
+            }
             else -> {
                 navigateToFragment(SleepAwakeFragment())
-                title = "Setting"
+                title = "Other"
             }
         }
         supportActionBar?.title = title

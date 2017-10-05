@@ -17,9 +17,6 @@ class RemindDetailActivity : AppCompatActivity() {
             val reminderDetailFragment = ReminderDetailFragment()
             reminderDetailFragment.arguments = bundle
             supportFragmentManager.beginTransaction().replace(R.id.containRemind, reminderDetailFragment).commit()
-        }else{
-            val reminderDetailFragment = ReminderDetailFragment()
-            supportFragmentManager.beginTransaction().replace(R.id.containRemind, reminderDetailFragment).commit()
         }
     }
 }

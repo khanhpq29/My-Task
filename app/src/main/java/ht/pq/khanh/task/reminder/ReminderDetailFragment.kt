@@ -1,5 +1,6 @@
 package ht.pq.khanh.task.reminder
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
@@ -63,9 +64,9 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
         val isAlarm = switchRemind.isChecked
         val remind = Reminder(titleRemind, contentRemind, null, isAlarm)
         realm.insertRemind(remind)
-//        intent.putExtra("reminder", remind)
-//        setResult(Activity.RESULT_OK, intent)
-//        finish()
+        activity.intent.putExtra("reminder", remind)
+        activity.setResult(Activity.RESULT_OK, activity.intent)
+        activity.finish()
     }
 
     @OnClick(R.id.btnDate)
