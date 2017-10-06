@@ -41,7 +41,6 @@ class WeatherFragment : Fragment() {
     lateinit var tvWind : TextView
     private lateinit var presenter: WeatherPresenter
     private var itemList : List? = null
-    private val disposal: CompositeDisposable by lazy { CompositeDisposable() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -83,6 +82,5 @@ class WeatherFragment : Fragment() {
     }
     override fun onDestroyView() {
         super.onDestroyView()
-        disposal.clear()
     }
 }

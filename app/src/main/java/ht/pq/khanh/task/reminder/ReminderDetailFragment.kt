@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputEditText
 import android.support.v4.app.Fragment
 import android.support.v4.app.NavUtils
 import android.support.v7.widget.SwitchCompat
+import android.text.format.DateFormat
 import android.util.Log
 import android.view.*
 import android.widget.DatePicker
@@ -16,13 +17,12 @@ import android.widget.TimePicker
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
-import ht.pq.khanh.dialog.DateDialogFragment
-import ht.pq.khanh.dialog.TimePickerDialogFragment
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.extension.insertRemind
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import io.realm.Realm
+import java.util.*
 
 /**
  * Created by khanhpq on 10/5/17.
@@ -71,14 +71,21 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
 
     @OnClick(R.id.btnDate)
     fun showDatePickerDialog() {
-        val dateDialog = DateDialogFragment()
-        dateDialog.show(childFragmentManager, "date")
+        val calendar = Calendar.getInstance()
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val month = calendar.get(Calendar.MONTH)
+        val year = calendar.get(Calendar.YEAR)
+        val datePicker = DatePickerDialog(activity, this, year, month, day)
+        datePicker.show()
     }
 
     @OnClick(R.id.btnTime)
     fun showTimePickerDialog() {
-        val timeDialog = TimePickerDialogFragment()
-        timeDialog.show(childFragmentManager, "time picker")
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+        val timePicker = TimePickerDialog(activity, this, hour, minute, DateFormat.is24HourFormat(activity))
+        timePicker.show()
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
@@ -103,9 +110,5 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
         super.onDestroy()
         Log.d("destroy detailactivity", "destroy")
         realm.close()
-    }
-
-    private fun getData() {
-
     }
 }

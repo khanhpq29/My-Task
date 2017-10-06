@@ -7,8 +7,8 @@ import ht.pq.khanh.api.forecast.Forecast
  */
 interface ForecastContract {
     interface View{
-        fun showForecast(forecast : Forecast)
-        fun loadForecast()
+        fun addForecast(forecast : Forecast)
+        fun loadForecastList()
         fun showError(throwable: Throwable)
     }
     interface Presenter{

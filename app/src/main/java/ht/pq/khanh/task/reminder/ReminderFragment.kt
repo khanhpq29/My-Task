@@ -54,7 +54,7 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
         remindAdapter = ReminderAdapter(listReminder)
         val itemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         recyclerRemind.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(this@ReminderFragment.activity)
             adapter = remindAdapter
             setHasFixedSize(true)
             addItemDecoration(itemDecoration)
@@ -64,7 +64,7 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
 
     @OnClick(R.id.fab_remind)
     fun createReminder() {
-        val intent = IntentFor<RemindDetailActivity>(activity)
+        val intent = IntentFor<ReminderEditActivity>(activity)
         intent.putExtra("reminder_data", Reminder())
         startActivityForResult(intent, REQUEST_CODE_CREATE)
     }
@@ -90,7 +90,7 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
 
     override fun onChangeItem(position: Int) {
         val item = listReminder[position]
-        val intent = IntentFor<RemindDetailActivity>(activity)
+        val intent = IntentFor<ReminderEditActivity>(activity)
         intent.putExtra("reminder_data", item)
         startActivityForResult(intent, REQUEST_CODE_EDIT)
     }

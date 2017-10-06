@@ -1,9 +1,9 @@
 package ht.pq.khanh.multitask.forecast
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -49,14 +49,19 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
         swipeLayout.isRefreshing = true
         forecastAdapter = ForecastAdapter(listForecast)
         presenter = ForecastPresenter(this, disposal)
-        val linearManager = LinearLayoutManager(context)
-        recyclerForecast.layoutManager = linearManager
-        recyclerForecast.adapter = forecastAdapter
+        val itemRclDecorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        val linearManager = LinearLayoutManager(activity)
         presenter.fetchData()
+        with(recyclerForecast){
+            layoutManager = linearManager
+            adapter = forecastAdapter
+            addItemDecoration(itemRclDecorator)
+            setHasFixedSize(true)
+        }
         forecastAdapter?.setOnWeatherItemClickListener(this)
     }
 
-    override fun showForecast(forecast: Forecast) {
+    override fun addForecast(forecast: Forecast) {
         listForecast.addAll(forecast.list)
     }
 
@@ -64,7 +69,7 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
         Log.e("error", t.toString())
         swipeLayout.isRefreshing = false
     }
-    override fun loadForecast() {
+    override fun loadForecastList() {
         forecastAdapter?.notifyDataSetChanged()
         swipeLayout.isRefreshing = false
     }
@@ -73,6 +78,7 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
         super.onDestroyView()
         swipeLayout.isRefreshing = false
         disposal.clear()
+        disposal.dispose()
     }
     override fun onWeatherItemClick(position: Int) {
         val item = listForecast[position]

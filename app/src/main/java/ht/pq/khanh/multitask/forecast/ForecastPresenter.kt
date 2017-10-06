@@ -11,11 +11,11 @@ class ForecastPresenter(val view: ForecastContract.View, val disposal: Composite
     val repository: ForecastRepository by lazy { ForecastRepository() }
     override fun fetchData() {
         disposal.add(repository.getForecast().subscribe({ forecasts: Forecast ->
-            view.showForecast(forecasts)
+            view.addForecast(forecasts)
         }, {it
             view.showError(it)
         },{
-            view.loadForecast()
+            view.loadForecastList()
         })
         )
     }

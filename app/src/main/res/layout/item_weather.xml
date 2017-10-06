@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:paddingLeft="8dp"
     android:orientation="horizontal">
 
     <FrameLayout
@@ -27,14 +27,12 @@
             android:id="@+id/list_item_date_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
             android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/tv_item_forecast"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceSmall"/>
     </LinearLayout>
 
@@ -50,7 +48,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceLarge"/>
 
         <TextView
@@ -58,7 +55,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceSmall"/>
     </LinearLayout>
 </LinearLayout>

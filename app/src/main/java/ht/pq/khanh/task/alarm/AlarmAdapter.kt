@@ -110,13 +110,13 @@ class AlarmAdapter(val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<Ala
             }
         }
         holder.imgWed.setOnClickListener {
-            if (isWedOn) {
+            isWedOn = if (isWedOn) {
                 val textDrawable = setTextDrawable("W", Color.WHITE, Color.BLUE)
                 holder.imgWed.setImageDrawable(textDrawable)
-                isWedOn = false
+                false
             } else {
                 setDay(holder)
-                isWedOn = true
+                true
             }
         }
         holder.imgThu.setOnClickListener {
@@ -130,13 +130,13 @@ class AlarmAdapter(val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<Ala
             }
         }
         holder.imgFri.setOnClickListener {
-            if (isFriON) {
+            isFriON = if (isFriON) {
                 val textDrawable = setTextDrawable("F", Color.WHITE, Color.BLUE)
                 holder.imgFri.setImageDrawable(textDrawable)
-                isFriON = false
+                false
             } else {
                 setDay(holder)
-                isFriON = true
+                true
             }
         }
         holder.imgSat.setOnClickListener {

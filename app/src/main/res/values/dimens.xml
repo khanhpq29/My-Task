@@ -10,4 +10,6 @@
     <dimen name="forecast_detail_horizontal_padding">32dp</dimen>
     <dimen name="today_icon">96dp</dimen>
     <dimen name="list_icon">40dp</dimen>
+    <dimen name="alert_def_padding">18dp</dimen>
+    <dimen name="dimen_large">16dp</dimen>
 </resources>

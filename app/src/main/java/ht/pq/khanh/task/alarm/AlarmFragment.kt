@@ -2,9 +2,7 @@ package ht.pq.khanh.task.alarm
 
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateFormat
@@ -28,15 +26,12 @@ import java.util.*
  */
 
 class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
-
-    @BindView(R.id.fab_set_alarm)
-    lateinit var fabAlarm: FloatingActionButton
     @BindView(R.id.alarms)
     lateinit var recyclerAlarm: RecyclerView
     private lateinit var presenter: AlarmPresenter
     private lateinit var alarmAdapter: AlarmAdapter
     private var alarms: MutableList<Alarm> = arrayListOf()
-    private val realm : Realm by lazy { Realm.getDefaultInstance() }
+    private val realm: Realm by lazy { Realm.getDefaultInstance() }
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = container!!.inflateLayout(R.layout.fragment_alarm)
         ButterKnife.bind(this, view)
@@ -60,11 +55,10 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
     }
 
     override fun onChangeTime(alarm: Alarm) {
-        val time = alarm.time
-
         val timePicker = TimePickerDialog(activity, onTimeSet, 3, 5, DateFormat.is24HourFormat(activity))
         timePicker.show()
     }
+
     private val onTimeSet = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
         val time = Calendar.getInstance()
         time.set(Calendar.HOUR_OF_DAY, hourOfDay)
