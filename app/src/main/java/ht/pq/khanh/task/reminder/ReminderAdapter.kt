@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -21,13 +22,16 @@ import ht.pq.khanh.util.ReminderDiffUtil
  * Created by khanhpq on 9/29/17.
  */
 class ReminderAdapter(val listRemind: MutableList<Reminder>) : RecyclerView.Adapter<ReminderAdapter.ReminderHolder>() {
+    private var counterOncreateViewHolder = 0
     private var listener: OnAlterItemRecyclerView? = null
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ReminderHolder {
         val view = parent!!.inflateLayout(R.layout.item_reminder)
+        Log.d("bind", "oncreate")
         return ReminderHolder(view)
     }
 
     override fun onBindViewHolder(holder: ReminderHolder, position: Int) {
+        Log.d("bind", "onBindViewHolder ${counterOncreateViewHolder++}")
         listRemind.apply {
             val remind = listRemind[position]
             holder.tvMessage.text = remind.message

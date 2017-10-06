@@ -106,8 +106,8 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         Log.d("destroy detailactivity", "destroy")
         realm.close()
     }

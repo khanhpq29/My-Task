@@ -26,8 +26,9 @@ class WeatherDetailActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         return true
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == android.R.id.home){
+        if (item.itemId == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this)
         }
         return super.onOptionsItemSelected(item)

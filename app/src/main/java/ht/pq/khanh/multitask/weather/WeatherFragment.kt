@@ -32,21 +32,21 @@ class WeatherFragment : Fragment() {
     @BindView(R.id.detail_icon)
     lateinit var imgIcon: ImageView
     @BindView(R.id.tvMinTemp)
-    lateinit var tvMinTemp : TextView
+    lateinit var tvMinTemp: TextView
     @BindView(R.id.detail_humidity_textview)
-    lateinit var tvHumid : TextView
+    lateinit var tvHumid: TextView
     @BindView(R.id.detail_pressure_textview)
-    lateinit var tvPressure : TextView
+    lateinit var tvPressure: TextView
     @BindView(R.id.detail_wind_textview)
-    lateinit var tvWind : TextView
-    private lateinit var presenter: WeatherPresenter
-    private var itemList : List? = null
+    lateinit var tvWind: TextView
+    private var itemList: List? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             itemList = arguments.getParcelable("fragment_key")
         }
     }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = container!!.inflateLayout(R.layout.fragment_weather)
         ButterKnife.bind(this, view)
@@ -74,12 +74,14 @@ class WeatherFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.weather_menu, menu)
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.wSearch){
+        if (item.itemId == R.id.wSearch) {
 
         }
         return super.onOptionsItemSelected(item)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
     }

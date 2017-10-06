@@ -52,7 +52,7 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
         val itemRclDecorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         val linearManager = LinearLayoutManager(activity)
         presenter.fetchData()
-        with(recyclerForecast){
+        recyclerForecast.apply{
             layoutManager = linearManager
             adapter = forecastAdapter
             addItemDecoration(itemRclDecorator)
@@ -77,8 +77,8 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
     override fun onDestroyView() {
         super.onDestroyView()
         swipeLayout.isRefreshing = false
-        disposal.clear()
         disposal.dispose()
+        disposal.clear()
     }
     override fun onWeatherItemClick(position: Int) {
         val item = listForecast[position]

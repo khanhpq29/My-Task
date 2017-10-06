@@ -40,7 +40,7 @@ class ForecastAdapter(val forecast: MutableList<List>) : RecyclerView.Adapter<Fo
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ForecastHolder {
         val view = parent!!.inflateLayout(R.layout.item_weather)
-        Log.d("bind", " oncreateHolder ${counterOncreateViewHolder++}")
+        Log.d("create", " on create Holder ${counterOncreateViewHolder++}")
         return ForecastHolder(view)
     }
 

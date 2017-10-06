@@ -1,6 +1,5 @@
 package ht.pq.khanh.multitask
 
-import android.app.TimePickerDialog
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
@@ -11,7 +10,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import android.widget.TimePicker
 import butterknife.BindView
 import butterknife.ButterKnife
 import ht.pq.khanh.TaskApplication
@@ -23,14 +21,14 @@ import ht.pq.khanh.task.reminder.ReminderFragment
 import ht.pq.khanh.task.sleepawake.SleepAwakeFragment
 
 
-class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener {
+class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.toolbar)
-    lateinit var toolbar : Toolbar
+    lateinit var toolbar: Toolbar
     @BindView(R.id.drawer_layout)
-    lateinit var drawer : DrawerLayout
+    lateinit var drawer: DrawerLayout
     @BindView(R.id.nav_view)
-    lateinit var navigationView : NavigationView
-    private lateinit var title : String
+    lateinit var navigationView: NavigationView
+    private lateinit var title: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO)
@@ -59,27 +57,27 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         val id = item.itemId
         when (id) {
-            R.id.nav_reminder ->{
+            R.id.nav_reminder -> {
                 navigateToFragment(ReminderFragment())
                 title = "Reminder"
             }
-            R.id.nav_schedule ->{
+            R.id.nav_schedule -> {
                 navigateToFragment(SleepAwakeFragment())
                 title = "Schedule"
             }
-            R.id.nav_forecast ->{
+            R.id.nav_forecast -> {
                 navigateToFragment(ForecastFragment())
                 title = "Weather Forecast"
             }
-            R.id.nav_alarm ->{
+            R.id.nav_alarm -> {
                 navigateToFragment(AlarmFragment())
                 title = "Alarm"
             }
-            R.id.nav_about ->{
+            R.id.nav_about -> {
                 navigateToFragment(AboutFragment())
                 title = "About"
             }
-            R.id.nav_setting ->{
+            R.id.nav_setting -> {
                 navigateToFragment(SettingFragment())
                 title = "Setting"
             }
@@ -92,10 +90,6 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         item.isChecked = true
         drawer.closeDrawer(GravityCompat.START)
         return true
-    }
-
-    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-
     }
 
     override fun onDestroy() {
