@@ -47,7 +47,7 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         swipeLayout.isRefreshing = true
-        forecastAdapter = ForecastAdapter(listForecast)
+        forecastAdapter = ForecastAdapter(context, listForecast)
         presenter = ForecastPresenter(this, disposal)
         val itemRclDecorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         val linearManager = LinearLayoutManager(activity)
@@ -63,17 +63,19 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
 
     override fun addForecast(forecast: Forecast) {
         listForecast.addAll(forecast.list)
+        forecastAdapter?.notifyDataSetChanged()
     }
 
     override fun showError(t :Throwable) {
         Log.e("error", t.toString())
-        swipeLayout.isRefreshing = false
     }
-    override fun loadForecastList() {
-        forecastAdapter?.notifyDataSetChanged()
-        swipeLayout.isRefreshing = false
+    override fun showProgressDialog() {
+        swipeLayout.isRefreshing = true
     }
 
+    override fun hideProgressDialog() {
+        swipeLayout.isRefreshing = false
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         swipeLayout.isRefreshing = false

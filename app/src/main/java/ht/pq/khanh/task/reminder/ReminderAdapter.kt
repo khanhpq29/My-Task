@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -15,35 +14,29 @@ import com.amulyakhare.textdrawable.TextDrawable
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
-import ht.pq.khanh.util.Common
 import ht.pq.khanh.util.ReminderDiffUtil
 
 /**
  * Created by khanhpq on 9/29/17.
  */
-class ReminderAdapter(val listRemind: MutableList<Reminder>) : RecyclerView.Adapter<ReminderAdapter.ReminderHolder>() {
-    private var counterOncreateViewHolder = 0
+class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerView.Adapter<ReminderAdapter.ReminderHolder>() {
     private var listener: OnAlterItemRecyclerView? = null
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ReminderHolder {
         val view = parent!!.inflateLayout(R.layout.item_reminder)
-        Log.d("bind", "oncreate")
         return ReminderHolder(view)
     }
 
     override fun onBindViewHolder(holder: ReminderHolder, position: Int) {
-        Log.d("bind", "onBindViewHolder ${counterOncreateViewHolder++}")
-        listRemind.apply {
-            val remind = listRemind[position]
-            holder.tvMessage.text = remind.message
-            holder.tvTitle.text = remind.title
-            val myDrawable = TextDrawable.builder().beginConfig()
-                    .textColor(Color.WHITE)
-                    .useFont(Typeface.DEFAULT)
-                    .toUpperCase()
-                    .endConfig()
-                    .buildRound(remind.title.substring(0, 1), Common.randomColor())
-            holder.imgText.setImageDrawable(myDrawable)
-        }
+        val remind = listRemind[position]
+        holder.tvMessage.text = remind.message
+        holder.tvTitle.text = remind.title
+        val myDrawable = TextDrawable.builder().beginConfig()
+                .textColor(Color.WHITE)
+                .useFont(Typeface.DEFAULT)
+                .toUpperCase()
+                .endConfig()
+                .buildRound(remind.title.substring(0, 1), remind.color)
+        holder.imgText.setImageDrawable(myDrawable)
     }
 
     override fun getItemCount(): Int = listRemind.size

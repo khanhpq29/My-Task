@@ -14,16 +14,18 @@ open class Reminder : RealmObject, Parcelable {
     var message: String? = null
 
     var time: Date? = null
+    var color : Int = 0
 
     var isNotify: Boolean = false
 
     constructor() {}
 
-    constructor(title: String, message: String?, time: Date?, isNotify: Boolean) {
+    constructor(title: String, message: String?, time: Date?, color : Int , isNotify: Boolean) {
         this.title = title
         this.message = message
         this.time = time
         this.isNotify = isNotify
+        this.color = color
     }
 
     constructor(source: Parcel) : this(

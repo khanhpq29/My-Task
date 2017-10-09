@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,14 +15,12 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
+import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.extension.findAllRemind
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import io.realm.Realm
-import android.support.v7.widget.DividerItemDecoration
-import android.util.Log
-import ht.pq.khanh.TaskApplication
 
 class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAlterItemRecyclerView {
 
@@ -31,7 +31,7 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
     private var remindAdapter: ReminderAdapter? = null
     private var listReminder: MutableList<Reminder> = arrayListOf()
     private val realm: Realm by lazy { Realm.getDefaultInstance() }
-    private lateinit var reminderPresenter : ReminderPresenter
+    private lateinit var reminderPresenter: ReminderPresenter
     private lateinit var reminder: Reminder
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +52,11 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
         reminderPresenter = ReminderPresenter(this)
         reminderPresenter.initReminder()
         remindAdapter = ReminderAdapter(listReminder)
+        initRecyclerview()
+        remindAdapter?.setOnChangeItem(this)
+    }
+
+    private fun initRecyclerview() {
         val itemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         recyclerRemind.apply {
             layoutManager = LinearLayoutManager(this@ReminderFragment.activity)
@@ -59,7 +64,6 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
             setHasFixedSize(true)
             addItemDecoration(itemDecoration)
         }
-        remindAdapter?.setOnChangeItem(this)
     }
 
     @OnClick(R.id.fab_remind)
@@ -71,12 +75,12 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_EDIT) {
-            if (data != null)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CREATE) {
+            if (data != null) {
                 reminder = data.getParcelableExtra("reminder")
-
-            listReminder.add(reminder)
-            reminderPresenter.addReminder(reminder)
+                listReminder.add(reminder)
+                reminderPresenter.addReminder(reminder)
+            }
         }
     }
 
@@ -85,8 +89,10 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
     }
 
     override fun loadChange() {
-        remindAdapter?.swipeReminder(listReminder)
+//        remindAdapter?.swipeReminder(listReminder)
+        remindAdapter?.notifyDataSetChanged()
     }
+
 
     override fun onChangeItem(position: Int) {
         val item = listReminder[position]

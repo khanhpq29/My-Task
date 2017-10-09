@@ -7,16 +7,17 @@ import io.reactivex.disposables.CompositeDisposable
 /**
  * Created by khanhpq on 9/28/17.
  */
-class ForecastPresenter(val view: ForecastContract.View, val disposal: CompositeDisposable) : ForecastContract.Presenter {
-    val repository: ForecastRepository by lazy { ForecastRepository() }
+class ForecastPresenter(private val view: ForecastContract.View, private val disposal: CompositeDisposable) : ForecastContract.Presenter {
+    private val repository: ForecastRepository by lazy { ForecastRepository() }
     override fun fetchData() {
-        disposal.add(repository.getForecast().subscribe({ forecasts: Forecast ->
-            view.addForecast(forecasts)
-        }, {it
-            view.showError(it)
-        },{
-            view.loadForecastList()
-        })
-        )
+        disposal.add(repository.getForecast()
+                .doOnNext { view.showProgressDialog() }
+                .doAfterNext { view.hideProgressDialog() }
+                .single(Forecast())
+                .subscribe({ forecast: Forecast ->
+                    view.addForecast(forecast)
+                }, { throwable: Throwable ->
+                    throwable.printStackTrace()
+                }))
     }
 }

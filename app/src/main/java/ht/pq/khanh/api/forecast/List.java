@@ -13,7 +13,7 @@ public class List implements Parcelable {
 
     @SerializedName("dt")
     @Expose
-    private Integer dt;
+    private Long dt;
     @SerializedName("main")
     @Expose
     private Main main;
@@ -30,11 +30,11 @@ public class List implements Parcelable {
     @Expose
     private String dtTxt;
 
-    public Integer getDt() {
+    public Long getDt() {
         return dt;
     }
 
-    public void setDt(Integer dt) {
+    public void setDt(Long dt) {
         this.dt = dt;
     }
 
@@ -98,7 +98,7 @@ public class List implements Parcelable {
     }
 
     protected List(Parcel in) {
-        this.dt = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.dt = (Long) in.readValue(Long.class.getClassLoader());
         this.main = in.readParcelable(Main.class.getClassLoader());
         this.weather = new ArrayList<Weather>();
         in.readList(this.weather, Weather.class.getClassLoader());

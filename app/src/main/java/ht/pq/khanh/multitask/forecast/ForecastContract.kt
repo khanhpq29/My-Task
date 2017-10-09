@@ -8,8 +8,9 @@ import ht.pq.khanh.api.forecast.Forecast
 interface ForecastContract {
     interface View{
         fun addForecast(forecast : Forecast)
-        fun loadForecastList()
         fun showError(throwable: Throwable)
+        fun showProgressDialog()
+        fun hideProgressDialog()
     }
     interface Presenter{
         fun fetchData()

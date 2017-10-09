@@ -1,5 +1,6 @@
 package ht.pq.khanh.multitask.forecast
 
+import android.content.Context
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -19,17 +20,14 @@ import ht.pq.khanh.util.WeatherDiffUtil
 /**
  * Created by khanhpq on 9/29/17.
  */
-class ForecastAdapter(val forecast: MutableList<List>) : RecyclerView.Adapter<ForecastAdapter.ForecastHolder>() {
-    private var counterOncreateViewHolder = 0
-    private var counterOnBindViewHolder = 0
+class ForecastAdapter(private val context : Context, private val forecast: MutableList<List>) : RecyclerView.Adapter<ForecastAdapter.ForecastHolder>() {
     private var listener: OnWeatherItemClickListener? = null
     override fun onBindViewHolder(holder: ForecastHolder, position: Int) {
-        Log.d("bind", "onBindViewHolder ${counterOnBindViewHolder++}")
         val main = forecast[position].main
         val weather = forecast[position].weather
 
         holder.tvDescript.text = weather[0].description
-        holder.tvDate.text = forecast[position].dt.toString()
+        holder.tvDate.text = Common.getFriendlyDayString(context, forecast[position].dt, false)
         holder.tvHighTemp.text = "${main.tempMax}°"
         holder.tvLowTemp.text = "${main.tempMin}°"
         holder.imgIcon.loadImage("${Common.URl_ICON}${weather[0].icon}.png")
@@ -40,7 +38,6 @@ class ForecastAdapter(val forecast: MutableList<List>) : RecyclerView.Adapter<Fo
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ForecastHolder {
         val view = parent!!.inflateLayout(R.layout.item_weather)
-        Log.d("create", " on create Holder ${counterOncreateViewHolder++}")
         return ForecastHolder(view)
     }
 

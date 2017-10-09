@@ -21,6 +21,7 @@ import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.extension.insertRemind
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
+import ht.pq.khanh.util.Common
 import io.realm.Realm
 import java.util.*
 
@@ -62,7 +63,7 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
         val titleRemind = edtTitle.text.toString()
         val contentRemind = edtContent.text.toString()
         val isAlarm = switchRemind.isChecked
-        val remind = Reminder(titleRemind, contentRemind, null, isAlarm)
+        val remind = Reminder(titleRemind, contentRemind, null, Common.randomColor(), isAlarm)
         realm.insertRemind(remind)
         activity.intent.putExtra("reminder", remind)
         activity.setResult(Activity.RESULT_OK, activity.intent)

@@ -21,14 +21,11 @@ fun ImageView.loadImage(url: String) {
     Glide.with(context)
             .load(url)
             .crossFade()
+            .override(42, 42)
             .error(R.mipmap.ic_launcher_round)
             .into(this)
 }
 
 fun Activity.showToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-}
-
-fun Intent.createIntentForesult(activity: Activity, requestCode: Int) {
-    activity.startActivityForResult(this, requestCode)
 }
