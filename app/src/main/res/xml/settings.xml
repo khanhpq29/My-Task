@@ -3,20 +3,20 @@
     <PreferenceCategory android:title="Setting">
         <SwitchPreferenceCompat
             android:defaultValue="true"
-            android:key="key1"
+            android:key="@string/night_mode_pref_key"
             android:summary="Activate night mode"
             android:title="Night mode" />
 
         <EditTextPreference
             android:dialogLayout="@layout/pref_dialog_edittext"
             android:dialogMessage="Enter location"
-            android:key="key2"
+            android:key="@string/location_preference"
             android:summary="Address"
             android:title="Location" />
 
         <CheckBoxPreference
             android:defaultValue="true"
-            android:key="key3"
+            android:key="temperaturePreferece"
             android:summary="Celsius/Fahrenheit"
             android:title="Temperature degree" />
 

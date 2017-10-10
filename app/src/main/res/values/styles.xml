@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -19,6 +19,36 @@
         <item name="secondaryTextColor">#8033343B</item>
         <item name="backgroundCardColor">#28292e</item>
         <item name="dividerColor">#F2F2F3</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme" parent="Theme.AppCompat">
+
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorAccent">@color/amber</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <!--color of thumb when inactive-->
+        <item name="colorSwitchThumbNormal">@color/grey300</item>
+        <!--Inactive track color-->
+        <item name="android:colorForeground">@color/grey600</item>
+    </style>
+
+    <style name="AppTheme.LightTheme" parent="Theme.AppCompat.Light">
+
+        <!--<item name="actionOverflowButtonStyle">@style/OverflowThreeDotsWhite</item>-->
+        <!--<item name="toolbarStyle">@style/ToolBarTheme</item>-->
+        <!--<item name="popupMenuStyle">@style/PopupMenuLight</item>-->
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        color of thumb when inactive
+        <item name="colorSwitchThumbNormal">@color/grey300</item>
+        <!--Inactive track color-->
+        <item name="android:colorForeground">@color/grey600</item>
+
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

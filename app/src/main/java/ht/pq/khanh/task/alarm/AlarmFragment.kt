@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import com.pawegio.kandroid.IntentFor
 import ht.pq.khanh.extension.findAllAlarm
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.extension.insertAlarm
@@ -31,6 +32,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
     private lateinit var presenter: AlarmPresenter
     private lateinit var alarmAdapter: AlarmAdapter
     private var alarms: MutableList<Alarm> = arrayListOf()
+    private val REQUEST_CODE = 116
     private val realm: Realm by lazy { Realm.getDefaultInstance() }
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = container!!.inflateLayout(R.layout.fragment_alarm)
@@ -47,11 +49,13 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
 
     @OnClick(R.id.fab_set_alarm)
     fun showTimeDialog() {
-        val calendar = Calendar.getInstance()
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-        val timePicker = TimePickerDialog(activity, onTimeSet, hour, minute, DateFormat.is24HourFormat(activity))
-        timePicker.show()
+//        val calendar = Calendar.getInstance()
+//        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+//        val minute = calendar.get(Calendar.MINUTE)
+//        val timePicker = TimePickerDialog(activity, onTimeSet, hour, minute, DateFormat.is24HourFormat(activity))
+//        timePicker.show()
+        val intent = IntentFor<AlarmEditActivity>(activity)
+        startActivityForResult(intent, REQUEST_CODE)
     }
 
     override fun onChangeTime(alarm: Alarm) {

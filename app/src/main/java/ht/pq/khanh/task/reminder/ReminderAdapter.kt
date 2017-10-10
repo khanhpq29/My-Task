@@ -41,7 +41,7 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
 
     override fun getItemCount(): Int = listRemind.size
 
-    fun swipeReminder(reminders: MutableList<Reminder>) {
+    fun loadChangeList(reminders: MutableList<Reminder>) {
         val remindDiff = ReminderDiffUtil(listRemind, reminders)
         val diffResult = DiffUtil.calculateDiff(remindDiff)
         listRemind.clear()

@@ -92,4 +92,9 @@
     <string name="humidity">Humidity</string>
     <string name="detail_icon_transition_name" translatable="false">TN_DetailIcon</string>
     <string name="format_full_friendly_date"><xliff:g id="month">%1$s</xliff:g>, <xliff:g id="day">%2$s</xliff:g></string>
+
+    <string name="night_mode_pref_key">NightModePreference</string>
+    <string name="location_preference">LocationPreference</string>
+    <string name="title_activity_paint">PaintActivity</string>
+    <string name="title_activity_alarm_edit">AlarmEditActivity</string>
 </resources>

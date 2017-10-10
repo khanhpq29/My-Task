@@ -22,16 +22,14 @@ import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import io.realm.Realm
 
-class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAlterItemRecyclerView {
+class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView {
 
     private val REQUEST_CODE_CREATE = 117
-    private val REQUEST_CODE_EDIT = 116
     @BindView(R.id.list_reminder)
     lateinit var recyclerRemind: RecyclerView
     private var remindAdapter: ReminderAdapter? = null
     private var listReminder: MutableList<Reminder> = arrayListOf()
     private val realm: Realm by lazy { Realm.getDefaultInstance() }
-    private lateinit var reminderPresenter: ReminderPresenter
     private lateinit var reminder: Reminder
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,15 +41,15 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
                               savedInstanceState: Bundle?): View? {
         val view = container!!.inflateLayout(R.layout.reminder_fragment)
         ButterKnife.bind(this, view)
-        Realm.init(context)
+        Realm.init(activity)
         return view
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        reminderPresenter = ReminderPresenter(this)
-        reminderPresenter.initReminder()
+        listReminder = realm.copyFromRealm(realm.findAllRemind())
         remindAdapter = ReminderAdapter(listReminder)
+        remindAdapter?.setHasStableIds(true)
         initRecyclerview()
         remindAdapter?.setOnChangeItem(this)
     }
@@ -77,33 +75,22 @@ class ReminderFragment : Fragment(), ReminderContract.View, ReminderAdapter.OnAl
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CREATE) {
             if (data != null) {
-                reminder = data.getParcelableExtra("reminder")
+                reminder = data.getParcelableExtra("reminder_result")
                 listReminder.add(reminder)
-                reminderPresenter.addReminder(reminder)
+                remindAdapter?.notifyDataSetChanged()
             }
         }
     }
-
-    override fun loadAllReminder() {
-        listReminder = realm.copyFromRealm(realm.findAllRemind())
-    }
-
-    override fun loadChange() {
-//        remindAdapter?.swipeReminder(listReminder)
-        remindAdapter?.notifyDataSetChanged()
-    }
-
 
     override fun onChangeItem(position: Int) {
         val item = listReminder[position]
         val intent = IntentFor<ReminderEditActivity>(activity)
         intent.putExtra("reminder_data", item)
-        startActivityForResult(intent, REQUEST_CODE_EDIT)
+        startActivityForResult(intent, REQUEST_CODE_CREATE)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d("destroy remind", "destroy")
         realm.close()
         val ref = TaskApplication().getRefWatcher(context)
         ref.watch(ref)

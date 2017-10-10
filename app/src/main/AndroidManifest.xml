@@ -39,18 +39,29 @@
                 android:value=".MenuActivity" />
         </activity>
         <activity android:name="ht.pq.khanh.task.alarm.AlarmChangeActivity" />
-        <activity android:name=".weather.WeatherDetailActivity"
+        <activity
+            android:name=".weather.WeatherDetailActivity"
             android:label="Weather detail">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MenuActivity" />
         </activity>
-        <activity android:name="ht.pq.khanh.task.reminder.ReminderEditActivity"
+        <activity
+            android:name="ht.pq.khanh.task.reminder.ReminderEditActivity"
             android:label="EditActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MenuActivity" />
         </activity>
+        <activity android:name="ht.pq.khanh.setting.SettingActivity" />
+        <activity
+            android:name=".paint.PaintFragment"
+            android:label="@string/title_activity_paint"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="ht.pq.khanh.task.alarm.AlarmEditActivity"
+            android:label="@string/title_activity_alarm_edit"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -1,8 +1,8 @@
 package ht.pq.khanh.util
 
 import android.content.Context
-import com.amulyakhare.textdrawable.util.ColorGenerator
 import android.text.format.Time
+import com.amulyakhare.textdrawable.util.ColorGenerator
 import ht.pq.khanh.multitask.R
 import java.text.SimpleDateFormat
 
@@ -12,12 +12,27 @@ import java.text.SimpleDateFormat
  */
 
 object Common {
-    val URL = "http://openweathermap.org/data/2.5/weather?q=London,uk&appid=b1b15e88fa797225412429c1c50c122a1"
-    val URL_FORECAST = "http://openweathermap.org/data/2.5/forecast?lat=35&lon=139&appid=b1b15e88fa797225412429c1c50c122a1"
+    //URL
     val URL_WEATHER_BASE = "http://openweathermap.org/"
     val URl_ICON = "http://openweathermap.org/img/w/"
+    //string format
     val DATE_FORMAT = "yyyyMMdd"
-    fun randomColor() : Int{
+    //theme keyname
+    val NIGHT_PREFERENCE_KEY = "NightModePreference"
+    val THEME_PREFERENCES = "theme_preferences"
+    val RECREATE_ACTIVITY = "recreateact"
+    val THEME_SAVED = "themesaved"
+    val DARKTHEME = "darktheme"
+    val LIGHTTHEME = "lighttheme"
+    //theme
+    val TEMP_PREFERENCE_KEY = "temperaturePreferece"
+    val TEMP_PREFERENCE = "tem_pref"
+    val TEMP_TYPE = "temperatureType"
+    val CELSIUS_TYPE = "celsiusType"
+    val FAHRENHEIT_TYPE = "fahrenheitType"
+    //location
+    val LOCATION_PREFERENCE = "location_pref"
+    fun randomColor(): Int {
         return ColorGenerator.MATERIAL.randomColor
     }
 

@@ -65,8 +65,9 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
         val isAlarm = switchRemind.isChecked
         val remind = Reminder(titleRemind, contentRemind, null, Common.randomColor(), isAlarm)
         realm.insertRemind(remind)
-        activity.intent.putExtra("reminder", remind)
-        activity.setResult(Activity.RESULT_OK, activity.intent)
+        val intentReminder = activity.intent
+        intentReminder.putExtra("reminder_result", remind)
+        activity.setResult(Activity.RESULT_OK, intentReminder)
         activity.finish()
     }
 
