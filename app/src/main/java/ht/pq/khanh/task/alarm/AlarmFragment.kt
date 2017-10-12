@@ -68,7 +68,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         time.set(Calendar.HOUR_OF_DAY, hourOfDay)
         time.set(Calendar.MINUTE, minute)
 
-        val alarm = Alarm(time.timeInMillis, false, true)
+        val alarm = Alarm(time.timeInMillis, "alarm", false, true)
         alarms.add(alarm)
         alarmAdapter.addChange(alarms)
         Log.d("alarm size", "${alarms.size}")

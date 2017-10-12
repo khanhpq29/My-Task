@@ -40,6 +40,7 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
     lateinit var switchRemind: SwitchCompat
     private val realm: Realm by lazy { Realm.getDefaultInstance() }
     private var item: Reminder? = null
+    private val timeReminder : Calendar by lazy { Calendar.getInstance() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         item = arguments.getParcelable("reminder_detail")
@@ -63,7 +64,8 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
         val titleRemind = edtTitle.text.toString()
         val contentRemind = edtContent.text.toString()
         val isAlarm = switchRemind.isChecked
-        val remind = Reminder(titleRemind, contentRemind, null, Common.randomColor(), isAlarm)
+        val timeAlert = timeReminder.timeInMillis
+        val remind = Reminder(titleRemind, contentRemind, timeAlert, Common.randomColor(), isAlarm)
         realm.insertRemind(remind)
         val intentReminder = activity.intent
         intentReminder.putExtra("reminder_result", remind)
@@ -77,7 +79,7 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
         val day = calendar.get(Calendar.DAY_OF_MONTH)
         val month = calendar.get(Calendar.MONTH)
         val year = calendar.get(Calendar.YEAR)
-        val datePicker = DatePickerDialog(activity, this, year, month, day)
+        val datePicker = DatePickerDialog(context, this, year, month, day)
         datePicker.show()
     }
 
@@ -92,10 +94,15 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         tvDateTime.text = "$dayOfMonth : ${month + 1} : $year "
+        timeReminder.set(Calendar.YEAR, year)
+        timeReminder.set(Calendar.MONTH, month)
+        timeReminder.set(Calendar.DAY_OF_MONTH, dayOfMonth)
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         tvDateTime.text = "$hourOfDay : $minute"
+        timeReminder.set(Calendar.HOUR_OF_DAY, hourOfDay)
+        timeReminder.set(Calendar.MINUTE, minute)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

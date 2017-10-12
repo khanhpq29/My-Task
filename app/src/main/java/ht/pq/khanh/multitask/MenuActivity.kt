@@ -18,6 +18,7 @@ import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.multitask.about.AboutFragment
 import ht.pq.khanh.multitask.forecast.ForecastFragment
 import ht.pq.khanh.multitask.paint.PaintFragment
+import ht.pq.khanh.setting.SettingFragment
 import ht.pq.khanh.task.alarm.AlarmFragment
 import ht.pq.khanh.task.reminder.ReminderFragment
 import ht.pq.khanh.task.sleepawake.SleepAwakeFragment
@@ -85,31 +86,17 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_paint -> {
                 navigateToFragment(PaintFragment())
-                title = "Setting"
+                title = "Painting"
             }
             else -> {
-                navigateToFragment(SleepAwakeFragment())
-                title = "Other"
+                navigateToFragment(SettingFragment())
+                title = "Setting"
             }
         }
         supportActionBar?.title = title
         item.isChecked = true
         drawer.closeDrawer(GravityCompat.START)
         return true
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_setting, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.mSetting){
-            val intent = IntentFor<SettingsActivity>(this)
-            startActivity(intent)
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {

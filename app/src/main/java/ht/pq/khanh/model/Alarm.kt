@@ -8,13 +8,15 @@ import io.realm.RealmObject
 
 open class Alarm : RealmObject {
     var time : Long = 0
+    var label : String = ""
     var isActive: Boolean = false
     var isVibrate: Boolean = false
 
     constructor() {}
 
-    constructor(time: Long, isActive: Boolean, isVibrate: Boolean) {
+    constructor(time: Long, label : String, isActive: Boolean, isVibrate: Boolean) {
         this.time = time
+        this.label = label
         this.isActive = isActive
         this.isVibrate = isVibrate
     }

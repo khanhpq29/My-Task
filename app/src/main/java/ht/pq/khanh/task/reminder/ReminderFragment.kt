@@ -8,9 +8,7 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -20,6 +18,7 @@ import ht.pq.khanh.extension.findAllRemind
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
+import ht.pq.khanh.multitask.SettingsActivity
 import io.realm.Realm
 
 class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView {
@@ -41,7 +40,8 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView {
                               savedInstanceState: Bundle?): View? {
         val view = container!!.inflateLayout(R.layout.reminder_fragment)
         ButterKnife.bind(this, view)
-        Realm.init(activity)
+        Realm.init(context)
+        setHasOptionsMenu(true)
         return view
     }
 
@@ -82,6 +82,17 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_reminder, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.mSort) {
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onChangeItem(position: Int) {
         val item = listReminder[position]
         val intent = IntentFor<ReminderEditActivity>(activity)
@@ -95,4 +106,5 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView {
         val ref = TaskApplication().getRefWatcher(context)
         ref.watch(ref)
     }
+
 }
