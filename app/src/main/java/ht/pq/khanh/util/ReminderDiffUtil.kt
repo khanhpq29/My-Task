@@ -16,7 +16,7 @@ class ReminderDiffUtil(val oldList : MutableList<Reminder>, val newList : Mutabl
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
-        if (oldItem.title == newItem.title && oldItem.time == newItem.time){
+        if (oldItem.title == newItem.title && oldItem.timeDay == newItem.timeDay){
             return true
         }
         return false

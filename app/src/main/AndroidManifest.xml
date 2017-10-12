@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.LightTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" />
@@ -22,7 +22,6 @@
         <activity
             android:name=".MenuActivity"
             android:label="@string/title_activity_menu"
-            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,6 +40,7 @@
         <activity android:name="ht.pq.khanh.task.alarm.AlarmChangeActivity" />
         <activity
             android:name=".weather.WeatherDetailActivity"
+            android:theme="@style/AppTheme.LightTheme"
             android:label="Weather detail">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

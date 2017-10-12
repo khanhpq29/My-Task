@@ -15,11 +15,14 @@ import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.util.ReminderDiffUtil
+import java.text.SimpleDateFormat
 
 /**
  * Created by khanhpq on 9/29/17.
  */
 class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerView.Adapter<ReminderAdapter.ReminderHolder>() {
+    private val DATE_FORMAT = "yyyy/mm/dd"
+    private val TIME_FORMAT = "hh:mm a"
     private var listener: OnAlterItemRecyclerView? = null
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ReminderHolder {
         val view = parent!!.inflateLayout(R.layout.item_reminder)
@@ -30,6 +33,12 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
         val remind = listRemind[position]
         holder.tvMessage.text = remind.message
         holder.tvTitle.text = remind.title
+        val simpleDateFormat = SimpleDateFormat(DATE_FORMAT)
+        val textTime = simpleDateFormat.format(remind.timeHour)
+        val simpleTimeFormat = SimpleDateFormat(TIME_FORMAT)
+        val textDate = simpleTimeFormat.format(remind.timeDay)
+        holder.tvDateTime.text = textDate
+        holder.tvTimeHour.text = textTime
         val myDrawable = TextDrawable.builder().beginConfig()
                 .textColor(Color.WHITE)
                 .useFont(Typeface.DEFAULT)
@@ -57,11 +66,13 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
         @BindView(R.id.imgText)
         lateinit var imgText: ImageView
         @BindView(R.id.tv_date)
-        lateinit var tvTime: TextView
+        lateinit var tvDateTime: TextView
         @BindView(R.id.tvTitle)
         lateinit var tvTitle: TextView
         @BindView(R.id.tvMessage)
         lateinit var tvMessage: TextView
+        @BindView(R.id.tv_time)
+        lateinit var tvTimeHour : TextView
 
         init {
             ButterKnife.bind(this, itemView)

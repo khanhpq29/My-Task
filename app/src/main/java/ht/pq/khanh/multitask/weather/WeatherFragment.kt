@@ -2,20 +2,17 @@ package ht.pq.khanh.multitask.weather
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.NavUtils
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import ht.pq.khanh.api.current.CurrentWeather
 import ht.pq.khanh.api.forecast.List
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.extension.loadImage
 
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.util.Common
-import io.reactivex.disposables.CompositeDisposable
 
 /**
  * Created by khanhpq on 9/25/17.
@@ -25,7 +22,7 @@ class WeatherFragment : Fragment() {
 
     @BindView(R.id.tvAdd)
     lateinit var tvAdd: TextView
-    @BindView(R.id.tvDay)
+    @BindView(R.id.tv_sleep_day)
     lateinit var tvDay: TextView
     @BindView(R.id.detail_forecast_textview)
     lateinit var tvDescription: TextView

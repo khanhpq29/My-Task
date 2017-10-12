@@ -43,7 +43,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="right"
-        android:textColor="@color/primary_text"
         android:textSize="16sp"/>
 
     <TextView
@@ -52,6 +51,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="right"
-        android:textColor="@color/forecast_low_text"
         android:textSize="16sp"/>
 </LinearLayout>
