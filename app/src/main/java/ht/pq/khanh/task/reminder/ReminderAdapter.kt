@@ -97,7 +97,4 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     interface OnLongRclItemClick{
         fun onLongClick(position: Int)
     }
-    fun fixwrong(){
-        
-    }
 }
