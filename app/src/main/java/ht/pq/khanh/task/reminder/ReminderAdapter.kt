@@ -24,6 +24,7 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     private val DATE_FORMAT = "yyyy/mm/dd"
     private val TIME_FORMAT = "hh:mm a"
     private var listener: OnAlterItemRecyclerView? = null
+    private var longListener : OnLongRclItemClick? = null
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ReminderHolder {
         val view = parent!!.inflateLayout(R.layout.item_reminder)
         return ReminderHolder(view)
@@ -61,7 +62,9 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     fun setOnChangeItem(callback: OnAlterItemRecyclerView?) {
         listener = callback
     }
-
+    fun setOnLongClickListener(callback: OnLongRclItemClick?){
+        this.longListener = callback
+    }
     inner class ReminderHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @BindView(R.id.imgText)
         lateinit var imgText: ImageView
@@ -80,10 +83,18 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
                 val position = adapterPosition
                 listener?.onChangeItem(position)
             }
+            itemView.setOnLongClickListener{
+                val position = adapterPosition
+                longListener?.onLongClick(position)
+                true
+            }
         }
     }
 
     interface OnAlterItemRecyclerView {
         fun onChangeItem(position: Int)
+    }
+    interface OnLongRclItemClick{
+        fun onLongClick(position: Int)
     }
 }

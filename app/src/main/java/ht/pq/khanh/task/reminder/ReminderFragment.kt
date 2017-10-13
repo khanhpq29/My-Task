@@ -13,6 +13,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
+import com.pawegio.kandroid.v
 import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.extension.findAllRemind
 import ht.pq.khanh.extension.inflateLayout
@@ -21,8 +22,7 @@ import ht.pq.khanh.multitask.R
 import ht.pq.khanh.multitask.SettingsActivity
 import io.realm.Realm
 
-class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView {
-
+class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, ReminderAdapter.OnLongRclItemClick {
     private val REQUEST_CODE_CREATE = 117
     @BindView(R.id.list_reminder)
     lateinit var recyclerRemind: RecyclerView
@@ -42,6 +42,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView {
         ButterKnife.bind(this, view)
         Realm.init(context)
         setHasOptionsMenu(true)
+        registerForContextMenu(recyclerRemind)
         return view
     }
 
@@ -52,6 +53,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView {
         remindAdapter?.setHasStableIds(true)
         initRecyclerview()
         remindAdapter?.setOnChangeItem(this)
+        remindAdapter?.setOnLongClickListener(this)
     }
 
     private fun initRecyclerview() {
@@ -98,6 +100,26 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView {
         val intent = IntentFor<ReminderEditActivity>(activity)
         intent.putExtra("reminder_data", item)
         startActivityForResult(intent, REQUEST_CODE_CREATE)
+    }
+
+    override fun onLongClick(position: Int) {
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        activity.menuInflater.inflate(R.menu.context_menu, menu)
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when {
+            item.itemId == R.id.cDelete -> {
+
+            }
+            item.itemId == R.id.cUpdate -> {
+
+            }
+        }
+        return super.onContextItemSelected(item)
     }
 
     override fun onDestroyView() {
