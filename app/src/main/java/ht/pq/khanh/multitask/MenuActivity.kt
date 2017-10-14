@@ -18,6 +18,7 @@ import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.multitask.about.AboutFragment
 import ht.pq.khanh.multitask.forecast.ForecastFragment
 import ht.pq.khanh.multitask.paint.PaintFragment
+import ht.pq.khanh.multitask.radio.RadioFragment
 import ht.pq.khanh.setting.SettingFragment
 import ht.pq.khanh.task.alarm.AlarmFragment
 import ht.pq.khanh.task.reminder.ReminderFragment
@@ -81,8 +82,8 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 title = "Alarm"
             }
             R.id.nav_about -> {
-                navigateToFragment(AboutFragment())
-                title = "About"
+                navigateToFragment(RadioFragment())
+                title = "Radio"
             }
             R.id.nav_paint -> {
                 navigateToFragment(PaintFragment())
