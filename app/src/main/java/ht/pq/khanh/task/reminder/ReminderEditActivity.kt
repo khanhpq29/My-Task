@@ -10,11 +10,8 @@ class ReminderEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reminder_edit)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val bundle = Bundle()
         val reminderItem = intent.getParcelableExtra<Reminder>("reminder_data")
-        bundle.putParcelable("reminder_detail", reminderItem)
-        val reminderDetailFragment = ReminderDetailFragment()
-        reminderDetailFragment.arguments = bundle
+        val reminderDetailFragment = ReminderDetailFragment.newInstance(reminderItem)
         supportFragmentManager.beginTransaction().replace(R.id.containRemind, reminderDetailFragment).commit()
 
     }

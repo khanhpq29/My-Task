@@ -51,13 +51,13 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
 
     override fun getItemCount(): Int = listRemind.size
 
-    fun loadChangeList(reminders: MutableList<Reminder>) {
-        val remindDiff = ReminderDiffUtil(listRemind, reminders)
-        val diffResult = DiffUtil.calculateDiff(remindDiff)
-        listRemind.clear()
-        listRemind.addAll(reminders)
-        diffResult.dispatchUpdatesTo(this)
-    }
+//    fun loadChangeList(reminders: MutableList<Reminder>) {
+//        val remindDiff = ReminderDiffUtil(listRemind, reminders)
+//        val diffResult = DiffUtil.calculateDiff(remindDiff)
+//        listRemind.clear()
+//        listRemind.addAll(reminders)
+//        diffResult.dispatchUpdatesTo(this)
+//    }
 
     fun setOnChangeItem(callback: OnAlterItemRecyclerView?) {
         listener = callback
@@ -96,8 +96,5 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     }
     interface OnLongRclItemClick{
         fun onLongClick(position: Int)
-    }
-    fun revertFix(){
-        
     }
 }

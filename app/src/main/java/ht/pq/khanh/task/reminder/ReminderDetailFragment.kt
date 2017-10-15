@@ -57,7 +57,7 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
         super.onViewCreated(view, savedInstanceState)
         Realm.init(context)
         edtTitle.setText(item?.title)
-        edtContent.setText(item?.title)
+        edtContent.setText(item?.message)
     }
 
     @OnClick(R.id.fab)
@@ -121,5 +121,14 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
         super.onDestroyView()
         Log.d("destroy detailactivity", "destroy")
         realm.close()
+    }
+    companion object {
+        fun newInstance(remind: Reminder): ReminderDetailFragment {
+            val myFragment = ReminderDetailFragment()
+            val args = Bundle()
+            args.putParcelable("reminder_detail", remind)
+            myFragment.arguments = args
+            return myFragment
+        }
     }
 }

@@ -1,6 +1,7 @@
 package ht.pq.khanh.extension
 
 import ht.pq.khanh.model.Alarm
+import ht.pq.khanh.model.Remind
 import ht.pq.khanh.model.Reminder
 import io.realm.Realm
 import io.realm.RealmResults

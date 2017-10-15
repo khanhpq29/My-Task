@@ -14,6 +14,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
+import com.pawegio.kandroid.i
 import ht.pq.khanh.extension.findAllAlarm
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.extension.insertAlarm
@@ -96,4 +97,10 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         realm.close()
     }
 
+    override fun onStop() {
+        super.onStop()
+        if (!realm.isClosed){
+            realm.close()
+        }
+    }
 }

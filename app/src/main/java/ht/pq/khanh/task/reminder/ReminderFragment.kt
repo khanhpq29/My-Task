@@ -13,23 +13,30 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
-import com.pawegio.kandroid.v
+import com.pawegio.kandroid.d
 import ht.pq.khanh.TaskApplication
+import ht.pq.khanh.extension.deleteRemind
 import ht.pq.khanh.extension.findAllRemind
 import ht.pq.khanh.extension.inflateLayout
+import ht.pq.khanh.extension.showToast
+import ht.pq.khanh.model.Remind
 import ht.pq.khanh.model.Reminder
+
 import ht.pq.khanh.multitask.R
-import ht.pq.khanh.multitask.SettingsActivity
 import io.realm.Realm
 
-class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, ReminderAdapter.OnLongRclItemClick {
+class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
+        ReminderAdapter.OnLongRclItemClick{
     private val REQUEST_CODE_CREATE = 117
+
     @BindView(R.id.list_reminder)
     lateinit var recyclerRemind: RecyclerView
+
     private var remindAdapter: ReminderAdapter? = null
     private var listReminder: MutableList<Reminder> = arrayListOf()
     private val realm: Realm by lazy { Realm.getDefaultInstance() }
     private lateinit var reminder: Reminder
+    private var selectedPosition = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
@@ -42,7 +49,6 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         ButterKnife.bind(this, view)
         Realm.init(context)
         setHasOptionsMenu(true)
-        registerForContextMenu(recyclerRemind)
         return view
     }
 
@@ -52,8 +58,10 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         remindAdapter = ReminderAdapter(listReminder)
         remindAdapter?.setHasStableIds(true)
         initRecyclerview()
+        registerForContextMenu(recyclerRemind)
         remindAdapter?.setOnChangeItem(this)
         remindAdapter?.setOnLongClickListener(this)
+
     }
 
     private fun initRecyclerview() {
@@ -68,13 +76,18 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
 
     @OnClick(R.id.fab_remind)
     fun createReminder() {
+        createIntent(Reminder())
+    }
+
+    private fun createIntent(reminder: Reminder) {
         val intent = IntentFor<ReminderEditActivity>(activity)
-        intent.putExtra("reminder_data", Reminder())
+        intent.putExtra("reminder_data", reminder)
         startActivityForResult(intent, REQUEST_CODE_CREATE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        d("on activity result")
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CREATE) {
             if (data != null) {
                 reminder = data.getParcelableExtra("reminder_result")
@@ -97,12 +110,11 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
 
     override fun onChangeItem(position: Int) {
         val item = listReminder[position]
-        val intent = IntentFor<ReminderEditActivity>(activity)
-        intent.putExtra("reminder_data", item)
-        startActivityForResult(intent, REQUEST_CODE_CREATE)
+        createIntent(item)
     }
 
     override fun onLongClick(position: Int) {
+        activity.openContextMenu(recyclerRemind)
     }
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
@@ -113,20 +125,43 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
     override fun onContextItemSelected(item: MenuItem): Boolean {
         when {
             item.itemId == R.id.cDelete -> {
-
             }
             item.itemId == R.id.cUpdate -> {
-
             }
         }
         return super.onContextItemSelected(item)
     }
 
+    override fun onPause() {
+        super.onPause()
+        d("on pause")
+
+    }
     override fun onDestroyView() {
         super.onDestroyView()
-        realm.close()
+        d("ondestroyview")
+        if (!realm.isClosed) {
+            realm.close()
+        }
         val ref = TaskApplication().getRefWatcher(context)
         ref.watch(ref)
     }
 
+    override fun onStop() {
+        super.onStop()
+        if (!realm.isClosed) {
+            realm.close()
+        }
+        d("onstop")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        d("onResume")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        d("onDestroy")
+    }
 }

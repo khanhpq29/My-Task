@@ -79,7 +79,11 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
     override fun onDestroyView() {
         super.onDestroyView()
         swipeLayout.isRefreshing = false
-        disposal.dispose()
+        disposal.clear()
+    }
+
+    override fun onStop() {
+        super.onStop()
         disposal.clear()
     }
     override fun onWeatherItemClick(position: Int) {
