@@ -45,8 +45,8 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
                               savedInstanceState: Bundle?): View? {
         val view = container!!.inflateLayout(R.layout.reminder_fragment)
         ButterKnife.bind(this, view)
-        realm = Realm.getDefaultInstance()
         Realm.init(context)
+        realm = Realm.getDefaultInstance()
         setHasOptionsMenu(true)
         return view
     }

@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat
  * Created by khanhpq on 9/29/17.
  */
 class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerView.Adapter<ReminderAdapter.ReminderHolder>() {
-    private val DATE_FORMAT = "yyyy/mm/dd"
+    private val DATE_FORMAT = "MMM, dd yyyy"
     private val TIME_FORMAT = "hh:mm a"
     private var listener: OnAlterItemRecyclerView? = null
     private var longListener : OnLongRclItemClick? = null

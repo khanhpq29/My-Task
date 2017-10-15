@@ -10,8 +10,10 @@ import io.realm.RealmResults
  * Created by khanh on 01/10/2017.
  */
 fun Realm.insertAlarm(alarm: Alarm) {
-    this.executeTransaction {
-        realm -> realm.insertOrUpdate(alarm)
+    this.use {
+        this.executeTransaction { realm ->
+            realm.insertOrUpdate(alarm)
+        }
     }
 }
 
@@ -31,8 +33,10 @@ fun Realm.findAllAlarm(): RealmResults<Alarm> {
 }
 
 fun Realm.insertRemind(remind: Reminder) {
-    this.executeTransaction {
-        realm -> realm.insertOrUpdate(remind)
+    this.use {
+        this.executeTransaction {
+            realm -> realm.insertOrUpdate(remind)
+        }
     }
 }
 
