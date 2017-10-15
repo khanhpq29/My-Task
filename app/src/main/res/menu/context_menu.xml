@@ -4,6 +4,6 @@
 
     <item android:title="Delete"
         android:id="@+id/cDelete"/>
-    <item android:title="Update"
-        android:id="@+id/cUpdate"/>
+    <!--<item android:title="Update"-->
+        <!--android:id="@+id/cUpdate"/>-->
 </menu>

@@ -10,9 +10,9 @@ import io.realm.RealmResults
  * Created by khanh on 01/10/2017.
  */
 fun Realm.insertAlarm(alarm: Alarm) {
-    this.beginTransaction()
-    this.insert(alarm)
-    this.commitTransaction()
+    this.executeTransaction {
+        realm -> realm.insertOrUpdate(alarm)
+    }
 }
 
 fun Realm.deleteAlarm(position: Int) {
@@ -31,9 +31,9 @@ fun Realm.findAllAlarm(): RealmResults<Alarm> {
 }
 
 fun Realm.insertRemind(remind: Reminder) {
-    this.beginTransaction()
-    this.insert(remind)
-    this.commitTransaction()
+    this.executeTransaction {
+        realm -> realm.insertOrUpdate(remind)
+    }
 }
 
 fun Realm.deleteRemind(position: Int) {

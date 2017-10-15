@@ -3,6 +3,7 @@ package ht.pq.khanh.task.reminder
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.support.v4.app.Fragment
@@ -24,6 +25,9 @@ import ht.pq.khanh.multitask.R
 import ht.pq.khanh.util.Common
 import io.realm.Realm
 import java.util.*
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.inputmethod.InputMethodManager
+
 
 /**
  * Created by khanhpq on 10/5/17.
