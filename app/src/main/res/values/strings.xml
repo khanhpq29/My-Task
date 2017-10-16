@@ -97,4 +97,5 @@
     <string name="location_preference">LocationPreference</string>
     <string name="title_activity_paint">PaintActivity</string>
     <string name="title_activity_alarm_edit">AlarmEditActivity</string>
+    <string name="alarm_hint">Name</string>
 </resources>

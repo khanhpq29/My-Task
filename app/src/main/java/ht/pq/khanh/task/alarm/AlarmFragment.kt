@@ -1,8 +1,12 @@
 package ht.pq.khanh.task.alarm
 
+import android.app.Activity
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateFormat
@@ -14,10 +18,9 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
+import com.pawegio.kandroid.d
 import com.pawegio.kandroid.i
-import ht.pq.khanh.extension.findAllAlarm
-import ht.pq.khanh.extension.inflateLayout
-import ht.pq.khanh.extension.insertAlarm
+import ht.pq.khanh.extension.*
 import ht.pq.khanh.model.Alarm
 import ht.pq.khanh.multitask.R
 import io.realm.Realm
@@ -34,6 +37,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
     private lateinit var alarmAdapter: AlarmAdapter
     private var alarms: MutableList<Alarm> = arrayListOf()
     private val REQUEST_CODE = 116
+    private var selectedPosition = 0
     private val realm: Realm by lazy { Realm.getDefaultInstance() }
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = container!!.inflateLayout(R.layout.fragment_alarm)
@@ -45,7 +49,8 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
-        alarmAdapter.setOnChangeDate(this)
+        alarmAdapter?.setOnChangeDate(this)
+        alarmAdapter?.handleListener(this)
     }
 
     @OnClick(R.id.fab_set_alarm)
@@ -59,9 +64,32 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         startActivityForResult(intent, REQUEST_CODE)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        d("on activity result")
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
+            val alarm = data?.getParcelableExtra<Alarm>("Alarm_parcel")
+            alarms.add(alarm!!)
+            alarmAdapter?.notifyDataSetChanged()
+        }
+    }
     override fun onChangeTime(alarm: Alarm) {
         val timePicker = TimePickerDialog(activity, onTimeSet, 3, 5, DateFormat.is24HourFormat(activity))
         timePicker.show()
+    }
+    override fun onDeleteAlarm(position: Int) {
+        d("ondelete")
+        selectedPosition = position
+        val alarm = alarms[position]
+        alarms.removeAt(position)
+        alarmAdapter?.notifyDataSetChanged()
+        realm.deleteAlarm(selectedPosition)
+        Snackbar.make(recyclerAlarm, "delete on item", Snackbar.LENGTH_LONG)
+                .setAction("Undo", {
+                    alarms.add(selectedPosition, alarm)
+                    alarmAdapter?.notifyDataSetChanged()
+                    realm.insertAlarm(alarm)
+                }).show()
     }
 
     private val onTimeSet = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
@@ -83,10 +111,12 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
     private fun initData() {
         presenter = AlarmPresenter()
         alarms = realm.copyFromRealm(realm.findAllAlarm())
+        val decorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         alarmAdapter = AlarmAdapter(alarms)
         recyclerAlarm.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = AlarmAdapter(alarms)
+            adapter = alarmAdapter
+            addItemDecoration(decorator)
             setHasFixedSize(true)
         }
     }

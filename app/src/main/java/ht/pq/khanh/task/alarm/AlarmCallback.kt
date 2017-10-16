@@ -11,4 +11,5 @@ interface AlarmCallback {
 //    fun onChangeDay()
 //    fun onChangeOnOff(isOff : Boolean)
 //    fun onIsVibrate(isVibrate : Boolean)
+    fun onDeleteAlarm(position: Int)
 }

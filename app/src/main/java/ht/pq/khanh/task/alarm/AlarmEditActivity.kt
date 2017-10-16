@@ -68,13 +68,16 @@ class AlarmEditActivity : AppCompatActivity() {
         time.set(Calendar.MINUTE, minute)
         val alarm = Alarm(time.timeInMillis, "alarm", false, true)
         realm.insertAlarm(alarm)
+        intent.putExtra("Alarm_parcel", alarm)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 
     @OnClick(R.id.tvRington)
     fun chooseRingtone() {
-        val audioIntent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI)
+//        val audioIntent = Intent(Intent.ACTION_VIEW)
 //        audioIntent.type = "audio/*"
-        startActivityForResult(audioIntent, 111)
+//        startActivityForResult(audioIntent, 111)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

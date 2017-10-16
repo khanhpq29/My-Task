@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat
 /**
  * Created by khanhpq on 9/25/17.
  */
-class AlarmAdapter(val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<AlarmAdapter.AlarmHolder>() {
+class AlarmAdapter(val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<AlarmAdapter.AlarmHolder>(){
     private var isMonOn = true
     private var isTueOn = true
     private var isWedOn = true
@@ -40,15 +40,17 @@ class AlarmAdapter(val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<Ala
         holder.tvTimeAlarm.text = "${timeFormat.format(alarm.time)}"
         holder.switchAlarm.isChecked = !alarm.isActive
         holder.cbVibrate.isChecked = !alarm.isVibrate
-        handleListener(holder)
         changeDayAlarm(holder)
         holder.tvTimeAlarm.setOnClickListener {
             callBack?.onChangeTime(alarm)
         }
+        holder.imgDelete.setOnClickListener {
+            callBack?.onDeleteAlarm(position)
+        }
     }
 
-    private fun handleListener(holder: AlarmHolder) {
-
+    fun handleListener(callback: AlarmCallback?) {
+        this.callBack = callBack
     }
     fun setOnChangeDate(listener: AlarmCallback?){
         callBack = listener
@@ -193,7 +195,8 @@ class AlarmAdapter(val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<Ala
         lateinit var changeRington: ConstraintLayout
         @BindView(R.id.switch_alarm)
         lateinit var switchAlarm: SwitchCompat
-
+        @BindView(R.id.img_delete)
+        lateinit var imgDelete : ImageView
         init {
             ButterKnife.bind(this, itemView)
         }
