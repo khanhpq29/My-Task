@@ -1,6 +1,7 @@
 package ht.pq.khanh.multitask
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
@@ -9,22 +10,19 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.view.Menu
 import android.view.MenuItem
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.pawegio.kandroid.IntentFor
+import com.pawegio.kandroid.d
 import ht.pq.khanh.TaskApplication
-import ht.pq.khanh.multitask.about.AboutFragment
 import ht.pq.khanh.multitask.forecast.ForecastFragment
 import ht.pq.khanh.multitask.paint.PaintFragment
 import ht.pq.khanh.multitask.radio.RadioFragment
-import ht.pq.khanh.setting.SettingFragment
 import ht.pq.khanh.task.alarm.AlarmFragment
+import ht.pq.khanh.task.reminder.ReminderActivity
 import ht.pq.khanh.task.reminder.ReminderFragment
 import ht.pq.khanh.task.sleepawake.SleepAwakeFragment
 import ht.pq.khanh.util.Common
-
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.toolbar)
@@ -35,6 +33,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var navigationView: NavigationView
     private lateinit var title: String
     private var theme = "name_of_the_theme"
+    private val RECREATE_ACTIVITY ="recreat_theme"
     private var themeStyle = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         setUpTheme()
@@ -90,7 +89,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 title = "Painting"
             }
             else -> {
-                navigateToFragment(SettingFragment())
+                startActivity(Intent(this, SettingsActivity::class.java))
                 title = "Setting"
             }
         }
@@ -100,15 +99,26 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
+    override fun onResume() {
+        super.onResume()
+        d("onresume")
+        if (getSharedPreferences(Common.THEME_PREFERENCES, Context.MODE_PRIVATE).getBoolean(RECREATE_ACTIVITY, false)) {
+            val editor = getSharedPreferences(Common.THEME_PREFERENCES, Context.MODE_PRIVATE).edit()
+            editor.putBoolean(RECREATE_ACTIVITY, false)
+            editor.apply()
+            recreate()
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        val ref = TaskApplication().getRefWatcher(applicationContext)
+        val ref = TaskApplication().getRefWatcher(this)
         ref.watch(ref)
     }
 
     private fun setUpTheme() {
         val preference = getSharedPreferences(Common.THEME_PREFERENCES, Context.MODE_PRIVATE)
-        theme = preference.getString(Common.THEME_SAVED, Common.DARKTHEME)
+        theme = preference.getString(Common.THEME_SAVED, Common.LIGHTTHEME)
         themeStyle = if (theme == Common.DARKTHEME) {
             R.style.AppTheme_DarkTheme
         } else {

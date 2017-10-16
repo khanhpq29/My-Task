@@ -3,6 +3,8 @@
     package="ht.pq.khanh.multitask">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="ht.pq.khanh.TaskApplication"
@@ -11,7 +13,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.LightTheme">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" />
@@ -29,21 +31,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name="ht.pq.khanh.task.alarm.AlarmChangeActivity" />
         <activity
             android:name=".weather.WeatherDetailActivity"
-            android:theme="@style/AppTheme"
-            android:label="Weather detail">
+            android:label="Weather detail"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MenuActivity" />
         </activity>
         <activity
             android:name="ht.pq.khanh.task.reminder.ReminderEditActivity"
+            android:label="EditActivity"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden"
-            android:label="EditActivity">
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MenuActivity" />
@@ -57,13 +58,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MenuActivity" />
         </activity>
-        <!--<service-->
-        <!--android:name=""-->
-        <!--android:exported="false" >-->
-        <!--<intent-filter>-->
-            <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
-        <!--</intent-filter>-->
-    <!--</service>-->
+        <activity
+            android:name="ht.pq.khanh.task.reminder.ReminderActivity"
+            android:label="Reminder" />
+        <!-- <service -->
+        <!-- android:name="" -->
+        <!-- android:exported="false" > -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.android.c2dm.intent.RECEIVE" /> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
 
     </application>
 

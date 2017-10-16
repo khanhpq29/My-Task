@@ -10,10 +10,8 @@ import io.realm.RealmResults
  * Created by khanh on 01/10/2017.
  */
 fun Realm.insertAlarm(alarm: Alarm) {
-    this.use {
-        this.executeTransaction { realm ->
-            realm.insertOrUpdate(alarm)
-        }
+    this.executeTransaction { realm ->
+        realm.insertOrUpdate(alarm)
     }
 }
 
@@ -26,17 +24,17 @@ fun Realm.deleteAlarm(position: Int) {
 }
 
 fun Realm.findAllAlarm(): RealmResults<Alarm> {
-    this.beginTransaction()
-    val realmQuery = this.where(Alarm::class.java).findAll()
-    this.commitTransaction()
-    return realmQuery
+    var realmQuery : RealmResults<Alarm>? = null
+    this.executeTransaction {
+        realm: Realm ->
+        realmQuery = realm.where(Alarm::class.java).findAll()
+    }
+    return realmQuery!!
 }
 
 fun Realm.insertRemind(remind: Reminder) {
-    this.use {
-        this.executeTransaction {
-            realm -> realm.insertOrUpdate(remind)
-        }
+    this.executeTransaction { realm ->
+        realm.insertOrUpdate(remind)
     }
 }
 
@@ -48,9 +46,17 @@ fun Realm.deleteRemind(position: Int) {
     }
 }
 
+fun Realm.updateReminder(remind: Reminder){
+    this.executeTransaction {
+        realm -> realm.copyToRealmOrUpdate(remind)
+    }
+}
+
 fun Realm.findAllRemind(): RealmResults<Reminder> {
-    this.beginTransaction()
-    val realmQuery = this.where(Reminder::class.java).findAll()
-    this.commitTransaction()
-    return realmQuery
+    var realmResults : RealmResults<Reminder>? = null
+    this.executeTransaction {
+        realm: Realm ->
+        realmResults = realm.where(Reminder::class.java).findAll()
+    }
+    return realmResults!!
 }

@@ -1,14 +1,13 @@
 package ht.pq.khanh.task.reminder
 
-import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
+import android.os.Bundle
+import ht.pq.khanh.multitask.R
 
-/**
- * Created by khanh on 15/10/2017.
- */
-class ReminderActivity : AppCompatActivity(){
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+class ReminderActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_reminder)
     }
 }

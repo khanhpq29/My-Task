@@ -21,12 +21,13 @@ import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.extension.insertRemind
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
+import ht.pq.khanh.multitask.SettingsActivity
 import io.realm.Realm
 
 class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
         ReminderAdapter.OnLongRclItemClick {
     private val REQUEST_CODE_CREATE = 117
-
+    private val REQUEST_UPDATE = 113
     @BindView(R.id.list_reminder)
     lateinit var recyclerRemind: RecyclerView
 
@@ -75,23 +76,31 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
 
     @OnClick(R.id.fab_remind)
     fun createReminder() {
-        createIntent(Reminder())
+        createIntent(Reminder(), REQUEST_CODE_CREATE)
     }
 
-    private fun createIntent(reminder: Reminder) {
+    private fun createIntent(reminder: Reminder, requestCode: Int) {
         val intent = IntentFor<ReminderEditActivity>(activity)
         intent.putExtra("reminder_data", reminder)
-        startActivityForResult(intent, REQUEST_CODE_CREATE)
+        startActivityForResult(intent, requestCode)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         d("on activity result")
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CREATE) {
-            if (data != null) {
-                reminder = data.getParcelableExtra("reminder_result")
-                listReminder.add(reminder)
-                remindAdapter?.notifyDataSetChanged()
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE_CREATE) {
+                if (data != null) {
+                    reminder = data.getParcelableExtra("reminder_result")
+                    listReminder.add(reminder)
+                    remindAdapter?.notifyDataSetChanged()
+                }
+            }else if (resultCode == REQUEST_UPDATE){
+                data?.let {
+                    reminder = data.getParcelableExtra("reminder_result")
+                    listReminder.add(reminder)
+                    remindAdapter?.notifyDataSetChanged()
+                }
             }
         }
     }
@@ -102,6 +111,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.mSort) {
+            activity.startActivity(Intent(activity, SettingsActivity::class.java))
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -110,7 +120,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
     override fun onChangeItem(position: Int) {
         selectedPosition = position
         val item = listReminder[position]
-        createIntent(item)
+        createIntent(item, REQUEST_UPDATE)
     }
 
     override fun onLongClick(position: Int) {

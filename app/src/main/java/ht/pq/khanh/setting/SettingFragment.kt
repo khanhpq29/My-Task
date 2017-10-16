@@ -3,6 +3,7 @@ package ht.pq.khanh.setting
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceFragment
 import android.support.v7.preference.CheckBoxPreference
 import android.support.v7.preference.EditTextPreference
 import android.support.v7.preference.PreferenceFragmentCompat
@@ -13,12 +14,11 @@ import ht.pq.khanh.util.Common
 /**
  * Created by khanhpq on 10/5/17.
  */
-class SettingFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
-
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(R.xml.settings)
+class SettingFragment : PreferenceFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        addPreferencesFromResource(R.xml.preferences_layout)
     }
-
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (key == Common.NIGHT_PREFERENCE_KEY) {
             val sharedPreference = activity.getSharedPreferences(Common.THEME_PREFERENCES, Context.MODE_PRIVATE)

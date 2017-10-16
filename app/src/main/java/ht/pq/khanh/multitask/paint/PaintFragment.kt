@@ -1,5 +1,6 @@
 package ht.pq.khanh.multitask.paint
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.DisplayMetrics
@@ -11,7 +12,8 @@ import ht.pq.khanh.multitask.R
 
 class PaintFragment : Fragment() {
     @BindView(R.id.paint)
-    lateinit var paint : PaintView
+    lateinit var paint: PaintView
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = container!!.inflateLayout(R.layout.activity_paint)
         ButterKnife.bind(this, view)
@@ -21,7 +23,7 @@ class PaintFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         val metrics = DisplayMetrics()
-       activity.windowManager.defaultDisplay.getMetrics(metrics)
+        activity.windowManager.defaultDisplay.getMetrics(metrics)
         paint.init(metrics)
     }
 
@@ -31,7 +33,7 @@ class PaintFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.normal ->
                 paint.normal()
             R.id.emboss ->
@@ -40,6 +42,8 @@ class PaintFragment : Fragment() {
                 paint.blur()
             R.id.clear ->
                 paint.clear()
+            R.id.pick_color ->
+                paint.setColorPaint(Color.RED)
         }
         return true
     }

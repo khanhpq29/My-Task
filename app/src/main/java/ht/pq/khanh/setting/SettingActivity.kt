@@ -9,7 +9,7 @@ class SettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
-        val settingFragment = SettingFragment()
-        supportFragmentManager.beginTransaction().replace(R.id.containerSetting, settingFragment).commit()
+//        val settingFragment = SettingFragment()
+//        supportFragmentManager.beginTransaction().replace(R.id.containerSetting, settingFragment).commit()
     }
 }

@@ -53,7 +53,7 @@ public class PaintView extends View {
         mPaint.setXfermode(null);
         mPaint.setAlpha(0xff);
 
-        mEmboss = new EmbossMaskFilter(new float[] {1, 1, 1}, 0.4f, 6, 3.5f);
+        mEmboss = new EmbossMaskFilter(new float[]{1, 1, 1}, 0.4f, 6, 3.5f);
         mBlur = new BlurMaskFilter(5, BlurMaskFilter.Blur.NORMAL);
     }
 
@@ -66,6 +66,10 @@ public class PaintView extends View {
 
         currentColor = DEFAULT_COLOR;
         strokeWidth = BRUSH_SIZE;
+    }
+
+    public void setColorPaint(int color) {
+        mPaint.setColor(color);
     }
 
     public void normal() {
@@ -144,16 +148,16 @@ public class PaintView extends View {
         float x = event.getX();
         float y = event.getY();
 
-        switch(event.getAction()) {
-            case MotionEvent.ACTION_DOWN :
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
                 touchStart(x, y);
                 invalidate();
                 break;
-            case MotionEvent.ACTION_MOVE :
+            case MotionEvent.ACTION_MOVE:
                 touchMove(x, y);
                 invalidate();
                 break;
-            case MotionEvent.ACTION_UP :
+            case MotionEvent.ACTION_UP:
                 touchUp();
                 invalidate();
                 break;
