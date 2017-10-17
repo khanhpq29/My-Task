@@ -15,10 +15,7 @@ import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
 import com.pawegio.kandroid.d
 import ht.pq.khanh.TaskApplication
-import ht.pq.khanh.extension.deleteRemind
-import ht.pq.khanh.extension.findAllRemind
-import ht.pq.khanh.extension.inflateLayout
-import ht.pq.khanh.extension.insertRemind
+import ht.pq.khanh.extension.*
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.multitask.SettingsActivity
@@ -93,12 +90,15 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
                 if (data != null) {
                     reminder = data.getParcelableExtra("reminder_result")
                     listReminder.add(reminder)
+                    realm.insertRemind(reminder)
                     remindAdapter?.notifyDataSetChanged()
                 }
-            }else if (resultCode == REQUEST_UPDATE){
+            }else if (requestCode == REQUEST_UPDATE){
                 data?.let {
                     reminder = data.getParcelableExtra("reminder_result")
-                    listReminder.add(reminder)
+                    listReminder.removeAt(selectedPosition)
+                    listReminder.add(selectedPosition, reminder)
+                    realm.updateReminder(reminder)
                     remindAdapter?.notifyDataSetChanged()
                 }
             }
@@ -169,9 +169,9 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
 
     override fun onStop() {
         super.onStop()
-        if (!realm.isClosed) {
-            realm.close()
-        }
+//        if (!realm.isClosed) {
+//            realm.close()
+//        }
         d("onstop")
     }
 

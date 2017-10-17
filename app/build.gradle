@@ -4,7 +4,7 @@ apply plugin: 'realm-android'
 def VERSION_CODE = 10
 def VERSION_NAME = "1.0.2"
 android {
-    compileSdkVersion 26
+    compileSdkVersion 25
     defaultConfig {
         applicationId "ht.pq.khanh.multitask"
         minSdkVersion 16

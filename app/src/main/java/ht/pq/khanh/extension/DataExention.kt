@@ -34,7 +34,7 @@ fun Realm.findAllAlarm(): RealmResults<Alarm> {
 
 fun Realm.insertRemind(remind: Reminder) {
     this.executeTransaction { realm ->
-        realm.insertOrUpdate(remind)
+        realm.copyToRealmOrUpdate(remind)
     }
 }
 

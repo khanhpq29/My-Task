@@ -3,17 +3,20 @@ package ht.pq.khanh.model
 import android.os.Parcel
 import android.os.Parcelable
 import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
 /**
  * Created by khanhpq on 9/29/17.
  */
-open class Reminder(var title: String = "",
+open class Reminder(@PrimaryKey open var id: Long = 0,
+                    var title: String = "",
                     var message: String? = null,
                     var timeDay: Long? = null,
                     var timeHour: Long? = null,
                     var color: Int = 0,
                     var isNotify: Boolean = false) : RealmObject(), Parcelable {
     constructor(source: Parcel) : this(
+            source.readLong(),
             source.readString(),
             source.readString(),
             source.readValue(Long::class.java.classLoader) as Long?,
@@ -25,6 +28,7 @@ open class Reminder(var title: String = "",
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeLong(id)
         writeString(title)
         writeString(message)
         writeValue(timeDay)
