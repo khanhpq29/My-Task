@@ -6,10 +6,10 @@ import ht.pq.khanh.model.Alarm
  * Created by khanh on 01/10/2017.
  */
 interface AlarmCallback {
-//    fun onChangeRington()
+    fun onChangeRington()
     fun onChangeTime(time : Alarm)
 //    fun onChangeDay()
-//    fun onChangeOnOff(isOff : Boolean)
-//    fun onIsVibrate(isVibrate : Boolean)
+    fun onChangeOnOff(isOff : Boolean)
+    fun onIsVibrate(isVibrate : Boolean)
     fun onDeleteAlarm(position: Int)
 }

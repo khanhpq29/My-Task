@@ -66,27 +66,20 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
 
     @OnClick(R.id.fab)
     fun saveToData() {
-        if (item!!.id == 0.toLong()) {
-            val titleRemind = edtTitle.text.toString()
+        var remind: Reminder
+        val titleRemind = edtTitle.text.toString()
             val contentRemind = edtContent.text.toString()
             val isAlarm = switchRemind.isChecked
             val timeAlert = timeReminder.timeInMillis
             val dateAlert = dateReminder.timeInMillis
-            val remind = Reminder(timeAlert, titleRemind, contentRemind, timeAlert, dateAlert, Common.randomColor(), isAlarm)
-            val intentReminder = activity.intent
-            intentReminder.putExtra("reminder_result", remind)
-            activity.setResult(Activity.RESULT_OK, intentReminder)
+        remind = if (item!!.id == 0.toLong()) {
+            Reminder(timeAlert, titleRemind, contentRemind, timeAlert, dateAlert, Common.randomColor(), isAlarm)
         }else {
-            val titleRemind = edtTitle.text.toString()
-            val contentRemind = edtContent.text.toString()
-            val isAlarm = switchRemind.isChecked
-            val timeAlert = timeReminder.timeInMillis
-            val dateAlert = dateReminder.timeInMillis
-            val remind = Reminder(item!!.id, titleRemind, contentRemind, timeAlert, dateAlert, Common.randomColor(), isAlarm)
-            val intentReminder = activity.intent
-            intentReminder.putExtra("reminder_result", remind)
-            activity.setResult(Activity.RESULT_OK, intentReminder)
+            Reminder(item!!.id, titleRemind, contentRemind, timeAlert, dateAlert, Common.randomColor(), isAlarm)
         }
+        val intentReminder = activity.intent
+        intentReminder.putExtra("reminder_result", remind)
+        activity.setResult(Activity.RESULT_OK, intentReminder)
         activity.finish()
     }
 

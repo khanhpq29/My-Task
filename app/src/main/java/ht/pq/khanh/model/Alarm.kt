@@ -1,7 +1,10 @@
 package ht.pq.khanh.model
 
+import android.media.Ringtone
+import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
+import android.util.SparseBooleanArray
 import io.realm.RealmObject
 
 /**
@@ -11,12 +14,14 @@ import io.realm.RealmObject
 open class Alarm(var time: Long = 0,
                  var label: String = "",
                  var isActive: Boolean = false,
-                 var isVibrate: Boolean = false) : RealmObject(), Parcelable {
+                 var isVibrate: Boolean = false,
+                 var ringtoneUri: String? = null) : RealmObject(), Parcelable {
     constructor(source: Parcel) : this(
             source.readLong(),
             source.readString(),
             1 == source.readInt(),
-            1 == source.readInt()
+            1 == source.readInt(),
+            source.readString()
     )
 
     override fun describeContents() = 0
@@ -26,6 +31,7 @@ open class Alarm(var time: Long = 0,
         writeString(label)
         writeInt((if (isActive) 1 else 0))
         writeInt((if (isVibrate) 1 else 0))
+        writeString(ringtoneUri)
     }
 
     companion object {

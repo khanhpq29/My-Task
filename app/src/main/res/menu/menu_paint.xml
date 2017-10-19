@@ -11,7 +11,11 @@
         android:id="@+id/clear"/>
     <item android:id="@+id/pick_color"
         android:title="Pick color"
-        android:icon="@drawable/ic_color_lens"/>
-        <!--app:showAsAction="always"-->
+        android:icon="@drawable/ic_color_lens"
+        app:showAsAction="always"/>
+    <item android:id="@+id/save_paint"
+        android:title="Save"
+        android:icon="@android:drawable/ic_menu_save"
+        app:showAsAction="always"/>
 
 </menu>

@@ -1,7 +1,10 @@
 package ht.pq.khanh.task.alarm
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
+import android.media.RingtoneManager
+import android.net.Uri
 import android.support.constraint.ConstraintLayout
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -23,7 +26,7 @@ import java.text.SimpleDateFormat
 /**
  * Created by khanhpq on 9/25/17.
  */
-class AlarmAdapter(val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<AlarmAdapter.AlarmHolder>(){
+class AlarmAdapter(private val context: Context, private val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<AlarmAdapter.AlarmHolder>(){
     private var isMonOn = true
     private var isTueOn = true
     private var isWedOn = true
@@ -40,6 +43,9 @@ class AlarmAdapter(val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<Ala
         holder.tvTimeAlarm.text = "${timeFormat.format(alarm.time)}"
         holder.switchAlarm.isChecked = !alarm.isActive
         holder.cbVibrate.isChecked = !alarm.isVibrate
+        val alarmUri = Uri.parse(alarm.ringtoneUri)
+        val ringTone = RingtoneManager.getRingtone(context, alarmUri)
+        holder.tvRingAlarm.text = ringTone.getTitle(context)
         changeDayAlarm(holder)
         holder.tvTimeAlarm.setOnClickListener {
             callBack?.onChangeTime(alarm)
@@ -47,6 +53,17 @@ class AlarmAdapter(val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<Ala
         holder.imgDelete.setOnClickListener {
             callBack?.onDeleteAlarm(position)
         }
+        holder.switchAlarm.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+                callBack?.onChangeOnOff(isChecked)
+            }
+        }
+        holder.cbVibrate.setOnCheckedChangeListener { buttonView, isChecked ->
+            callBack?.onIsVibrate(isChecked)
+        }
+        holder.changeRington.setOnClickListener(View.OnClickListener {
+            callBack?.onChangeRington()
+        })
     }
 
     fun handleListener(callback: AlarmCallback?) {

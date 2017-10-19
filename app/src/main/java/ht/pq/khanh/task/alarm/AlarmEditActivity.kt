@@ -16,6 +16,9 @@ import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_alarm_edit.*
 import java.util.*
 import android.content.Intent
+import android.media.Ringtone
+import android.media.RingtoneManager
+import android.net.Uri
 import android.widget.*
 
 
@@ -39,6 +42,8 @@ class AlarmEditActivity : AppCompatActivity() {
     @BindView(R.id.tvRington)
     lateinit var tvRingtone : TextView
     private val realm by lazy { Realm.getDefaultInstance() }
+    private var ringToneUri : String? = null
+    private val RQS_RINGTONEPICKER = 111
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alarm_edit)
@@ -66,7 +71,14 @@ class AlarmEditActivity : AppCompatActivity() {
         val minute = timeAlarm.currentMinute
         time.set(Calendar.HOUR_OF_DAY, hour)
         time.set(Calendar.MINUTE, minute)
-        val alarm = Alarm(time.timeInMillis, "alarm", false, true)
+//        alarmDay.put(2, cbMon.isChecked)
+//        alarmDay.put(3, cbTue.isChecked)
+//        alarmDay.put(4, cbWed.isChecked)
+//        alarmDay.put(5, cbThur.isChecked)
+//        alarmDay.put(6, cbFri.isChecked)
+//        alarmDay.put(7, cbSat.isChecked)
+//        alarmDay.put(8, cbSun.isChecked)
+        val alarm = Alarm(time.timeInMillis, "alarm", false, true, ringToneUri)
         realm.insertAlarm(alarm)
         intent.putExtra("Alarm_parcel", alarm)
         setResult(Activity.RESULT_OK, intent)
@@ -75,16 +87,18 @@ class AlarmEditActivity : AppCompatActivity() {
 
     @OnClick(R.id.tvRington)
     fun chooseRingtone() {
-//        val audioIntent = Intent(Intent.ACTION_VIEW)
-//        audioIntent.type = "audio/*"
-//        startActivityForResult(audioIntent, 111)
+        val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+        startActivityForResult(intent, RQS_RINGTONEPICKER)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 111 && resultCode == Activity.RESULT_OK){
-            val path = data?.data
-            tvRingtone.text = path?.host
+        if (requestCode == RQS_RINGTONEPICKER && resultCode == android.app.Activity.RESULT_OK) {
+            val uri = data?.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+            val ringTone = RingtoneManager.getRingtone(applicationContext, uri)
+            ringToneUri = uri?.toString()
+            tvRingtone.text = ringTone.getTitle(this@AlarmEditActivity)
+//            ringTone.play()
         }
     }
     override fun onDestroy() {

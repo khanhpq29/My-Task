@@ -3,6 +3,7 @@ package ht.pq.khanh.task.alarm
 import android.app.Activity
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.media.RingtoneManager
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -19,12 +20,18 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
 import com.pawegio.kandroid.d
-import com.pawegio.kandroid.i
 import ht.pq.khanh.extension.*
 import ht.pq.khanh.model.Alarm
 import ht.pq.khanh.multitask.R
 import io.realm.Realm
 import java.util.*
+import android.widget.Toast
+import ht.pq.khanh.multitask.MainActivity
+import android.R.attr.data
+import android.app.Activity.RESULT_OK
+import android.media.Ringtone
+import android.net.Uri
+
 
 /**
  * Created by khanhpq on 9/25/17.
@@ -73,10 +80,12 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
             alarmAdapter?.notifyDataSetChanged()
         }
     }
+
     override fun onChangeTime(alarm: Alarm) {
         val timePicker = TimePickerDialog(activity, onTimeSet, 3, 5, DateFormat.is24HourFormat(activity))
         timePicker.show()
     }
+
     override fun onDeleteAlarm(position: Int) {
         d("ondelete")
         selectedPosition = position
@@ -104,6 +113,19 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         realm.insertAlarm(alarm)
     }
 
+    override fun onChangeRington() {
+
+    }
+
+    override fun onChangeOnOff(isOff: Boolean) {
+        activity.showToast("switch")
+
+    }
+
+    override fun onIsVibrate(isVibrate: Boolean) {
+        activity.showToast("vibrate")
+    }
+
     override fun display() {
 
     }
@@ -112,7 +134,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         presenter = AlarmPresenter()
         alarms = realm.copyFromRealm(realm.findAllAlarm())
         val decorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        alarmAdapter = AlarmAdapter(alarms)
+        alarmAdapter = AlarmAdapter(context, alarms)
         recyclerAlarm.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = alarmAdapter
@@ -129,7 +151,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
 
     override fun onStop() {
         super.onStop()
-        if (!realm.isClosed){
+        if (!realm.isClosed) {
             realm.close()
         }
     }
