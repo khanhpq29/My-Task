@@ -12,8 +12,7 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
- -->
-<!-- Detail Layout for Grid -->
+ --><!-- Detail Layout for Grid -->
 <android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -34,12 +33,12 @@
         android:layout_marginTop="@dimen/abc_list_item_padding_horizontal_material"
         android:fontFamily="sans-serif"
         android:gravity="center_horizontal"
+        android:text="Today, April 03"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textColor="@color/secondary_text"
         app:layout_columnSpan="2"
         app:layout_columnWeight="1"
-        app:layout_gravity="fill_horizontal"
-        android:text="Today, April 03" />
+        app:layout_gravity="fill_horizontal" />
 
     <ImageView
         android:id="@+id/detail_icon"
@@ -47,10 +46,10 @@
         android:adjustViewBounds="true"
         android:maxHeight="@dimen/today_icon"
         android:maxWidth="@dimen/today_icon"
+        android:transitionName="@string/detail_icon_transition_name"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal"
-        tools:src="@drawable/art_clouds"
-        android:transitionName="@string/detail_icon_transition_name"/>
+        tools:src="@drawable/art_clouds" />
 
     <TextView
         android:id="@+id/detail_high_textview"
@@ -68,10 +67,10 @@
         android:layout_width="0dp"
         android:fontFamily="sans-serif"
         android:gravity="center_horizontal"
+        android:text="Rainy"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textColor="@color/secondary_text"
-        app:layout_columnWeight="1"
-        android:text="Rainy" />
+        app:layout_columnWeight="1" />
 
     <TextView
         android:id="@+id/detail_low_textview"

@@ -15,11 +15,17 @@ fun Realm.insertAlarm(alarm: Alarm) {
     }
 }
 
+fun Realm.updateAlarm(alarm: Alarm){
+    this.executeTransaction {
+        realm -> realm.copyToRealmOrUpdate(alarm)
+    }
+}
+
 fun Realm.deleteAlarm(position: Int) {
     val data = this.findAllAlarm()
     this.executeTransaction {
-        val movie = data[position]
-        movie.deleteFromRealm()
+        val alarm = data[position]
+        alarm.deleteFromRealm()
     }
 }
 
@@ -41,8 +47,8 @@ fun Realm.insertRemind(remind: Reminder) {
 fun Realm.deleteRemind(position: Int) {
     val data = this.findAllRemind()
     this.executeTransaction {
-        val movie = data[position]
-        movie.deleteFromRealm()
+        val reminder = data[position]
+        reminder.deleteFromRealm()
     }
 }
 

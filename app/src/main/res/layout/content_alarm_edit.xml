@@ -8,6 +8,7 @@
     tools:context="ht.pq.khanh.task.alarm.AlarmEditActivity"
     tools:showIn="@layout/activity_alarm_edit">
     <android.support.constraint.ConstraintLayout
+        android:animateLayoutChanges="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

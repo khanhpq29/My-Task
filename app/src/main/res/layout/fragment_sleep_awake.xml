@@ -5,9 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="ht.pq.khanh.task.sleepawake.SleepAwakeFragment">
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true">
 
         <TextView
             android:id="@+id/textView3"
@@ -64,10 +66,12 @@
             app:layout_constraintBottom_toBottomOf="@+id/tv_sleep_day"
             app:layout_constraintRight_toRightOf="parent" />
     </android.support.constraint.ConstraintLayout>
+
     <FrameLayout
         android:id="@+id/fragment_awake"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
     <include
         layout="@layout/no_layout"
         android:visibility="gone" />

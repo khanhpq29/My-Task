@@ -6,17 +6,20 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.util.SparseBooleanArray
 import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
 /**
  * Created by khanhpq on 10/2/17.
  */
 
-open class Alarm(var time: Long = 0,
+open class Alarm(@PrimaryKey open var id: Long = 0,
+                 var time: Long = 0,
                  var label: String = "",
                  var isActive: Boolean = false,
                  var isVibrate: Boolean = false,
                  var ringtoneUri: String? = null) : RealmObject(), Parcelable {
     constructor(source: Parcel) : this(
+            source.readLong(),
             source.readLong(),
             source.readString(),
             1 == source.readInt(),
@@ -27,6 +30,7 @@ open class Alarm(var time: Long = 0,
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeLong(id)
         writeLong(time)
         writeString(label)
         writeInt((if (isActive) 1 else 0))

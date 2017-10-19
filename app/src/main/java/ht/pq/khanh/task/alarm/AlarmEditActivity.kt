@@ -40,9 +40,11 @@ class AlarmEditActivity : AppCompatActivity() {
     @BindView(R.id.cbSun)
     lateinit var cbSun: CheckBox
     @BindView(R.id.tvRington)
-    lateinit var tvRingtone : TextView
+    lateinit var tvRingtone: TextView
+    @BindView(R.id.cbVib)
+    lateinit var cbVibrate: CheckBox
     private val realm by lazy { Realm.getDefaultInstance() }
-    private var ringToneUri : String? = null
+    private var ringToneUri: String? = null
     private val RQS_RINGTONEPICKER = 111
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +60,7 @@ class AlarmEditActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home){
+        if (item.itemId == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this)
         }
         return super.onOptionsItemSelected(item)
@@ -78,7 +80,8 @@ class AlarmEditActivity : AppCompatActivity() {
 //        alarmDay.put(6, cbFri.isChecked)
 //        alarmDay.put(7, cbSat.isChecked)
 //        alarmDay.put(8, cbSun.isChecked)
-        val alarm = Alarm(time.timeInMillis, "alarm", false, true, ringToneUri)
+        val isVibration = cbVibrate.isChecked
+        val alarm = Alarm(time.timeInMillis, time.timeInMillis, "alarm", true, isVibration, ringToneUri)
         realm.insertAlarm(alarm)
         intent.putExtra("Alarm_parcel", alarm)
         setResult(Activity.RESULT_OK, intent)
@@ -101,6 +104,7 @@ class AlarmEditActivity : AppCompatActivity() {
 //            ringTone.play()
         }
     }
+
     override fun onDestroy() {
         super.onDestroy()
         realm.close()

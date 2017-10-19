@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat
 /**
  * Created by khanhpq on 9/25/17.
  */
-class AlarmAdapter(private val context: Context, private val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<AlarmAdapter.AlarmHolder>(){
+class AlarmAdapter(private val context: Context, private val alarmList: MutableList<Alarm>) : RecyclerView.Adapter<AlarmAdapter.AlarmHolder>() {
     private var isMonOn = true
     private var isTueOn = true
     private var isWedOn = true
@@ -41,37 +41,27 @@ class AlarmAdapter(private val context: Context, private val alarmList: MutableL
         val alarm = alarmList[position]
         val timeFormat = SimpleDateFormat(timeFormatString)
         holder.tvTimeAlarm.text = "${timeFormat.format(alarm.time)}"
-        holder.switchAlarm.isChecked = !alarm.isActive
-        holder.cbVibrate.isChecked = !alarm.isVibrate
-        val alarmUri = Uri.parse(alarm.ringtoneUri)
-        val ringTone = RingtoneManager.getRingtone(context, alarmUri)
-        holder.tvRingAlarm.text = ringTone.getTitle(context)
+        holder.switchAlarm.isChecked = alarm.isActive
+        holder.cbVibrate.isChecked = alarm.isVibrate
+        if (alarm.ringtoneUri != null) {
+            val alarmUri = Uri.parse(alarm.ringtoneUri)
+            val ringTone = RingtoneManager.getRingtone(context, alarmUri)
+            holder.tvRingAlarm.text = ringTone.getTitle(context)
+        } else {
+            holder.tvRingAlarm.text = "No ringtone"
+        }
         changeDayAlarm(holder)
-        holder.tvTimeAlarm.setOnClickListener {
-            callBack?.onChangeTime(alarm)
-        }
-        holder.imgDelete.setOnClickListener {
-            callBack?.onDeleteAlarm(position)
-        }
-        holder.switchAlarm.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
-                callBack?.onChangeOnOff(isChecked)
-            }
-        }
-        holder.cbVibrate.setOnCheckedChangeListener { buttonView, isChecked ->
-            callBack?.onIsVibrate(isChecked)
-        }
-        holder.changeRington.setOnClickListener(View.OnClickListener {
-            callBack?.onChangeRington()
-        })
+
     }
 
     fun handleListener(callback: AlarmCallback?) {
         this.callBack = callBack
     }
-    fun setOnChangeDate(listener: AlarmCallback?){
+
+    fun setOnChangeDate(listener: AlarmCallback?) {
         callBack = listener
     }
+
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AlarmHolder {
         val view = parent!!.inflateLayout(R.layout.item_alarm)
         return AlarmHolder(view)
@@ -179,7 +169,8 @@ class AlarmAdapter(private val context: Context, private val alarmList: MutableL
             }
         }
     }
-    fun addChange(alarms : MutableList<Alarm>){
+
+    fun addChange(alarms: MutableList<Alarm>) {
         val diffCallback = AlarmDiffUtil(alarmList, alarms)
         val diffAlarm = DiffUtil.calculateDiff(diffCallback)
         alarmList.clear()
@@ -187,7 +178,7 @@ class AlarmAdapter(private val context: Context, private val alarmList: MutableL
         diffAlarm.dispatchUpdatesTo(this)
     }
 
-    class AlarmHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class AlarmHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @BindView(R.id.imageView2)
         lateinit var imgMon: ImageView
         @BindView(R.id.imageView3)
@@ -213,10 +204,36 @@ class AlarmAdapter(private val context: Context, private val alarmList: MutableL
         @BindView(R.id.switch_alarm)
         lateinit var switchAlarm: SwitchCompat
         @BindView(R.id.img_delete)
-        lateinit var imgDelete : ImageView
+        lateinit var imgDelete: ImageView
+
         init {
             ButterKnife.bind(this, itemView)
+
+            switchAlarm.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (buttonView.isPressed) {
+                    callBack?.onActivate(isChecked, adapterPosition)
+                }
+            }
+            tvTimeAlarm.setOnClickListener {
+                callBack?.onChangeTime(adapterPosition)
+            }
+            imgDelete.setOnClickListener {
+                callBack?.onDeleteAlarm(adapterPosition)
+            }
+
+            cbVibrate.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (buttonView.isPressed) {
+                    callBack?.onIsVibrate(isChecked, adapterPosition)
+                }
+            }
+            changeRington.setOnClickListener({
+                callBack?.onChangeRingtone(adapterPosition)
+            })
+            tvRingAlarm.setOnClickListener({
+                callBack?.onChangeRingtone(adapterPosition)
+            })
         }
+
     }
 
 }

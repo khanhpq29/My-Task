@@ -26,12 +26,12 @@
         android:id="@+id/lbVersion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Version"
         app:layout_constraintBottom_toTopOf="@+id/textView13"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+        app:layout_constraintTop_toBottomOf="@+id/textView11"
+        tools:text="Version" />
 
     <TextView
         android:id="@+id/textView13"

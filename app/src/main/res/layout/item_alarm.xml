@@ -6,6 +6,7 @@
     android:layout_height="wrap_content">
 
     <android.support.constraint.ConstraintLayout
+        android:animateLayoutChanges="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -14,10 +15,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="6:30 AM"
-            android:textSize="24sp"
+            android:textSize="36sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -26,11 +26,10 @@
             android:id="@+id/switch_alarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTimeAlarm"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/tvTimeAlarm" />
 
         <ImageView
             android:id="@+id/imageView2"
@@ -121,9 +120,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTimeAlarm"
             app:layout_constraintEnd_toStartOf="@+id/switch_alarm"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvTimeAlarm"
             app:srcCompat="@android:drawable/ic_menu_delete" />
 
         <android.support.constraint.ConstraintLayout

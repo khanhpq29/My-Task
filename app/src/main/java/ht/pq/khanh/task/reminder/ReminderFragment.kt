@@ -169,9 +169,6 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
 
     override fun onStop() {
         super.onStop()
-//        if (!realm.isClosed) {
-//            realm.close()
-//        }
         d("onstop")
     }
 
