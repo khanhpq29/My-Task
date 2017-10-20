@@ -35,7 +35,7 @@ class AlarmAdapter(private val context: Context, private val alarmList: MutableL
     private var isSatOn = true
     private var isSunOn = true
     private var callBack: AlarmCallback? = null
-    private val timeFormatString = "hh:mm a"
+    private val timeFormatString = "HH:mm"
     override fun onBindViewHolder(holder: AlarmHolder, position: Int) {
         setDay(holder)
         val alarm = alarmList[position]
@@ -54,8 +54,8 @@ class AlarmAdapter(private val context: Context, private val alarmList: MutableL
 
     }
 
-    fun handleListener(callback: AlarmCallback?) {
-        this.callBack = callBack
+    fun handleListener(listener: AlarmCallback?) {
+        this.callBack = listener
     }
 
     fun setOnChangeDate(listener: AlarmCallback?) {

@@ -112,7 +112,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onDestroy() {
         super.onDestroy()
-        val ref = TaskApplication().getRefWatcher(this)
+        val ref = TaskApplication().getRefWatcher(applicationContext)
         ref.watch(ref)
     }
 

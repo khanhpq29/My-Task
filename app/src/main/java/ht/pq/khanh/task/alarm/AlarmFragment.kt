@@ -135,13 +135,9 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
     override fun onIsVibrate(isVibrate: Boolean, position: Int) {
         selectedPosition = position
         activity.showToast("vibrate")
-        val alrmItem = alarms[selectedPosition]
-//        if (isVibrate) {
-//            val vibration = activity.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-//            vibration.vibrate(300)
-//        }
-        alrmItem.isVibrate = isVibrate
-        realm.updateAlarm(alrmItem)
+        val alarm = alarms[selectedPosition]
+        alarm.isVibrate = isVibrate
+        realm.updateAlarm(alarm)
         alarmAdapter?.notifyDataSetChanged()
     }
 

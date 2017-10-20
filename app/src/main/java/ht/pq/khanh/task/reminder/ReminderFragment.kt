@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -19,10 +20,16 @@ import ht.pq.khanh.extension.*
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.multitask.SettingsActivity
+import ht.pq.khanh.service.OnStartDragListener
+import ht.pq.khanh.service.SimpleItemTouchHelperCallBack
 import io.realm.Realm
 
 class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
-        ReminderAdapter.OnLongRclItemClick {
+        ReminderAdapter.OnLongRclItemClick, OnStartDragListener {
+    override fun onDragItem(holder: RecyclerView.ViewHolder) {
+        simpleTouch.startDrag(holder)
+    }
+
     private val REQUEST_CODE_CREATE = 117
     private val REQUEST_UPDATE = 113
     @BindView(R.id.list_reminder)
@@ -33,6 +40,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
     private lateinit var realm: Realm
     private lateinit var reminder: Reminder
     private var selectedPosition = 0
+    private lateinit var simpleTouch : ItemTouchHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
@@ -56,6 +64,9 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
         remindAdapter?.setHasStableIds(true)
         initRecyclerview()
         registerForContextMenu(recyclerRemind)
+        val callback = SimpleItemTouchHelperCallBack(remindAdapter!!)
+        simpleTouch = ItemTouchHelper(callback)
+        simpleTouch.attachToRecyclerView(recyclerRemind)
         remindAdapter?.setOnChangeItem(this)
         remindAdapter?.setOnLongClickListener(this)
 

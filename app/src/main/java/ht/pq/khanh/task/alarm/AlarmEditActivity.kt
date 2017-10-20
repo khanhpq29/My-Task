@@ -21,7 +21,6 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.widget.*
 
-
 class AlarmEditActivity : AppCompatActivity() {
     @BindView(R.id.timeAlarm)
     lateinit var timeAlarm: TimePicker
@@ -101,7 +100,6 @@ class AlarmEditActivity : AppCompatActivity() {
             val ringTone = RingtoneManager.getRingtone(applicationContext, uri)
             ringToneUri = uri?.toString()
             tvRingtone.text = ringTone.getTitle(this@AlarmEditActivity)
-//            ringTone.play()
         }
     }
 

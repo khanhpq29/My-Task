@@ -2,6 +2,7 @@ package ht.pq.khanh.task.reminder
 
 import android.graphics.Color
 import android.graphics.Typeface
+import android.opengl.GLSurfaceView
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -14,13 +15,27 @@ import com.amulyakhare.textdrawable.TextDrawable
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
+import ht.pq.khanh.service.ItemTouchHelperAdapter
+import ht.pq.khanh.service.ItemTouchViewholder
 import ht.pq.khanh.util.ReminderDiffUtil
 import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by khanhpq on 9/29/17.
  */
-class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerView.Adapter<ReminderAdapter.ReminderHolder>() {
+class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerView.Adapter<ReminderAdapter.ReminderHolder>(), ItemTouchHelperAdapter {
+    override fun onItemMove(fromPosition: Int, toPosition: Int) : Boolean {
+        Collections.swap(listRemind, fromPosition, toPosition)
+        notifyDataSetChanged()
+        return true
+    }
+
+    override fun onItemDissmiss(position: Int) {
+        listRemind.removeAt(position)
+        notifyDataSetChanged()
+    }
+
     private val DATE_FORMAT = "MMM, dd yyyy"
     private val TIME_FORMAT = "hh:mm a"
     private var listener: OnAlterItemRecyclerView? = null
@@ -65,7 +80,15 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     fun setOnLongClickListener(callback: OnLongRclItemClick?){
         this.longListener = callback
     }
-    inner class ReminderHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ReminderHolder(itemView: View) : RecyclerView.ViewHolder(itemView), ItemTouchViewholder {
+        override fun onItemSelect() {
+            itemView.setBackgroundColor(Color.LTGRAY)
+        }
+
+        override fun onItemClear() {
+            itemView.setBackgroundColor(0)
+        }
+
         @BindView(R.id.imgText)
         lateinit var imgText: ImageView
         @BindView(R.id.tv_date)
