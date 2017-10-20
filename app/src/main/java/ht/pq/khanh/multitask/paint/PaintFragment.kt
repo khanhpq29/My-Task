@@ -15,7 +15,6 @@ import butterknife.ButterKnife
 import com.android.colorpicker.ColorPickerPalette
 import com.android.colorpicker.ColorPickerSwatch
 import ht.pq.khanh.TaskApplication
-import ht.pq.khanh.dialog.ColorPickerDialog
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.multitask.R
 
@@ -67,7 +66,6 @@ class PaintFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallb
     }
 
     private fun setColor() {
-//        val colorPickerDialog = ColorPickerDialog()
         val colors = intArrayOf(R.color.red,
                 R.color.pink,
                 R.color.purple,
@@ -87,7 +85,7 @@ class PaintFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallb
                 R.color.blue_grey)
 
         val layoutInflater = LayoutInflater.from(context)
-        val colorPickerPalette = layoutInflater.inflate(R.layout.color_picker_dialog, null) as ColorPickerPalette
+        val colorPickerPalette = layoutInflater.inflate(R.layout.color_picker_dg, null) as ColorPickerPalette
         colorPickerPalette.init(colors.size, 4, this)
         colorPickerPalette.drawPalette(colors,
                 R.color.green)

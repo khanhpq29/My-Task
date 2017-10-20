@@ -3,7 +3,6 @@ package ht.pq.khanh.setting
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceFragment
 import android.support.v7.preference.CheckBoxPreference
 import android.support.v7.preference.EditTextPreference
 import android.support.v7.preference.PreferenceFragmentCompat
@@ -14,12 +13,12 @@ import ht.pq.khanh.util.Common
 /**
  * Created by khanhpq on 10/5/17.
  */
-class SettingFragment : PreferenceFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        addPreferencesFromResource(R.xml.preferences_layout)
+class SettingFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        addPreferencesFromResource(R.xml.pref_general)
     }
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if (key == Common.NIGHT_PREFERENCE_KEY) {
             val sharedPreference = activity.getSharedPreferences(Common.THEME_PREFERENCES, Context.MODE_PRIVATE)
             val themeEditor = sharedPreference.edit()
@@ -34,18 +33,18 @@ class SettingFragment : PreferenceFragment(), SharedPreferences.OnSharedPreferen
             }
             themeEditor.apply()
             activity.recreate()
-        }else if (key == Common.TEMP_PREFERENCE_KEY){
+        } else if (key == Common.TEMP_PREFERENCE_KEY) {
             val sharePref = activity.getSharedPreferences(Common.TEMP_PREFERENCE, Context.MODE_PRIVATE)
             val tempEditor = sharePref.edit()
             val checkTemp = findPreference(Common.TEMP_PREFERENCE_KEY) as CheckBoxPreference
-            if (checkTemp.isChecked){
+            if (checkTemp.isChecked) {
                 tempEditor.putString(Common.TEMP_TYPE, Common.CELSIUS_TYPE)
                 checkTemp.summary = "°C"
-            }else {
+            } else {
                 tempEditor.putString(Common.TEMP_TYPE, Common.FAHRENHEIT_TYPE)
                 checkTemp.summary = "°F"
             }
-        }else if (key == resources.getString(R.string.location_preference)){
+        } else if (key == resources.getString(R.string.location_preference)) {
             val locationPref = activity.getSharedPreferences(Common.LOCATION_PREFERENCE, Context.MODE_PRIVATE)
             val locationEditor = locationPref.edit()
             val location = findPreference(resources.getString(R.string.location_preference)) as EditTextPreference

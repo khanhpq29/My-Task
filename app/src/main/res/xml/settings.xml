@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="Setting">
-        <SwitchPreferenceCompat
+        <android.support.v7.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="@string/night_mode_pref_key"
             android:summary="Activate night mode"
             android:title="Night mode" />
 
-        <EditTextPreference
+        <android.support.v7.preference.Edi
             android:dialogLayout="@layout/pref_dialog_edittext"
             android:dialogMessage="Enter location"
             android:key="@string/location_preference"

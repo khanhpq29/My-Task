@@ -1,7 +1,6 @@
 package ht.pq.khanh.multitask
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
@@ -18,8 +17,8 @@ import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.multitask.forecast.ForecastFragment
 import ht.pq.khanh.multitask.paint.PaintFragment
 import ht.pq.khanh.multitask.radio.RadioFragment
+import ht.pq.khanh.setting.SettingFragment
 import ht.pq.khanh.task.alarm.AlarmFragment
-import ht.pq.khanh.task.reminder.ReminderActivity
 import ht.pq.khanh.task.reminder.ReminderFragment
 import ht.pq.khanh.task.sleepawake.SleepAwakeFragment
 import ht.pq.khanh.util.Common
@@ -33,7 +32,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var navigationView: NavigationView
     private lateinit var title: String
     private var theme = "name_of_the_theme"
-    private val RECREATE_ACTIVITY ="recreat_theme"
+    private val RECREATE_ACTIVITY = "recreat_theme"
     private var themeStyle = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         setUpTheme()
@@ -89,7 +88,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 title = "Painting"
             }
             else -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
+                navigateToFragment(SettingFragment())
                 title = "Setting"
             }
         }
