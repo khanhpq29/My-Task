@@ -69,7 +69,8 @@ public class PaintView extends View {
     }
 
     public void setColorPaint(int color) {
-        mPaint.setColor(color);
+        currentColor = color;
+        mPaint.setColor(currentColor);
         invalidate();
     }
 
