@@ -4,10 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.preference.PreferenceManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import butterknife.BindView
@@ -34,20 +36,22 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var theme = "name_of_the_theme"
     private val RECREATE_ACTIVITY = "recreat_theme"
     private var themeStyle = -1
+    private var currentId = R.id.nav_reminder
     override fun onCreate(savedInstanceState: Bundle?) {
         setUpTheme()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
         ButterKnife.bind(this)
         setSupportActionBar(toolbar)
+        supportFragmentManager.beginTransaction().replace(R.id.container, ReminderFragment()).commit()
         val toggle = ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer.addDrawerListener(toggle)
         toggle.syncState()
 
         navigationView.setNavigationItemSelectedListener(this)
-        val item = navigationView.menu.getItem(0)
-        onNavigationItemSelected(item)
+//        val item = navigationView.menu.getItem(0)
+//        onNavigationItemSelected(item)
     }
 
     override fun onBackPressed() {
@@ -61,39 +65,44 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         val id = item.itemId
+        if (currentId == id){
+            drawer.closeDrawer(GravityCompat.START)
+            return false
+        }
+        val fragmentManager = supportFragmentManager
         when (id) {
             R.id.nav_reminder -> {
-                navigateToFragment(ReminderFragment())
+                navigateToFragment(fragmentManager, ReminderFragment())
                 title = "Reminder"
             }
             R.id.nav_schedule -> {
-                navigateToFragment(SleepAwakeFragment())
+                navigateToFragment(fragmentManager, SleepAwakeFragment())
                 title = "Schedule"
             }
             R.id.nav_forecast -> {
-                navigateToFragment(ForecastFragment())
+                navigateToFragment(fragmentManager, ForecastFragment())
                 title = "Weather Forecast"
             }
 
             R.id.nav_alarm -> {
-                navigateToFragment(AlarmFragment())
+                navigateToFragment(fragmentManager, AlarmFragment())
                 title = "Alarm"
             }
             R.id.nav_about -> {
-                navigateToFragment(RadioFragment())
+                navigateToFragment(fragmentManager, RadioFragment())
                 title = "Radio"
             }
             R.id.nav_paint -> {
-                navigateToFragment(PaintFragment())
+                navigateToFragment(fragmentManager, PaintFragment())
                 title = "Painting"
             }
             else -> {
-                navigateToFragment(SettingFragment())
+                navigateToFragment(fragmentManager, SettingFragment())
                 title = "Setting"
             }
         }
         supportActionBar?.title = title
-        item.isChecked = true
+        currentId = id
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
@@ -126,13 +135,9 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setTheme(themeStyle)
     }
 
-    private fun navigateToFragment(fragment: Fragment) {
-        val transaction = supportFragmentManager.beginTransaction()
-        if (fragment.isAdded) {
-            transaction.show(fragment)
-        } else {
-            transaction.replace(R.id.container, fragment)
-        }
+    private fun navigateToFragment(fragmentManager: FragmentManager, fragment: Fragment) {
+        val transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.container, fragment)
         transaction.commit()
     }
 

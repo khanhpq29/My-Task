@@ -1,12 +1,8 @@
 package ht.pq.khanh.multitask.weather
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.NavUtils
-import android.view.Menu
+import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import ht.pq.khanh.api.forecast.List
-
 import ht.pq.khanh.multitask.R
 
 class WeatherDetailActivity : AppCompatActivity() {
@@ -23,13 +19,10 @@ class WeatherDetailActivity : AppCompatActivity() {
         supportPostponeEnterTransition()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        return true
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this)
+            finish()
+            return true
         }
         return super.onOptionsItemSelected(item)
     }

@@ -13,6 +13,6 @@ interface ForecastContract {
         fun hideProgressDialog()
     }
     interface Presenter{
-        fun fetchData()
+        fun fetchData(location: String)
     }
 }

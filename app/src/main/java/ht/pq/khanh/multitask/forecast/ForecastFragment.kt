@@ -1,5 +1,6 @@
 package ht.pq.khanh.multitask.forecast
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
@@ -14,28 +15,30 @@ import android.widget.RelativeLayout
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.pawegio.kandroid.IntentFor
+import com.pawegio.kandroid.d
 import ht.pq.khanh.api.forecast.Forecast
 import ht.pq.khanh.api.forecast.List
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.multitask.weather.WeatherDetailActivity
+import ht.pq.khanh.util.Common
 import io.reactivex.disposables.CompositeDisposable
 
 /**
  * Created by khanhpq on 9/25/17.
  */
 
-class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWeatherItemClickListener{
+class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWeatherItemClickListener {
     @BindView(R.id.listForecast)
-    lateinit var recyclerForecast : RecyclerView
+    lateinit var recyclerForecast: RecyclerView
     @BindView(R.id.no_layout)
-    lateinit var noLayout : RelativeLayout
+    lateinit var noLayout: RelativeLayout
     @BindView(R.id.swipe_view)
-    lateinit var swipeLayout : SwipeRefreshLayout
-    private var forecastAdapter : ForecastAdapter? = null
-    private lateinit var presenter : ForecastPresenter
-    private var listForecast : MutableList<List> = arrayListOf()
-    private val disposal : CompositeDisposable by lazy { CompositeDisposable() }
+    lateinit var swipeLayout: SwipeRefreshLayout
+    private var forecastAdapter: ForecastAdapter? = null
+    private lateinit var presenter: ForecastPresenter
+    private var listForecast: MutableList<List> = arrayListOf()
+    private val disposal: CompositeDisposable by lazy { CompositeDisposable() }
 
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,8 +54,11 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
         presenter = ForecastPresenter(this, disposal)
         val itemRclDecorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         val linearManager = LinearLayoutManager(activity)
-        presenter.fetchData()
-        recyclerForecast.apply{
+        val locationPref = activity.getSharedPreferences(Common.LOCATION_PREFERENCE, Context.MODE_PRIVATE)
+        var location = locationPref.getString("Location_name", "London")
+        d(location)
+        presenter.fetchData(location)
+        recyclerForecast.apply {
             layoutManager = linearManager
             adapter = forecastAdapter
             addItemDecoration(itemRclDecorator)
@@ -66,9 +72,10 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
         forecastAdapter?.notifyDataSetChanged()
     }
 
-    override fun showError(t :Throwable) {
+    override fun showError(t: Throwable) {
         Log.e("error", t.toString())
     }
+
     override fun showProgressDialog() {
         swipeLayout.isRefreshing = true
     }
@@ -76,6 +83,7 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
     override fun hideProgressDialog() {
         swipeLayout.isRefreshing = false
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         swipeLayout.isRefreshing = false
@@ -86,6 +94,7 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
         super.onStop()
         disposal.clear()
     }
+
     override fun onWeatherItemClick(position: Int) {
         val item = listForecast[position]
         val intent = IntentFor<WeatherDetailActivity>(activity)

@@ -9,8 +9,8 @@ import io.reactivex.disposables.CompositeDisposable
  */
 class ForecastPresenter(private val view: ForecastContract.View, private val disposal: CompositeDisposable) : ForecastContract.Presenter {
     private val repository: ForecastRepository by lazy { ForecastRepository() }
-    override fun fetchData() {
-        disposal.add(repository.getForecast()
+    override fun fetchData(location: String) {
+        disposal.add(repository.getForecast(location)
                 .doOnNext { view.showProgressDialog() }
                 .doAfterNext { view.hideProgressDialog() }
                 .single(Forecast())

@@ -1,11 +1,17 @@
 package ht.pq.khanh.task.alarm
 
 import android.app.Activity
+import android.content.Intent
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.CheckBox
+import android.widget.TextView
+import android.widget.TimePicker
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -15,11 +21,6 @@ import ht.pq.khanh.multitask.R
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_alarm_edit.*
 import java.util.*
-import android.content.Intent
-import android.media.Ringtone
-import android.media.RingtoneManager
-import android.net.Uri
-import android.widget.*
 
 class AlarmEditActivity : AppCompatActivity() {
     @BindView(R.id.timeAlarm)
@@ -56,13 +57,6 @@ class AlarmEditActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this)
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     @OnClick(R.id.fab)
@@ -102,7 +96,13 @@ class AlarmEditActivity : AppCompatActivity() {
             tvRingtone.text = ringTone.getTitle(this@AlarmEditActivity)
         }
     }
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
     override fun onDestroy() {
         super.onDestroy()
         realm.close()

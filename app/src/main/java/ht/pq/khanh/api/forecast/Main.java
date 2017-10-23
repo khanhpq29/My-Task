@@ -12,7 +12,7 @@ public class Main implements Parcelable {
     @SerializedName("temp")
     @Expose
     private Double temp;
-    @SerializedName("temp_min")
+    @SerializedName("min")
     @Expose
     private Double tempMin;
     @SerializedName("temp_max")

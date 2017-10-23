@@ -40,7 +40,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
     private lateinit var realm: Realm
     private lateinit var reminder: Reminder
     private var selectedPosition = 0
-    private lateinit var simpleTouch : ItemTouchHelper
+    private lateinit var simpleTouch: ItemTouchHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
@@ -104,7 +104,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
                     realm.insertRemind(reminder)
                     remindAdapter?.notifyDataSetChanged()
                 }
-            }else if (requestCode == REQUEST_UPDATE){
+            } else if (requestCode == REQUEST_UPDATE) {
                 data?.let {
                     reminder = data.getParcelableExtra("reminder_result")
                     listReminder.removeAt(selectedPosition)
@@ -171,11 +171,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
     override fun onDestroyView() {
         super.onDestroyView()
         d("ondestroyview")
-        if (!realm.isClosed) {
-            realm.close()
-        }
-        val ref = TaskApplication().getRefWatcher(context)
-        ref.watch(ref)
+        realm.close()
     }
 
     override fun onStop() {

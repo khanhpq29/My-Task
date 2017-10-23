@@ -58,13 +58,15 @@ class WeatherFragment : Fragment() {
 
     private fun initLayout() {
         tvAdd.text = "London"
-        tvDay.text = "${itemList!!.main.tempMax}°"
-        tvMinTemp.text = "${itemList!!.main.tempMin}°"
+        tvDay.text = "${itemList!!.temp.max}°"
+        tvMinTemp.text = "${itemList!!.temp.min}°"
         imgIcon.loadImage("${Common.URl_ICON}${itemList!!.weather[0].icon}.png")
         tvDescription.text = itemList!!.weather[0].description
-        tvWind.text = "${itemList!!.wind.speed} km/h NW"
-        tvHumid.text = "${itemList!!.main.humidity} %"
-        tvPressure.text = "${itemList!!.main.pressure} hPa"
+//        tvWind.text = "${itemList!!.wind.speed} km/h NW"
+//        tvHumid.text = "${itemList!!.main.humidity} %"
+//        tvPressure.text = "${itemList!!.main.pressure} hPa"
+        tvHumid.text = "9%"
+        tvPressure.text = "56hPa"
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater?) {

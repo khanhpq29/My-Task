@@ -17,9 +17,9 @@ class WeatherDiffUtil(val oldList: MutableList<List>, val newList : MutableList<
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
-        if (oldItem.dt == newItem.dt && oldItem.dtTxt == newItem.dtTxt){
-            return true
-        }
+//        if (oldItem.dt == newItem.dt && oldItem.dtTxt == newItem.dtTxt){
+//            return true
+//        }
         return false
     }
 }

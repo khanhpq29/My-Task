@@ -12,8 +12,8 @@ import io.reactivex.schedulers.Schedulers
  */
 class ForecastRepository {
     val forecastService : ForecastService = ApiManager.createApiService(ForecastService::class.java)
-    fun getForecast() : Observable<Forecast>{
-        return forecastService.getForecastWeather().observeOn(AndroidSchedulers.mainThread())
+    fun getForecast(location : String) : Observable<Forecast>{
+        return forecastService.getForecastWeather(location, "b1b15e88fa797225412429c1c50c122a1").observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
     }
 }

@@ -20,16 +20,19 @@ public class List implements Parcelable {
     @SerializedName("weather")
     @Expose
     private java.util.List<Weather> weather = null;
-    @SerializedName("clouds")
-    @Expose
-    private Clouds clouds;
-    @SerializedName("wind")
-    @Expose
-    private Wind wind;
-    @SerializedName("dt_txt")
-    @Expose
-    private String dtTxt;
 
+//    @SerializedName("clouds")
+//    @Expose
+//    private Clouds clouds;
+//    @SerializedName("wind")
+//    @Expose
+//    private Wind wind;
+//    @SerializedName("dt_txt")
+//    @Expose
+//    private String dtTxt;
+    @SerializedName("temp")
+    @Expose
+    private Temp temp;
     public Long getDt() {
         return dt;
     }
@@ -54,29 +57,37 @@ public class List implements Parcelable {
         this.weather = weather;
     }
 
-    public Clouds getClouds() {
-        return clouds;
+    public Temp getTemp() {
+        return temp;
     }
 
-    public void setClouds(Clouds clouds) {
-        this.clouds = clouds;
+    public void setTemp(Temp temp) {
+        this.temp = temp;
     }
 
-    public Wind getWind() {
-        return wind;
-    }
-
-    public void setWind(Wind wind) {
-        this.wind = wind;
-    }
-
-    public String getDtTxt() {
-        return dtTxt;
-    }
-
-    public void setDtTxt(String dtTxt) {
-        this.dtTxt = dtTxt;
-    }
+//    public Clouds getClouds() {
+//        return clouds;
+//    }
+//
+//    public void setClouds(Clouds clouds) {
+//        this.clouds = clouds;
+//    }
+//
+//    public Wind getWind() {
+//        return wind;
+//    }
+//
+//    public void setWind(Wind wind) {
+//        this.wind = wind;
+//    }
+//
+//    public String getDtTxt() {
+//        return dtTxt;
+//    }
+//
+//    public void setDtTxt(String dtTxt) {
+//        this.dtTxt = dtTxt;
+//    }
 
 
     @Override
@@ -89,9 +100,9 @@ public class List implements Parcelable {
         dest.writeValue(this.dt);
         dest.writeParcelable(this.main, flags);
         dest.writeList(this.weather);
-        dest.writeParcelable(this.clouds, flags);
-        dest.writeParcelable(this.wind, flags);
-        dest.writeString(this.dtTxt);
+        dest.writeParcelable(this.temp, flags);
+//        dest.writeParcelable(this.wind, flags);
+//        dest.writeString(this.dtTxt);
     }
 
     public List() {
@@ -102,9 +113,9 @@ public class List implements Parcelable {
         this.main = in.readParcelable(Main.class.getClassLoader());
         this.weather = new ArrayList<Weather>();
         in.readList(this.weather, Weather.class.getClassLoader());
-        this.clouds = in.readParcelable(Clouds.class.getClassLoader());
-        this.wind = in.readParcelable(Wind.class.getClassLoader());
-        this.dtTxt = in.readString();
+        this.temp = in.readParcelable(Clouds.class.getClassLoader());
+//        this.wind = in.readParcelable(Wind.class.getClassLoader());
+//        this.dtTxt = in.readString();
     }
 
     public static final Parcelable.Creator<List> CREATOR = new Parcelable.Creator<List>() {

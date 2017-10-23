@@ -5,21 +5,23 @@
         android:title="Setting">
 
         <android.support.v7.preference.SwitchPreferenceCompat
-            android:key="key1"
+            android:key="@string/night_mode_pref_key"
             android:title="Night mode"
-            android:summary="Activate night mode"
+            android:summaryOn="Night mode is on"
+            android:summaryOff="Night mode is off"
             android:defaultValue="true" />
 
         <android.support.v7.preference.EditTextPreference
-            android:key="key2"
+            android:key="@string/location_preference"
             android:title="Location"
             android:summary="Address"
             android:dialogMessage="Enter location"
             android:dialogLayout="@layout/pref_dialog_edittext" />
         <android.support.v7.preference.CheckBoxPreference
-            android:key="key3"
+            android:key="temperaturePreferece"
             android:title="Temperature degree"
-            android:summary="Celsius/Fahrenheit"
+            android:summaryOn="°C"
+            android:summaryOff="°F"
             android:defaultValue="true"/>
 
     </android.support.v7.preference.PreferenceCategory>

@@ -22,13 +22,13 @@ import ht.pq.khanh.util.WeatherDiffUtil
 class ForecastAdapter(private val context : Context, private val forecast: MutableList<List>) : RecyclerView.Adapter<ForecastAdapter.ForecastHolder>() {
     private var listener: OnWeatherItemClickListener? = null
     override fun onBindViewHolder(holder: ForecastHolder, position: Int) {
-        val main = forecast[position].main
+        val main = forecast[position].temp
         val weather = forecast[position].weather
 
         holder.tvDescript.text = weather[0].description
         holder.tvDate.text = Common.getFriendlyDayString(context, forecast[position].dt, false)
-        holder.tvHighTemp.text = "${main.tempMax}°"
-        holder.tvLowTemp.text = "${main.tempMin}°"
+        holder.tvHighTemp.text = "${main.max}°"
+        holder.tvLowTemp.text = "${main.min}°"
         holder.imgIcon.loadImage("${Common.URl_ICON}${weather[0].icon}.png")
 
     }
