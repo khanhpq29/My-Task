@@ -1,7 +1,10 @@
 package ht.pq.khanh.task.reminder
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
+import android.support.constraint.ConstraintLayout
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -11,26 +14,33 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.amulyakhare.textdrawable.TextDrawable
 import ht.pq.khanh.extension.inflateLayout
+import ht.pq.khanh.helper.ItemTouchHelperAdapter
+import ht.pq.khanh.helper.ItemTouchHelperViewHolder
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
-import ht.pq.khanh.service.ItemTouchHelperAdapter
-import ht.pq.khanh.service.ItemTouchViewholder
 import java.text.SimpleDateFormat
 import java.util.*
 
 /**
  * Created by khanhpq on 9/29/17.
  */
-class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerView.Adapter<ReminderAdapter.ReminderHolder>(), ItemTouchHelperAdapter {
-    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
-        Collections.swap(listRemind, fromPosition, toPosition)
-        notifyDataSetChanged()
-        return true
+class ReminderAdapter(private val context: Context, private val listRemind: MutableList<Reminder>) : RecyclerView.Adapter<ReminderAdapter.ReminderHolder>(), ItemTouchHelperAdapter {
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(listRemind, i, i + 1)
+            }
+        }else{
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(listRemind, i, i - 1)
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition)
+
     }
 
-    override fun onItemDissmiss(position: Int) {
-        listRemind.removeAt(position)
-        notifyDataSetChanged()
+    override fun onItemDismiss(position: Int) {
+        longListener?.onLongClick(position)
     }
 
     private val DATE_FORMAT = "MMM, dd yyyy"
@@ -79,13 +89,13 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
         this.longListener = callback
     }
 
-    inner class ReminderHolder(itemView: View) : RecyclerView.ViewHolder(itemView), ItemTouchViewholder {
-        override fun onItemSelect() {
-            itemView.setBackgroundColor(Color.LTGRAY)
+    inner class ReminderHolder(itemView: View) : RecyclerView.ViewHolder(itemView), ItemTouchHelperViewHolder {
+        override fun onItemSelected(context: Context?) {
+            itemContain.setBackgroundColor(ContextCompat.getColor(context, R.color.blue_grey))
         }
 
-        override fun onItemClear() {
-            itemView.setBackgroundColor(0)
+        override fun onItemClear(context: Context?) {
+            itemContain.setBackgroundColor(0)
         }
 
         @BindView(R.id.imgText)
@@ -98,17 +108,14 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
         lateinit var tvMessage: TextView
         @BindView(R.id.tv_time)
         lateinit var tvTimeHour: TextView
+        @BindView(R.id.item_container)
+        lateinit var itemContain: ConstraintLayout
 
         init {
             ButterKnife.bind(this, itemView)
             itemView.setOnClickListener {
                 val position = adapterPosition
                 listener?.onChangeItem(position)
-            }
-            itemView.setOnLongClickListener {
-                val position = adapterPosition
-                longListener?.onLongClick(position)
-                true
             }
         }
     }

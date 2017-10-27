@@ -28,7 +28,6 @@ import java.util.*
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.view.inputmethod.InputMethodManager
 
-
 /**
  * Created by khanhpq on 10/5/17.
  */
@@ -42,7 +41,7 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
     lateinit var edtTitle: TextInputEditText
     @BindView(R.id.switch_reminder)
     lateinit var switchRemind: SwitchCompat
-    private val realm: Realm by lazy { Realm.getDefaultInstance() }
+    private lateinit var realm: Realm
     private var item: Reminder? = null
     private val timeReminder : Calendar by lazy { Calendar.getInstance() }
     private val dateReminder : Calendar by lazy { Calendar.getInstance() }
@@ -54,6 +53,7 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = container!!.inflateLayout(R.layout.fragment_detail_reminder)
         ButterKnife.bind(this, view)
+        realm = Realm.getDefaultInstance()
         return view
     }
 

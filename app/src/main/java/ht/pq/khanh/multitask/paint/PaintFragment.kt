@@ -18,7 +18,6 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.android.colorpicker.ColorPickerPalette
 import com.android.colorpicker.ColorPickerSwatch
-import com.pawegio.kandroid.IntentFor
 import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.extension.showToast
@@ -126,7 +125,7 @@ class PaintFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallb
     }
 
     private fun save() {
-        checkIsGrantPermission()
+//        checkIsGrantPermission()
         saveFile()
     }
 
