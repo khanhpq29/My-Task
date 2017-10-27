@@ -1,9 +1,7 @@
 package ht.pq.khanh.extension
 
-import android.app.Activity
 import android.app.Fragment
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +30,7 @@ fun ImageView.loadImage(url: String) {
 fun Context.showToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
-fun Fragment.d(message: String){
+
+fun Fragment.d(message: String) {
     Log.d(this.tag, message)
 }

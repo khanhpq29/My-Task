@@ -2,9 +2,13 @@ package ht.pq.khanh.multitask.paint
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
 import android.support.design.widget.Snackbar
+import android.support.design.widget.TextInputEditText
+import android.support.design.widget.TextInputLayout
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.util.DisplayMetrics
@@ -14,10 +18,12 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.android.colorpicker.ColorPickerPalette
 import com.android.colorpicker.ColorPickerSwatch
+import com.pawegio.kandroid.IntentFor
 import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.extension.inflateLayout
+import ht.pq.khanh.extension.showToast
 import ht.pq.khanh.multitask.R
-
+import java.io.*
 
 class PaintFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallback, ColorPickerSwatch.OnColorSelectedListener {
     override fun onColorSelected(color: Int) {
@@ -125,11 +131,77 @@ class PaintFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallb
     }
 
     private fun saveFile() {
+        showDialog()
 //        val fileOutput = FileOutputStream("")
 //        fileOutput.flush()
 //        fileOutput.close()
     }
 
+    private fun showDialog() {
+        val dialogBuilder = AlertDialog.Builder(context)
+        val inflater = this.layoutInflater
+        val dialogView = inflater.inflate(R.layout.file_dialog, null)
+        dialogBuilder.setView(dialogView)
+
+        val edtFile = dialogView.findViewById<TextInputEditText>(R.id.text_input_file_name)
+        val edtLayout = dialogView.findViewById<TextInputLayout>(R.id.til_file_name)
+        dialogBuilder.setPositiveButton("Done") { dialog, whichButton ->
+            //do something with edt.getText().toString();
+            saveSuccess(edtFile.text.toString())
+        }
+        dialogBuilder.setNegativeButton("Cancel") { dialog, whichButton ->
+            //pass
+            context.showToast("done")
+        }
+        val b = dialogBuilder.create()
+        b.show()
+    }
+
+    //demo save internal storage
+    private fun saveSuccess(name: String) {
+//        val string = "Hello world!"
+//        val outputStream: FileOutputStream
+//        try {
+//            outputStream = activity.openFileOutput(name, Context.MODE_PRIVATE)
+//            outputStream.write(string.toByteArray(Charsets.UTF_8))
+//            outputStream.close()
+//        } catch (fne: FileNotFoundException) {
+//            fne.printStackTrace()
+//        }
+        val byteOutput = ByteArrayOutputStream()
+        val bitmap = paint
+    }
+
+    //check external storage
+    fun isExternalStorageWritable(): Boolean = Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+
+    fun isExternalStorageReadable(): Boolean {
+        val state = Environment.getExternalStorageState()
+        if (state == Environment.MEDIA_MOUNTED || state == Environment.MEDIA_MOUNTED_READ_ONLY) {
+            return true
+        }
+        return false
+    }
+
+    //demo external storage
+    fun createFileExternal(fileName: String) {
+        if (isExternalStorageWritable()) {
+            val string = "Hello world!"
+            val filedir = Environment.getExternalStorageDirectory()
+            val file = File(filedir, fileName)
+            try {
+                val fileOutputStream = FileOutputStream(file)
+                fileOutputStream.write(string.toByteArray(Charsets.UTF_8))
+                fileOutputStream.close()
+            } catch (fnf: FileNotFoundException) {
+                fnf.printStackTrace()
+            } catch (ioe: IOException) {
+                ioe.printStackTrace()
+            }
+        }
+    }
+
+    //begin permission
     private fun checkIsGrantPermission() {
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             showPermissionDialog()
@@ -154,4 +226,6 @@ class PaintFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallb
                     REQUEST_STORAGE)
         }
     }
+    //end permission
+
 }

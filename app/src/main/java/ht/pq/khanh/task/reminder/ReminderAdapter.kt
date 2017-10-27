@@ -2,8 +2,6 @@ package ht.pq.khanh.task.reminder
 
 import android.graphics.Color
 import android.graphics.Typeface
-import android.opengl.GLSurfaceView
-import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +15,6 @@ import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.service.ItemTouchHelperAdapter
 import ht.pq.khanh.service.ItemTouchViewholder
-import ht.pq.khanh.util.ReminderDiffUtil
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,7 +22,7 @@ import java.util.*
  * Created by khanhpq on 9/29/17.
  */
 class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerView.Adapter<ReminderAdapter.ReminderHolder>(), ItemTouchHelperAdapter {
-    override fun onItemMove(fromPosition: Int, toPosition: Int) : Boolean {
+    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         Collections.swap(listRemind, fromPosition, toPosition)
         notifyDataSetChanged()
         return true
@@ -39,7 +36,7 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     private val DATE_FORMAT = "MMM, dd yyyy"
     private val TIME_FORMAT = "hh:mm a"
     private var listener: OnAlterItemRecyclerView? = null
-    private var longListener : OnLongRclItemClick? = null
+    private var longListener: OnLongRclItemClick? = null
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ReminderHolder {
         val view = parent!!.inflateLayout(R.layout.item_reminder)
         return ReminderHolder(view)
@@ -77,9 +74,11 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     fun setOnChangeItem(callback: OnAlterItemRecyclerView?) {
         listener = callback
     }
-    fun setOnLongClickListener(callback: OnLongRclItemClick?){
+
+    fun setOnLongClickListener(callback: OnLongRclItemClick?) {
         this.longListener = callback
     }
+
     inner class ReminderHolder(itemView: View) : RecyclerView.ViewHolder(itemView), ItemTouchViewholder {
         override fun onItemSelect() {
             itemView.setBackgroundColor(Color.LTGRAY)
@@ -98,7 +97,7 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
         @BindView(R.id.tvMessage)
         lateinit var tvMessage: TextView
         @BindView(R.id.tv_time)
-        lateinit var tvTimeHour : TextView
+        lateinit var tvTimeHour: TextView
 
         init {
             ButterKnife.bind(this, itemView)
@@ -106,7 +105,7 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
                 val position = adapterPosition
                 listener?.onChangeItem(position)
             }
-            itemView.setOnLongClickListener{
+            itemView.setOnLongClickListener {
                 val position = adapterPosition
                 longListener?.onLongClick(position)
                 true
@@ -117,7 +116,8 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     interface OnAlterItemRecyclerView {
         fun onChangeItem(position: Int)
     }
-    interface OnLongRclItemClick{
+
+    interface OnLongRclItemClick {
         fun onLongClick(position: Int)
     }
 }
