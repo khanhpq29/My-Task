@@ -1,4 +1,4 @@
-package ht.pq.khanh.notification
+package ht.pq.khanh.service
 
 import android.app.IntentService
 import android.app.Notification

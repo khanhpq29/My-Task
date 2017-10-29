@@ -42,15 +42,6 @@ android {
     aaptOptions {
         cruncherEnabled false
     }
-    splits {
-        abi {
-            enable false
-        }
-        density {
-            enable false
-        }
-
-    }
 }
 
 kapt {

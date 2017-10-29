@@ -15,12 +15,13 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
 import com.pawegio.kandroid.d
+import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.extension.*
-import ht.pq.khanh.helper.SimpleItemTouchHelperCallback
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.multitask.SettingsActivity
 import ht.pq.khanh.service.OnStartDragListener
+import ht.pq.khanh.service.SimpleItemTouchHelperCallBack
 import io.realm.Realm
 
 class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
@@ -59,11 +60,11 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listReminder = realm.copyFromRealm(realm.findAllRemind())
-        remindAdapter = ReminderAdapter(context, listReminder)
+        remindAdapter = ReminderAdapter(listReminder)
         remindAdapter?.setHasStableIds(true)
         initRecyclerview()
         registerForContextMenu(recyclerRemind)
-        val callback = SimpleItemTouchHelperCallback(remindAdapter!!, context)
+        val callback = SimpleItemTouchHelperCallBack(remindAdapter!!)
         simpleTouch = ItemTouchHelper(callback)
         simpleTouch.attachToRecyclerView(recyclerRemind)
         remindAdapter?.setOnChangeItem(this)
@@ -97,7 +98,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
         d("on activity result")
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_CREATE) {
-                data?.let {
+                if (data != null) {
                     reminder = data.getParcelableExtra("reminder_result")
                     listReminder.add(reminder)
                     realm.insertRemind(reminder)
@@ -115,8 +116,9 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater)
-            = inflater.inflate(R.menu.menu_reminder, menu)
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_reminder, menu)
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.mSort) {
@@ -134,16 +136,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
 
     override fun onLongClick(position: Int) {
         selectedPosition = position
-        var itemSelected = listReminder[selectedPosition]
-        listReminder.removeAt(selectedPosition)
-        remindAdapter?.notifyDataSetChanged()
-        realm.deleteRemind(selectedPosition)
-        Snackbar.make(recyclerRemind, "delete on item", Snackbar.LENGTH_LONG)
-                .setAction("Undo", {
-                    listReminder.add(selectedPosition, itemSelected)
-                    remindAdapter?.notifyDataSetChanged()
-                    realm.insertRemind(itemSelected)
-                }).show()
+        activity.openContextMenu(recyclerRemind)
     }
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
@@ -151,9 +144,26 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
         activity.menuInflater.inflate(R.menu.context_menu, menu)
     }
 
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when {
+            item.itemId == R.id.cDelete -> {
+                var itemSelected = listReminder[selectedPosition]
+                listReminder.removeAt(selectedPosition)
+                remindAdapter?.notifyDataSetChanged()
+                realm.deleteRemind(selectedPosition)
+                Snackbar.make(recyclerRemind, "delete on item", Snackbar.LENGTH_LONG)
+                        .setAction("Undo", {
+                            listReminder.add(selectedPosition, itemSelected)
+                            remindAdapter?.notifyDataSetChanged()
+                            realm.insertRemind(itemSelected)
+                        }).show()
+            }
+        }
+        return super.onContextItemSelected(item)
+    }
+
     override fun onPause() {
         super.onPause()
-        realm.close()
         d("on pause")
 
     }
@@ -171,7 +181,6 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
 
     override fun onResume() {
         super.onResume()
-        realm = Realm.getDefaultInstance()
         d("onResume")
     }
 
