@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -33,4 +35,9 @@ fun Context.showToast(message: String) {
 
 fun Fragment.d(message: String) {
     Log.d(this.tag, message)
+}
+
+fun Context.hideKeyBoard(et : EditText){
+    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(et.windowToken, 0)
 }
