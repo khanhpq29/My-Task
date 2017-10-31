@@ -22,21 +22,12 @@ import java.util.*
  * Created by khanhpq on 9/29/17.
  */
 class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerView.Adapter<ReminderAdapter.ReminderHolder>(), ItemTouchHelperAdapter {
-    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
-        Collections.swap(listRemind, fromPosition, toPosition)
-        notifyDataSetChanged()
-        return true
-    }
-
-    override fun onItemDissmiss(position: Int) {
-        listRemind.removeAt(position)
-        notifyDataSetChanged()
-    }
-
+    private val simpleDateFormat by lazy { SimpleDateFormat(DATE_FORMAT) }
+    private val simpleTimeFormat by lazy { SimpleDateFormat(TIME_FORMAT) }
     private val DATE_FORMAT = "MMM, dd yyyy"
     private val TIME_FORMAT = "hh:mm a"
     private var listener: OnAlterItemRecyclerView? = null
-    private var longListener: OnLongRclItemClick? = null
+    private var delListener : OnDeleteItemListener? = null
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ReminderHolder {
         val view = parent!!.inflateLayout(R.layout.item_reminder)
         return ReminderHolder(view)
@@ -46,9 +37,7 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
         val remind = listRemind[position]
         holder.tvMessage.text = remind.message
         holder.tvTitle.text = remind.title
-        val simpleDateFormat = SimpleDateFormat(DATE_FORMAT)
         val textTime = simpleDateFormat.format(remind.timeHour)
-        val simpleTimeFormat = SimpleDateFormat(TIME_FORMAT)
         val textDate = simpleTimeFormat.format(remind.timeDay)
         holder.tvDateTime.text = textDate
         holder.tvTimeHour.text = textTime
@@ -63,6 +52,15 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
 
     override fun getItemCount(): Int = listRemind.size
 
+    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+        Collections.swap(listRemind, fromPosition, toPosition)
+        notifyItemMoved(fromPosition, toPosition)
+        return true
+    }
+
+    override fun onItemDissmiss(position: Int) {
+        delListener?.onDeleteItem(position)
+    }
 //    fun loadChangeList(reminders: MutableList<Reminder>) {
 //        val remindDiff = ReminderDiffUtil(listRemind, reminders)
 //        val diffResult = DiffUtil.calculateDiff(remindDiff)
@@ -74,11 +72,9 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     fun setOnChangeItem(callback: OnAlterItemRecyclerView?) {
         listener = callback
     }
-
-    fun setOnLongClickListener(callback: OnLongRclItemClick?) {
-        this.longListener = callback
+    fun setOnDeleteItemListener(callback: OnDeleteItemListener){
+        this.delListener = callback
     }
-
     inner class ReminderHolder(itemView: View) : RecyclerView.ViewHolder(itemView), ItemTouchViewholder {
         override fun onItemSelect() {
             itemView.setBackgroundColor(Color.LTGRAY)
@@ -105,19 +101,13 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
                 val position = adapterPosition
                 listener?.onChangeItem(position)
             }
-            itemView.setOnLongClickListener {
-                val position = adapterPosition
-                longListener?.onLongClick(position)
-                true
-            }
         }
     }
 
     interface OnAlterItemRecyclerView {
         fun onChangeItem(position: Int)
     }
-
-    interface OnLongRclItemClick {
-        fun onLongClick(position: Int)
+    interface OnDeleteItemListener{
+        fun onDeleteItem(position: Int)
     }
 }

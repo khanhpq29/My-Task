@@ -3,14 +3,12 @@ package ht.pq.khanh.task.reminder
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.support.v4.app.Fragment
 import android.support.v4.app.NavUtils
 import android.support.v7.widget.SwitchCompat
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.*
 import android.widget.DatePicker
 import android.widget.TextView
@@ -18,16 +16,15 @@ import android.widget.TimePicker
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import com.pawegio.kandroid.d
+import ht.pq.khanh.extension.hideKeyBoard
 import ht.pq.khanh.extension.inflateLayout
-import ht.pq.khanh.extension.insertRemind
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.util.Common
 import io.realm.Realm
+import java.sql.Time
 import java.util.*
-import android.content.Context.INPUT_METHOD_SERVICE
-import android.view.inputmethod.InputMethodManager
-
 
 /**
  * Created by khanhpq on 10/5/17.
@@ -44,8 +41,8 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
     lateinit var switchRemind: SwitchCompat
     private val realm: Realm by lazy { Realm.getDefaultInstance() }
     private var item: Reminder? = null
-    private val timeReminder : Calendar by lazy { Calendar.getInstance() }
-    private val dateReminder : Calendar by lazy { Calendar.getInstance() }
+    private val timeReminder: Calendar by lazy { Calendar.getInstance() }
+    private val dateReminder: Calendar by lazy { Calendar.getInstance() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         item = arguments.getParcelable("reminder_detail")
@@ -62,19 +59,24 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
         Realm.init(context)
         edtTitle.setText(item?.title)
         edtContent.setText(item?.message)
+        switchRemind.setOnCheckedChangeListener { _, _ ->
+            context.hideKeyBoard(edtContent)
+            context.hideKeyBoard(edtTitle)
+        }
     }
 
     @OnClick(R.id.fab)
     fun saveToData() {
         var remind: Reminder
         val titleRemind = edtTitle.text.toString()
-            val contentRemind = edtContent.text.toString()
-            val isAlarm = switchRemind.isChecked
-            val timeAlert = timeReminder.timeInMillis
-            val dateAlert = dateReminder.timeInMillis
+        val contentRemind = edtContent.text.toString()
+        val isAlarm = switchRemind.isChecked
+        val timeAlert = timeReminder.timeInMillis
+        val dateAlert = dateReminder.timeInMillis
+        val currentId = System.currentTimeMillis()
         remind = if (item!!.id == 0.toLong()) {
-            Reminder(timeAlert, titleRemind, contentRemind, timeAlert, dateAlert, Common.randomColor(), isAlarm)
-        }else {
+            Reminder(currentId, titleRemind, contentRemind, timeAlert, dateAlert, Common.randomColor(), isAlarm)
+        } else {
             Reminder(item!!.id, titleRemind, contentRemind, timeAlert, dateAlert, Common.randomColor(), isAlarm)
         }
         val intentReminder = activity.intent
@@ -127,9 +129,10 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d("destroy detailactivity", "destroy")
+        d("destroy")
         realm.close()
     }
+
     companion object {
         fun newInstance(remind: Reminder): ReminderDetailFragment {
             val myFragment = ReminderDetailFragment()

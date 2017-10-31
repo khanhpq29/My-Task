@@ -86,7 +86,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_alarm -> {
                 navigateToFragment(fragmentManager, AlarmFragment())
-                title = "Alarm"
+                title = "AlarmJ"
             }
             R.id.nav_about -> {
                 navigateToFragment(fragmentManager, RadioFragment())

@@ -1,10 +1,7 @@
 package ht.pq.khanh.model
 
-import android.media.Ringtone
-import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
-import android.util.SparseBooleanArray
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 

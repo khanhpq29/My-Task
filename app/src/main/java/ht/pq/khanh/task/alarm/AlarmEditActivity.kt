@@ -46,6 +46,7 @@ class AlarmEditActivity : AppCompatActivity() {
     private val realm by lazy { Realm.getDefaultInstance() }
     private var ringToneUri: String? = null
     private val RQS_RINGTONEPICKER = 111
+    private var idAlarm : Long = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alarm_edit)
@@ -74,7 +75,8 @@ class AlarmEditActivity : AppCompatActivity() {
 //        alarmDay.put(7, cbSat.isChecked)
 //        alarmDay.put(8, cbSun.isChecked)
         val isVibration = cbVibrate.isChecked
-        val alarm = Alarm(time.timeInMillis, time.timeInMillis, "alarm", true, isVibration, ringToneUri)
+        val alarmId = System.currentTimeMillis()
+        val alarm = Alarm(alarmId, time.timeInMillis, "alarm", true, isVibration, ringToneUri)
         realm.insertAlarm(alarm)
         intent.putExtra("Alarm_parcel", alarm)
         setResult(Activity.RESULT_OK, intent)

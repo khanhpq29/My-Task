@@ -43,7 +43,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
     private var ringToneUri : String? = null
     private val RQS_RINGTONEPICKER = 111
     private var selectedPosition = 0
-    private val realm: Realm by lazy { Realm.getDefaultInstance() }
+    private lateinit var realm: Realm
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = container!!.inflateLayout(R.layout.fragment_alarm)
         ButterKnife.bind(this, view)
@@ -53,11 +53,22 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        realm = Realm.getDefaultInstance()
         initData()
-        alarmAdapter?.setOnChangeDate(this)
-        alarmAdapter?.handleListener(this)
+        alarmAdapter.setOnChangeDate(this)
+        alarmAdapter.handleListener(this)
     }
 
+    override fun onPause() {
+        super.onPause()
+        realm.close()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        realm = Realm.getDefaultInstance()
+    }
     @OnClick(R.id.fab_set_alarm)
     fun showTimeDialog() {
         val intent = IntentFor<AlarmEditActivity>(activity)
@@ -69,15 +80,15 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         d("on activity result")
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
             val alarm = data?.getParcelableExtra<Alarm>("Alarm_parcel")
-            alarms.add(alarm!!)
-            alarmAdapter?.notifyDataSetChanged()
+            if (alarm != null) alarms.add(alarm)
+            alarmAdapter.notifyDataSetChanged()
         }else if (requestCode == RQS_RINGTONEPICKER && resultCode == android.app.Activity.RESULT_OK) {
             val uri = data?.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
             ringToneUri = uri?.toString()
             val alrmItem = alarms[selectedPosition]
             alrmItem.ringtoneUri = ringToneUri
             realm.updateAlarm(alrmItem)
-            alarmAdapter?.notifyItemChanged(selectedPosition)
+            alarmAdapter.notifyItemChanged(selectedPosition)
         }
     }
 
@@ -92,7 +103,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         val alarm = alarms[selectedPosition]
         alarm.isActive = isActivation
         realm.updateAlarm(alarm)
-        alarmAdapter?.notifyDataSetChanged()
+        alarmAdapter.notifyDataSetChanged()
     }
 
     override fun onDeleteAlarm(position: Int) {
@@ -100,12 +111,12 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         selectedPosition = position
         val alarm = alarms[position]
         alarms.removeAt(position)
-        alarmAdapter?.notifyDataSetChanged()
-        realm.deleteAlarm(selectedPosition)
+        alarmAdapter.notifyDataSetChanged()
+        realm.deleteAlarm(alarm)
         Snackbar.make(recyclerAlarm, "delete on item", Snackbar.LENGTH_LONG)
                 .setAction("Undo", {
                     alarms.add(selectedPosition, alarm)
-                    alarmAdapter?.notifyDataSetChanged()
+                    alarmAdapter.notifyDataSetChanged()
                     realm.insertAlarm(alarm)
                 }).show()
     }
@@ -115,7 +126,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         time.set(Calendar.HOUR_OF_DAY, hourOfDay)
         time.set(Calendar.MINUTE, minute)
 
-//        val alarm = Alarm(time.timeInMillis, time.timeInMillis, "alarm", false, true)
+//        val alarm = AlarmJ(time.timeInMillis, time.timeInMillis, "alarm", false, true)
 //        alarms.add(alarm)
 //        alarmAdapter.addChange(alarms)
 //        Log.d("alarm size", "${alarms.size}")
@@ -123,7 +134,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         val alarm = alarms[selectedPosition]
         alarm.time = time.timeInMillis
         realm.updateAlarm(alarm)
-        alarmAdapter?.notifyItemChanged(selectedPosition)
+        alarmAdapter.notifyItemChanged(selectedPosition)
     }
 
     override fun onChangeRingtone(position: Int) {
@@ -138,7 +149,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         val alarm = alarms[selectedPosition]
         alarm.isVibrate = isVibrate
         realm.updateAlarm(alarm)
-        alarmAdapter?.notifyDataSetChanged()
+        alarmAdapter.notifyDataSetChanged()
     }
 
     override fun display() {

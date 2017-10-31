@@ -15,20 +15,17 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
 import com.pawegio.kandroid.d
-import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.extension.*
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.multitask.SettingsActivity
-import ht.pq.khanh.service.OnStartDragListener
 import ht.pq.khanh.service.SimpleItemTouchHelperCallBack
 import io.realm.Realm
 
-class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
-        ReminderAdapter.OnLongRclItemClick, OnStartDragListener {
-    override fun onDragItem(holder: RecyclerView.ViewHolder) {
-        simpleTouch.startDrag(holder)
-    }
+class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, ReminderAdapter.OnDeleteItemListener {
+//    override fun onDragItem(holder: RecyclerView.ViewHolder) {
+//        simpleTouch.startDrag(holder)
+//    }
 
     private val REQUEST_CODE_CREATE = 117
     private val REQUEST_UPDATE = 113
@@ -41,6 +38,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
     private lateinit var reminder: Reminder
     private var selectedPosition = 0
     private lateinit var simpleTouch: ItemTouchHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
@@ -68,18 +66,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
         simpleTouch = ItemTouchHelper(callback)
         simpleTouch.attachToRecyclerView(recyclerRemind)
         remindAdapter?.setOnChangeItem(this)
-        remindAdapter?.setOnLongClickListener(this)
-
-    }
-
-    private fun initRecyclerview() {
-        val itemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        recyclerRemind.apply {
-            layoutManager = LinearLayoutManager(this@ReminderFragment.activity)
-            adapter = remindAdapter
-            setHasFixedSize(true)
-            addItemDecoration(itemDecoration)
-        }
+        remindAdapter?.setOnDeleteItemListener(this)
     }
 
     @OnClick(R.id.fab_remind)
@@ -87,18 +74,12 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
         createIntent(Reminder(), REQUEST_CODE_CREATE)
     }
 
-    private fun createIntent(reminder: Reminder, requestCode: Int) {
-        val intent = IntentFor<ReminderEditActivity>(activity)
-        intent.putExtra("reminder_data", reminder)
-        startActivityForResult(intent, requestCode)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         d("on activity result")
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_CREATE) {
-                if (data != null) {
+                data?.let {
                     reminder = data.getParcelableExtra("reminder_result")
                     listReminder.add(reminder)
                     realm.insertRemind(reminder)
@@ -116,9 +97,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_reminder, menu)
-    }
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) = inflater.inflate(R.menu.menu_reminder, menu)
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.mSort) {
@@ -134,36 +113,23 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
         createIntent(item, REQUEST_UPDATE)
     }
 
-    override fun onLongClick(position: Int) {
+    override fun onDeleteItem(position: Int) {
         selectedPosition = position
-        activity.openContextMenu(recyclerRemind)
-    }
-
-    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        activity.menuInflater.inflate(R.menu.context_menu, menu)
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        when {
-            item.itemId == R.id.cDelete -> {
-                var itemSelected = listReminder[selectedPosition]
-                listReminder.removeAt(selectedPosition)
-                remindAdapter?.notifyDataSetChanged()
-                realm.deleteRemind(selectedPosition)
-                Snackbar.make(recyclerRemind, "delete on item", Snackbar.LENGTH_LONG)
-                        .setAction("Undo", {
-                            listReminder.add(selectedPosition, itemSelected)
-                            remindAdapter?.notifyDataSetChanged()
-                            realm.insertRemind(itemSelected)
-                        }).show()
-            }
-        }
-        return super.onContextItemSelected(item)
+        var itemSelected = listReminder[position]
+        listReminder.removeAt(position)
+        remindAdapter?.notifyItemRemoved(position)
+        realm.deleteRemind(itemSelected)
+        Snackbar.make(recyclerRemind, "delete on item", Snackbar.LENGTH_LONG)
+                .setAction("Undo", {
+                    listReminder.add(selectedPosition, itemSelected)
+                    realm.insertRemind(itemSelected)
+                    remindAdapter?.notifyDataSetChanged()
+                }).show()
     }
 
     override fun onPause() {
         super.onPause()
+        realm.close()
         d("on pause")
 
     }
@@ -181,11 +147,29 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView,
 
     override fun onResume() {
         super.onResume()
+        realm = Realm.getDefaultInstance()
         d("onResume")
+        d("size", "${listReminder.size}")
     }
 
     override fun onDestroy() {
         super.onDestroy()
         d("onDestroy")
+    }
+
+    private fun createIntent(reminder: Reminder, requestCode: Int) {
+        val intent = IntentFor<ReminderEditActivity>(activity)
+        intent.putExtra("reminder_data", reminder)
+        startActivityForResult(intent, requestCode)
+    }
+
+    private fun initRecyclerview() {
+        val itemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        recyclerRemind.apply {
+            layoutManager = LinearLayoutManager(this@ReminderFragment.activity)
+            adapter = remindAdapter
+            setHasFixedSize(true)
+            addItemDecoration(itemDecoration)
+        }
     }
 }
