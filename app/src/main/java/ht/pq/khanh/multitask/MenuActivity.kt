@@ -1,7 +1,12 @@
 package ht.pq.khanh.multitask
 
+import android.app.AlarmManager
+import android.app.Notification
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -9,7 +14,6 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.preference.PreferenceManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import butterknife.BindView
@@ -19,11 +23,13 @@ import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.multitask.forecast.ForecastFragment
 import ht.pq.khanh.multitask.paint.PaintFragment
 import ht.pq.khanh.multitask.radio.RadioFragment
+import ht.pq.khanh.notification.NotificationPublisher
 import ht.pq.khanh.setting.SettingFragment
 import ht.pq.khanh.task.alarm.AlarmFragment
 import ht.pq.khanh.task.reminder.ReminderFragment
 import ht.pq.khanh.task.sleepawake.SleepAwakeFragment
 import ht.pq.khanh.util.Common
+
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.toolbar)
@@ -65,7 +71,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         val id = item.itemId
-        if (currentId == id){
+        if (currentId == id) {
             drawer.closeDrawer(GravityCompat.START)
             return false
         }
@@ -89,8 +95,9 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 title = "AlarmJ"
             }
             R.id.nav_about -> {
-                navigateToFragment(fragmentManager, RadioFragment())
+//                navigateToFragment(fragmentManager, RadioFragment())
                 title = "Radio"
+                scheduleNotification(getNotification("30 second delay"), 30000)
             }
             R.id.nav_paint -> {
                 navigateToFragment(fragmentManager, PaintFragment())
@@ -141,4 +148,23 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         transaction.commit()
     }
 
+    private fun scheduleNotification(notification: Notification, delay: Int) {
+
+        val notificationIntent = Intent(this, NotificationPublisher::class.java)
+        notificationIntent.putExtra("notification-id", 1)
+        notificationIntent.putExtra("notification", notification)
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val futureInMillis = SystemClock.elapsedRealtime() + delay
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent)
+    }
+
+    private fun getNotification(content: String): Notification {
+        val builder = Notification.Builder(this)
+        builder.setContentTitle("Scheduled Notification")
+        builder.setContentText(content)
+        builder.setSmallIcon(R.mipmap.ic_launcher)
+        return builder.build()
+    }
 }

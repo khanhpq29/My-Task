@@ -1,4 +1,4 @@
-package ht.pq.khanh.service
+package ht.pq.khanh.notification
 
 import android.app.IntentService
 import android.app.Notification
@@ -24,8 +24,6 @@ class ReminderNotificationService(name: String) : IntentService(name) {
     override fun onHandleIntent(intent: Intent) {
         mTodoText = intent.getStringExtra(TODOTEXT)
         mTodoUUID = intent.getSerializableExtra(TODOUUID) as UUID
-
-        Log.d("OskarSchindler", "onHandleIntent called")
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val i = Intent(this, ReminderActivity::class.java)
         i.putExtra(TODOUUID, mTodoUUID)
