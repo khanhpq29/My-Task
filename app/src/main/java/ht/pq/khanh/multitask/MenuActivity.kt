@@ -23,8 +23,6 @@ import butterknife.ButterKnife
 import com.pawegio.kandroid.d
 import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.broadcast.ConnectivityReceiver
-import ht.pq.khanh.bus.NetworkEvent
-import ht.pq.khanh.bus.RxBus
 import ht.pq.khanh.multitask.forecast.ForecastFragment
 import ht.pq.khanh.multitask.paint.PaintFragment
 import ht.pq.khanh.setting.SettingFragment
@@ -33,7 +31,6 @@ import ht.pq.khanh.task.reminder.ReminderActivity
 import ht.pq.khanh.task.reminder.ReminderFragment
 import ht.pq.khanh.task.sleepawake.SleepAwakeFragment
 import ht.pq.khanh.util.Common
-import io.reactivex.disposables.CompositeDisposable
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.toolbar)

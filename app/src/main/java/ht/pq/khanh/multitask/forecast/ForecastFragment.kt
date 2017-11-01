@@ -7,7 +7,6 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,7 @@ import com.pawegio.kandroid.IntentFor
 import com.pawegio.kandroid.d
 import ht.pq.khanh.api.forecast.Forecast
 import ht.pq.khanh.api.forecast.List
-import ht.pq.khanh.bus.NetworkEvent
+import ht.pq.khanh.bus.event.NetworkEvent
 import ht.pq.khanh.bus.RxBus
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.extension.showToast
@@ -41,8 +40,8 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
     private var forecastAdapter: ForecastAdapter? = null
     private lateinit var presenter: ForecastPresenter
     private var listForecast: MutableList<List> = arrayListOf()
-    private lateinit var location : String
-    private val disposal : CompositeDisposable by lazy { CompositeDisposable() }
+    private lateinit var location: String
+    private val disposal: CompositeDisposable by lazy { CompositeDisposable() }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = container!!.inflateLayout(R.layout.fragment_forecast)
@@ -55,17 +54,7 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
         swipeLayout.isRefreshing = true
         forecastAdapter = ForecastAdapter(context, listForecast)
         presenter = ForecastPresenter(this, disposal)
-        disposal.add(RxBus.getInstance().toObservable(NetworkEvent::class.java)
-                .subscribe({
-                    event: NetworkEvent ->
-                    if (event.isConnected){
-                        onRefresh()
-                    }else{
-                        context.showToast("check network")
-                    }
-                },{
-                    throwable: Throwable? -> throwable?.printStackTrace()
-                }))
+        presenter.networkChange()
         val itemRclDecorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         val linearManager = LinearLayoutManager(activity)
         val locationPref = activity.getSharedPreferences(Common.LOCATION_PREFERENCE, Context.MODE_PRIVATE)
@@ -110,9 +99,24 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
         super.onStop()
         disposal.clear()
     }
+
     override fun onRefresh() {
         presenter.fetchData(location)
     }
+
+    override fun changeNetworkState() {
+        disposal.add(RxBus.getInstance().toObservable(NetworkEvent::class.java)
+                .subscribe({ event: NetworkEvent ->
+                    if (event.isConnected) {
+                        onRefresh()
+                    } else {
+                        context.showToast("check network")
+                    }
+                }, { throwable: Throwable? ->
+                    throwable?.printStackTrace()
+                }))
+    }
+
     override fun onWeatherItemClick(position: Int) {
         val item = listForecast[position]
         val intent = IntentFor<WeatherDetailActivity>(activity)

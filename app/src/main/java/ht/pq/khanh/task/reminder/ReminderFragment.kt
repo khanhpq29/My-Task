@@ -16,17 +16,12 @@ import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
 import com.pawegio.kandroid.d
 import ht.pq.khanh.extension.*
+import ht.pq.khanh.helper.SimpleItemTouchHelperCallBack
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
-import ht.pq.khanh.multitask.SettingsActivity
-import ht.pq.khanh.service.SimpleItemTouchHelperCallBack
 import io.realm.Realm
 
 class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, ReminderAdapter.OnDeleteItemListener {
-//    override fun onDragItem(holder: RecyclerView.ViewHolder) {
-//        simpleTouch.startDrag(holder)
-//    }
-
     private val REQUEST_CODE_CREATE = 117
     private val REQUEST_UPDATE = 113
     @BindView(R.id.list_reminder)
@@ -101,7 +96,6 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.mSort) {
-            activity.startActivity(Intent(activity, SettingsActivity::class.java))
             return true
         }
         return super.onOptionsItemSelected(item)

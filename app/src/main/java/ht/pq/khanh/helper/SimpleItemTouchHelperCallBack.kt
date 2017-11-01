@@ -1,4 +1,4 @@
-package ht.pq.khanh.service
+package ht.pq.khanh.helper
 
 import android.graphics.Canvas
 import android.support.v7.widget.RecyclerView

@@ -1,4 +1,4 @@
-package ht.pq.khanh.helper;
+package ht.pq.khanh.util;
 
 import android.content.res.Resources;
 

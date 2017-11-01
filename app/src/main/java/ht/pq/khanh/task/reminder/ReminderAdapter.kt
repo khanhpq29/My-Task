@@ -13,8 +13,8 @@ import com.amulyakhare.textdrawable.TextDrawable
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
-import ht.pq.khanh.service.ItemTouchHelperAdapter
-import ht.pq.khanh.service.ItemTouchViewholder
+import ht.pq.khanh.helper.ItemTouchHelperAdapter
+import ht.pq.khanh.helper.ItemTouchViewholder
 import java.text.SimpleDateFormat
 import java.util.*
 

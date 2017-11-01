@@ -4,10 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
-import ht.pq.khanh.bus.NetworkEvent
+import ht.pq.khanh.bus.event.NetworkEvent
 import ht.pq.khanh.bus.RxBus
-import ht.pq.khanh.extension.showToast
-
 
 /**
  * Created by khanhpq on 11/1/17.

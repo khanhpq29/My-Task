@@ -11,8 +11,10 @@ interface ForecastContract {
         fun showError(throwable: Throwable)
         fun showProgressDialog()
         fun hideProgressDialog()
+        fun changeNetworkState()
     }
     interface Presenter{
         fun fetchData(location: String)
+        fun networkChange()
     }
 }

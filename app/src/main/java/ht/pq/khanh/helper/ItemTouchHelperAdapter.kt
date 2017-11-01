@@ -1,4 +1,4 @@
-package ht.pq.khanh.service
+package ht.pq.khanh.helper
 
 /**
  * Created by khanhpq on 10/20/17.
