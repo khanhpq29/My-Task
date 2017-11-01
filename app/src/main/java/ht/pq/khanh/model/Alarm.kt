@@ -4,11 +4,12 @@ import android.os.Parcel
 import android.os.Parcelable
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 
 /**
  * Created by khanhpq on 10/2/17.
  */
-
+@RealmClass
 open class Alarm(@PrimaryKey open var id: Long = 0,
                  var time: Long = 0,
                  var label: String = "",

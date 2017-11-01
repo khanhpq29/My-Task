@@ -10,8 +10,8 @@ import android.content.Intent
  * Created by khanhpq on 10/31/17.
  */
 class NotificationPublisher : BroadcastReceiver() {
-    public val NOTIFICATION_ID = "notification-id"
-    public val NOTIFICATION = "notification"
+    val NOTIFICATION_ID = "notification-id"
+    val NOTIFICATION = "notification"
     override fun onReceive(p0: Context, p1: Intent?) {
         val notificationService = p0.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notification = p1?.getParcelableExtra<Notification>(NOTIFICATION)

@@ -17,7 +17,7 @@ class ForecastPresenter(private val view: ForecastContract.View, private val dis
                 .subscribe({ forecast: Forecast ->
                     view.addForecast(forecast)
                 }, { throwable: Throwable ->
-                    throwable.printStackTrace()
+                    view.showError(throwable)
                 }))
     }
 }

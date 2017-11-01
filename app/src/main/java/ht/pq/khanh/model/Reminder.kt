@@ -4,10 +4,12 @@ import android.os.Parcel
 import android.os.Parcelable
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import io.realm.annotations.RealmClass
 
 /**
  * Created by khanhpq on 9/29/17.
  */
+@RealmClass
 open class Reminder(@PrimaryKey open var id: Long = 0,
                     var title: String = "",
                     var message: String? = null,
