@@ -38,6 +38,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         super.onCreate(savedInstanceState)
         if (arguments != null) {
         }
+        setNotification()
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -55,7 +56,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         listReminder = realm.copyFromRealm(realm.findAllRemind())
         remindAdapter = ReminderAdapter(listReminder)
         remindAdapter?.setHasStableIds(true)
-        initRecyclerview()
+        initialRecyclerview()
         registerForContextMenu(recyclerRemind)
         val callback = SimpleItemTouchHelperCallBack(remindAdapter!!)
         simpleTouch = ItemTouchHelper(callback)
@@ -157,13 +158,17 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         startActivityForResult(intent, requestCode)
     }
 
-    private fun initRecyclerview() {
+    private fun initialRecyclerview() {
         val itemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         recyclerRemind.apply {
-            layoutManager = LinearLayoutManager(this@ReminderFragment.activity)
+            layoutManager = LinearLayoutManager(context)
             adapter = remindAdapter
             setHasFixedSize(true)
             addItemDecoration(itemDecoration)
         }
+    }
+
+    private fun setNotification() {
+
     }
 }

@@ -2,6 +2,9 @@ package ht.pq.khanh.extension
 
 import ht.pq.khanh.model.Alarm
 import ht.pq.khanh.model.Reminder
+import io.reactivex.Completable
+import io.reactivex.CompletableEmitter
+import io.reactivex.CompletableOnSubscribe
 import io.realm.Realm
 import io.realm.RealmResults
 
@@ -37,6 +40,20 @@ fun Realm.findAllAlarm(): RealmResults<Alarm> {
         realmQuery = realm.where(Alarm::class.java).findAll()
     }
     return realmQuery!!
+}
+
+fun Realm.deleteAlarmRx(alarm: Alarm): Completable {
+    return Completable.create({ emitter: CompletableEmitter ->
+        val realQuery = this.where(Alarm::class.java)
+        val alarmQuery = realQuery.equalTo("id", alarm.id)
+        val alarmResult = alarmQuery.findAll()
+        if (alarmResult.size > 0) {
+            alarmResult.deleteFromRealm(0)
+            emitter.onComplete()
+        } else {
+            emitter.onError(Exception())
+        }
+    })
 }
 
 /**

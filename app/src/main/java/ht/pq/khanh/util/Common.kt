@@ -32,6 +32,10 @@ object Common {
     val FAHRENHEIT_TYPE = "fahrenheitType"
     //location
     val LOCATION_PREFERENCE = "location_pref"
+    //notification
+
+    val TODOTEXT = "notification.content"
+    val TODOUUID = "notification.uuid"
     fun randomColor(): Int {
         return ColorGenerator.MATERIAL.randomColor
     }
