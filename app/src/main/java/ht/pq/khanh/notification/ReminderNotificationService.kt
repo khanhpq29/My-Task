@@ -36,6 +36,7 @@ class ReminderNotificationService : IntentService("reminder notification") {
 
         manager.notify(100, notification)
         d("reset")
+        d("reset 2")
     }
 
 
