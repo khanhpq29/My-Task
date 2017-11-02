@@ -11,6 +11,7 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.*
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -122,6 +123,8 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         var itemSelected = listReminder[position]
         listReminder.removeAt(position)
         remindAdapter?.notifyItemRemoved(position)
+        val intent = IntentFor<ReminderNotificationService>(activity)
+        deleteAlarm(intent, itemSelected.id.hashCode())
         realm.deleteRemind(itemSelected)
         Snackbar.make(recyclerRemind, "delete on item", Snackbar.LENGTH_LONG)
                 .setAction("Undo", {
@@ -192,5 +195,19 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         val alarmManger = context.getAlarmManager()
         val pendingIntent = PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         alarmManger.set(AlarmManager.RTC_WAKEUP, timeAtMillis, pendingIntent)
+    }
+
+    private fun doesPendingIntentExist(i: Intent, requestCode: Int): Boolean {
+        val pi = PendingIntent.getService(context, requestCode, i, PendingIntent.FLAG_NO_CREATE)
+        return pi != null
+    }
+
+    private fun deleteAlarm(i: Intent, requestCode: Int) {
+        if (doesPendingIntentExist(i, requestCode)) {
+            val pi = PendingIntent.getService(context, requestCode, i, PendingIntent.FLAG_NO_CREATE)
+            pi.cancel()
+            context.getAlarmManager().cancel(pi)
+            Log.d("OskarSchindler", "PI Cancelled " + doesPendingIntentExist(i, requestCode))
+        }
     }
 }

@@ -25,6 +25,7 @@ import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.broadcast.ConnectivityReceiver
 import ht.pq.khanh.multitask.forecast.ForecastFragment
 import ht.pq.khanh.multitask.paint.PaintFragment
+import ht.pq.khanh.multitask.radio.RadioFragment
 import ht.pq.khanh.setting.SettingFragment
 import ht.pq.khanh.task.alarm.AlarmFragment
 import ht.pq.khanh.task.reminder.ReminderActivity
@@ -99,9 +100,9 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 title = "AlarmJ"
             }
             R.id.nav_about -> {
-//                navigateToFragment(fragmentManager, RadioFragment())
+                navigateToFragment(fragmentManager, RadioFragment())
                 title = "Radio"
-                scheduleNotification(getNotification("30 second delay"), 30000)
+//                scheduleNotification(getNotification("30 second delay"), 30000)
             }
             R.id.nav_paint -> {
                 navigateToFragment(fragmentManager, PaintFragment())
