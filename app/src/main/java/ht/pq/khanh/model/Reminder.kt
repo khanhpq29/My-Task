@@ -5,7 +5,6 @@ import android.os.Parcelable
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
-import java.util.*
 
 /**
  * Created by khanhpq on 9/29/17.
@@ -18,9 +17,6 @@ open class Reminder(@PrimaryKey open var id: Long = 0,
                     var timeHour: Long? = null,
                     var color: Int = 0,
                     var isNotify: Boolean = false) : RealmObject(), Parcelable {
-
-    private var mTodoIdentifier: UUID? = null
-
     constructor(source: Parcel) : this(
             source.readLong(),
             source.readString(),

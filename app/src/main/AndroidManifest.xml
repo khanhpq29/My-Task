@@ -71,6 +71,7 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
+        <service android:name="ht.pq.khanh.notification.ReminderNotificationService"/>
     </application>
 
 </manifest>

@@ -35,7 +35,7 @@ object Common {
     //notification
 
     val TODOTEXT = "notification.content"
-    val TODOUUID = "notification.uuid"
+    val TODOUUID = "notification.id"
     fun randomColor(): Int {
         return ColorGenerator.MATERIAL.randomColor
     }

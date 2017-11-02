@@ -1,5 +1,6 @@
 package ht.pq.khanh.extension
 
+import android.app.AlarmManager
 import android.app.Fragment
 import android.content.Context
 import android.util.Log
@@ -16,9 +17,8 @@ import ht.pq.khanh.multitask.R
 /**
  * Created by khanhpq on 9/25/17.
  */
-fun ViewGroup.inflateLayout(layoutId: Int, attachToRoot: Boolean = false): View {
-    return LayoutInflater.from(context).inflate(layoutId, this, attachToRoot)
-}
+fun ViewGroup.inflateLayout(layoutId: Int, attachToRoot: Boolean = false): View
+        = LayoutInflater.from(context).inflate(layoutId, this, attachToRoot)
 
 fun ImageView.loadImage(url: String) {
     Glide.with(context)
@@ -29,15 +29,15 @@ fun ImageView.loadImage(url: String) {
             .into(this)
 }
 
-fun Context.showToast(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-}
+fun Context.showToast(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
 fun Fragment.d(message: String) {
     Log.d(this.tag, message)
 }
 
-fun Context.hideKeyBoard(et : EditText){
+fun Context.hideKeyBoard(et: EditText) {
     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(et.windowToken, 0)
 }
+
+fun Context.getAlarmManager(): AlarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager

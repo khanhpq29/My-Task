@@ -23,7 +23,6 @@ import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.util.Common
 import io.realm.Realm
-import java.sql.Time
 import java.util.*
 
 /**

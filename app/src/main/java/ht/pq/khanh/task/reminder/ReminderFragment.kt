@@ -1,6 +1,8 @@
 package ht.pq.khanh.task.reminder
 
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -19,6 +21,8 @@ import ht.pq.khanh.extension.*
 import ht.pq.khanh.helper.SimpleItemTouchHelperCallBack
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
+import ht.pq.khanh.notification.ReminderNotificationService
+import ht.pq.khanh.util.Common
 import io.realm.Realm
 
 class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, ReminderAdapter.OnDeleteItemListener {
@@ -56,13 +60,18 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         listReminder = realm.copyFromRealm(realm.findAllRemind())
         remindAdapter = ReminderAdapter(listReminder)
         remindAdapter?.setHasStableIds(true)
-        initialRecyclerview()
+        initialRecyclerView()
         registerForContextMenu(recyclerRemind)
         val callback = SimpleItemTouchHelperCallBack(remindAdapter!!)
         simpleTouch = ItemTouchHelper(callback)
         simpleTouch.attachToRecyclerView(recyclerRemind)
         remindAdapter?.setOnChangeItem(this)
         remindAdapter?.setOnDeleteItemListener(this)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setNotification()
     }
 
     @OnClick(R.id.fab_remind)
@@ -158,7 +167,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         startActivityForResult(intent, requestCode)
     }
 
-    private fun initialRecyclerview() {
+    private fun initialRecyclerView() {
         val itemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         recyclerRemind.apply {
             layoutManager = LinearLayoutManager(context)
@@ -169,6 +178,19 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
     }
 
     private fun setNotification() {
+        for (item in listReminder) {
+            if (item.isNotify && item.timeDay != null && item.timeHour != null) {
+                val intent = IntentFor<ReminderNotificationService>(activity)
+                intent.putExtra(Common.TODOTEXT, item.title)
+                intent.putExtra(Common.TODOUUID, item.id)
+                setAlarmManager(intent, item.id.hashCode(), item.timeHour!!)
+            }
+        }
+    }
 
+    private fun setAlarmManager(intent: Intent, requestCode: Int, timeAtMillis: Long) {
+        val alarmManger = context.getAlarmManager()
+        val pendingIntent = PendingIntent.getService(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        alarmManger.set(AlarmManager.RTC_WAKEUP, timeAtMillis, pendingIntent)
     }
 }

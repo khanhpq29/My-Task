@@ -6,23 +6,18 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.task.reminder.ReminderActivity
 import ht.pq.khanh.util.Common
-import java.util.*
 
 /**
  * Created by khanh on 15/10/2017.
  */
-class ReminderNotificationService(name: String) : IntentService(name) {
-    private var mTodoText: String? = null
-    private var mTodoUUID: UUID? = null
-    private val mContext: Context? = null
+class ReminderNotificationService : IntentService("reminder notification") {
 
     override fun onHandleIntent(intent: Intent) {
-        mTodoText = intent.getStringExtra(Common.TODOTEXT)
-        mTodoUUID = intent.getSerializableExtra(Common.TODOUUID) as UUID
+        val mTodoText = intent.getStringExtra(Common.TODOTEXT)
+        val mTodoUUID = intent.getLongExtra(Common.TODOUUID, 0)
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val i = Intent(this, ReminderActivity::class.java)
         i.putExtra(Common.TODOUUID, mTodoUUID)
@@ -34,7 +29,7 @@ class ReminderNotificationService(name: String) : IntentService(name) {
                 .setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_SOUND)
 //                .setDeleteIntent(PendingIntent.getService(this, mTodoUUID!!.hashCode(), deleteIntent, PendingIntent.FLAG_UPDATE_CURRENT))
-                .setContentIntent(PendingIntent.getActivity(this, mTodoUUID!!.hashCode(), i, PendingIntent.FLAG_UPDATE_CURRENT))
+                .setContentIntent(PendingIntent.getActivity(this, mTodoUUID.hashCode(), i, PendingIntent.FLAG_UPDATE_CURRENT))
                 .build()
 
         manager.notify(100, notification)
