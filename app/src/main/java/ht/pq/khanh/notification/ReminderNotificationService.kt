@@ -6,8 +6,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import com.pawegio.kandroid.d
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.task.reminder.ReminderActivity
 import ht.pq.khanh.util.Common
