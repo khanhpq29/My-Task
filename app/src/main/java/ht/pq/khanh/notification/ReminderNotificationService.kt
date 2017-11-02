@@ -35,9 +35,6 @@ class ReminderNotificationService : IntentService("reminder notification") {
                 .build()
 
         manager.notify(100, notification)
-        d("reset")
-        d("reset 2")
-        d("rebase")
     }
 
 

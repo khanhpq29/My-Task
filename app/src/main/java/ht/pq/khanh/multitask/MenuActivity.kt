@@ -29,7 +29,7 @@ import ht.pq.khanh.setting.SettingFragment
 import ht.pq.khanh.task.alarm.AlarmFragment
 import ht.pq.khanh.task.reminder.ReminderActivity
 import ht.pq.khanh.task.reminder.ReminderFragment
-import ht.pq.khanh.task.sleepawake.SleepAwakeFragment
+import ht.pq.khanh.task.sleepawake.AwakeFragment
 import ht.pq.khanh.util.Common
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -86,7 +86,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 title = "Reminder"
             }
             R.id.nav_schedule -> {
-                navigateToFragment(fragmentManager, SleepAwakeFragment())
+                navigateToFragment(fragmentManager, AwakeFragment())
                 title = "Schedule"
             }
             R.id.nav_forecast -> {
