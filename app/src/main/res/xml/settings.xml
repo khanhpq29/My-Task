@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Setting">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/night_mode_pref_key"
+            android:summaryOn="Night mode is on"
+            android:summaryOff="Night mode is off"
+            android:title="Night mode" />
+
+        <EditTextPreference
+            android:dialogLayout="@layout/pref_dialog_edittext"
+            android:dialogMessage="Enter location"
+            android:key="@string/location_preference"
+            android:summary="Address"
+            android:title="Location" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:summaryOn="°C"
+            android:summaryOff="°F"
+            android:key="temperaturePreferece"
+            android:summary="Celsius/Fahrenheit"
+            android:title="Temperature degree" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

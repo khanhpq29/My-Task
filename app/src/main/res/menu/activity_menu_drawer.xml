@@ -3,34 +3,37 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
+            android:id="@+id/nav_reminder"
+            android:icon="@drawable/ic_notifications_black_24dp"
+            android:checked="true"
             android:title="Reminder" />
+
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Current Weather" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:id="@+id/nav_forecast"
+            android:icon="@drawable/ic_wb_sunny_black_24dp"
             android:title="Forecast" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
+            android:id="@+id/nav_schedule"
+            android:icon="@drawable/ic_filter_vintage"
+            android:title="Schedule phone" />
+        <item
+            android:id="@+id/nav_alarm"
+            android:icon="@drawable/ic_access_alarms_black"
             android:title="Alarm" />
-    </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Setting" />
-        </menu>
-    </item>
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Setting" />
+        <item
+            android:id="@+id/nav_paint"
+            android:icon="@drawable/ic_paint"
+            android:title="Paint" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_menu_send"
+            android:title="Radio" />
+
+    </group>
 
 </menu>

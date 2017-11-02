@@ -1,11 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -13,8 +14,47 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="ActivityTheme.Primary.Base.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="primaryTextColor">#33343B</item>
+        <item name="secondaryTextColor">#8033343B</item>
+        <item name="backgroundCardColor">#28292e</item>
+        <item name="dividerColor">#F2F2F3</item>
+    </style>
+
+    <style name="AppTheme.DarkTheme" parent="Theme.AppCompat">
+
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">true</item>
+        <item name="colorAccent">@color/amber</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <!--color of thumb when inactive-->
+        <item name="colorSwitchThumbNormal">@color/grey300</item>
+        <!--Inactive track color-->
+        <item name="android:colorForeground">@color/grey600</item>
+    </style>
+
+    <style name="AppTheme.LightTheme" parent="Theme.AppCompat.Light">
+
+        <!--<item name="actionOverflowButtonStyle">@style/OverflowThreeDotsWhite</item>-->
+        <!--<item name="toolbarStyle">@style/ToolBarTheme</item>-->
+        <!--<item name="popupMenuStyle">@style/PopupMenuLight</item>-->
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSwitchThumbNormal">@color/grey300</item>
+        <!--Inactive track color-->
+        <item name="android:colorForeground">@color/grey600</item>
+
+    </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorAccent">@color/detail_accent_pane_background</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
 
 </resources>

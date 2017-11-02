@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">MultiTask</string>
     <string name="title_home">Calendar</string>
     <string name="title_dashboard">Weather</string>
@@ -17,7 +17,7 @@
     <string name="pref_description_social_recommendations">Recommendations for people to contact
         based on your message history
     </string>
-
+    <string name="color_picker">Colorpicker dialog</string>
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
 
@@ -86,4 +86,16 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="wind">Wind</string>
+    <string name="pressure">Pressure</string>
+    <!-- Pressure format CHAR LIMIT=25] -->
+    <string name="humidity">Humidity</string>
+    <string name="detail_icon_transition_name" translatable="false">TN_DetailIcon</string>
+    <string name="format_full_friendly_date"><xliff:g id="month">%1$s</xliff:g>, <xliff:g id="day">%2$s</xliff:g></string>
+
+    <string name="night_mode_pref_key">NightModePreference</string>
+    <string name="location_preference">LocationPreference</string>
+    <string name="title_activity_paint">PaintActivity</string>
+    <string name="title_activity_alarm_edit">AlarmEditActivity</string>
+    <string name="alarm_hint">Name</string>
 </resources>

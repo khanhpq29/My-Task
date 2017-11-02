@@ -13,7 +13,7 @@ import io.reactivex.schedulers.Schedulers
 class WeatherRepository {
     var weatherService : WeatherService = ApiManager.createApiService(WeatherService::class.java)
     fun getCurrentWeather() : Observable<CurrentWeather>{
-        return weatherService.getDetailWeather()
+        return weatherService.getDetailWeather("London", "b1b15e88fa797225412429c1c50c122a1")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }

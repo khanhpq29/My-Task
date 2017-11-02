@@ -7,11 +7,14 @@ import ht.pq.khanh.api.forecast.Forecast
  */
 interface ForecastContract {
     interface View{
-        fun showForecast(forecast : Forecast)
-        fun loadForecast()
+        fun addForecast(forecast : Forecast)
         fun showError(throwable: Throwable)
+        fun showProgressDialog()
+        fun hideProgressDialog()
+        fun changeNetworkState()
     }
     interface Presenter{
-        fun fetchData()
+        fun fetchData(location: String)
+        fun networkChange()
     }
 }

@@ -1,41 +1,43 @@
 
 package ht.pq.khanh.api.forecast;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class List {
+import java.util.ArrayList;
+
+public class List implements Parcelable {
 
     @SerializedName("dt")
     @Expose
-    private Integer dt;
+    private Long dt;
     @SerializedName("main")
     @Expose
     private Main main;
     @SerializedName("weather")
     @Expose
     private java.util.List<Weather> weather = null;
-    @SerializedName("clouds")
-    @Expose
-    private Clouds clouds;
-    @SerializedName("wind")
-    @Expose
-    private Wind wind;
-    @SerializedName("sys")
-    @Expose
-    private Sys sys;
-    @SerializedName("dt_txt")
-    @Expose
-    private String dtTxt;
-    @SerializedName("rain")
-    @Expose
-    private Rain rain;
 
-    public Integer getDt() {
+//    @SerializedName("clouds")
+//    @Expose
+//    private Clouds clouds;
+//    @SerializedName("wind")
+//    @Expose
+//    private Wind wind;
+//    @SerializedName("dt_txt")
+//    @Expose
+//    private String dtTxt;
+    @SerializedName("temp")
+    @Expose
+    private Temp temp;
+    public Long getDt() {
         return dt;
     }
 
-    public void setDt(Integer dt) {
+    public void setDt(Long dt) {
         this.dt = dt;
     }
 
@@ -55,44 +57,76 @@ public class List {
         this.weather = weather;
     }
 
-    public Clouds getClouds() {
-        return clouds;
+    public Temp getTemp() {
+        return temp;
     }
 
-    public void setClouds(Clouds clouds) {
-        this.clouds = clouds;
+    public void setTemp(Temp temp) {
+        this.temp = temp;
     }
 
-    public Wind getWind() {
-        return wind;
+//    public Clouds getClouds() {
+//        return clouds;
+//    }
+//
+//    public void setClouds(Clouds clouds) {
+//        this.clouds = clouds;
+//    }
+//
+//    public Wind getWind() {
+//        return wind;
+//    }
+//
+//    public void setWind(Wind wind) {
+//        this.wind = wind;
+//    }
+//
+//    public String getDtTxt() {
+//        return dtTxt;
+//    }
+//
+//    public void setDtTxt(String dtTxt) {
+//        this.dtTxt = dtTxt;
+//    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setWind(Wind wind) {
-        this.wind = wind;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.dt);
+        dest.writeParcelable(this.main, flags);
+        dest.writeList(this.weather);
+        dest.writeParcelable(this.temp, flags);
+//        dest.writeParcelable(this.wind, flags);
+//        dest.writeString(this.dtTxt);
     }
 
-    public Sys getSys() {
-        return sys;
+    public List() {
     }
 
-    public void setSys(Sys sys) {
-        this.sys = sys;
+    protected List(Parcel in) {
+        this.dt = (Long) in.readValue(Long.class.getClassLoader());
+        this.main = in.readParcelable(Main.class.getClassLoader());
+        this.weather = new ArrayList<Weather>();
+        in.readList(this.weather, Weather.class.getClassLoader());
+        this.temp = in.readParcelable(Clouds.class.getClassLoader());
+//        this.wind = in.readParcelable(Wind.class.getClassLoader());
+//        this.dtTxt = in.readString();
     }
 
-    public String getDtTxt() {
-        return dtTxt;
-    }
+    public static final Parcelable.Creator<List> CREATOR = new Parcelable.Creator<List>() {
+        @Override
+        public List createFromParcel(Parcel source) {
+            return new List(source);
+        }
 
-    public void setDtTxt(String dtTxt) {
-        this.dtTxt = dtTxt;
-    }
-
-    public Rain getRain() {
-        return rain;
-    }
-
-    public void setRain(Rain rain) {
-        this.rain = rain;
-    }
-
+        @Override
+        public List[] newArray(int size) {
+            return new List[size];
+        }
+    };
 }

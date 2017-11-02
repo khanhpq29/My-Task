@@ -4,6 +4,8 @@ package ht.pq.khanh.api.forecast;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import ht.pq.khanh.api.current.Sys;
+
 public class Condition {
 
     @SerializedName("dt")
@@ -21,12 +23,6 @@ public class Condition {
     @SerializedName("wind")
     @Expose
     private Wind wind;
-    @SerializedName("rain")
-    @Expose
-    private Rain rain;
-    @SerializedName("sys")
-    @Expose
-    private Sys sys;
     @SerializedName("dt_txt")
     @Expose
     private String dtTxt;
@@ -69,22 +65,6 @@ public class Condition {
 
     public void setWind(Wind wind) {
         this.wind = wind;
-    }
-
-    public Rain getRain() {
-        return rain;
-    }
-
-    public void setRain(Rain rain) {
-        this.rain = rain;
-    }
-
-    public Sys getSys() {
-        return sys;
-    }
-
-    public void setSys(Sys sys) {
-        this.sys = sys;
     }
 
     public String getDtTxt() {
