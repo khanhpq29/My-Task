@@ -12,16 +12,13 @@ import io.realm.annotations.RealmClass
 @RealmClass
 open class Reminder(@PrimaryKey open var id: Long = 0,
                     var title: String = "",
-                    var message: String? = null,
-                    var timeDay: Long? = null,
-                    var timeHour: Long? = null,
+                    var time: Long? = null,
                     var color: Int = 0,
                     var isNotify: Boolean = false) : RealmObject(), Parcelable {
+
     constructor(source: Parcel) : this(
             source.readLong(),
             source.readString(),
-            source.readString(),
-            source.readValue(Long::class.java.classLoader) as Long?,
             source.readValue(Long::class.java.classLoader) as Long?,
             source.readInt(),
             1 == source.readInt()
@@ -32,11 +29,27 @@ open class Reminder(@PrimaryKey open var id: Long = 0,
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeLong(id)
         writeString(title)
-        writeString(message)
-        writeValue(timeDay)
-        writeValue(timeHour)
+        writeValue(time)
         writeInt(color)
         writeInt((if (isNotify) 1 else 0))
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Reminder
+
+        if (id != other.id) return false
+        if (title != other.title) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + title.hashCode()
+        return result
     }
 
     companion object {

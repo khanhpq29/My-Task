@@ -56,6 +56,7 @@
         </activity>
         <activity
             android:name="ht.pq.khanh.task.reminder.ReminderActivity"
+            android:theme="@style/AppTheme"
             android:label="Reminder" />
         <!-- <service -->
         <!-- android:name="" -->

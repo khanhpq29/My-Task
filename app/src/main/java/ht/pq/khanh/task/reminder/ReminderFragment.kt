@@ -87,6 +87,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
             if (requestCode == REQUEST_CODE_CREATE) {
                 data?.let {
                     reminder = data.getParcelableExtra("reminder_result")
+                    addNotification(reminder)
                     listReminder.add(reminder)
                     realm.insertRemind(reminder)
                     remindAdapter?.notifyDataSetChanged()
@@ -182,11 +183,11 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
 
     private fun setNotification() {
         for (item in listReminder) {
-            if (item.isNotify && item.timeDay != null && item.timeHour != null) {
+            if (item.isNotify && item.time != null) {
                 val intent = IntentFor<ReminderNotificationService>(activity)
                 intent.putExtra(Common.TODOTEXT, item.title)
                 intent.putExtra(Common.TODOUUID, item.id)
-                setAlarmManager(intent, item.id.hashCode(), item.timeHour!!)
+                setAlarmManager(intent, item.id.hashCode(), item.time!!)
             }
         }
     }
@@ -210,4 +211,12 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
             Log.d("OskarSchindler", "PI Cancelled " + doesPendingIntentExist(i, requestCode))
         }
     }
+
+    private fun addNotification(reminder: Reminder) {
+        val intent = IntentFor<ReminderNotificationService>(activity)
+        intent.putExtra(Common.TODOUUID, reminder.id.hashCode())
+        intent.putExtra(Common.TODOTEXT, reminder.title)
+        setAlarmManager(intent, reminder.id.hashCode(), reminder.time!!)
+    }
+
 }

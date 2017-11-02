@@ -23,9 +23,7 @@ import java.util.*
  */
 class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerView.Adapter<ReminderAdapter.ReminderHolder>(), ItemTouchHelperAdapter {
     private val simpleDateFormat by lazy { SimpleDateFormat(DATE_FORMAT) }
-    private val simpleTimeFormat by lazy { SimpleDateFormat(TIME_FORMAT) }
-    private val DATE_FORMAT = "MMM, dd yyyy"
-    private val TIME_FORMAT = "hh:mm a"
+    private val DATE_FORMAT = "MMM, dd yyyy hh:mm a"
     private var listener: OnAlterItemRecyclerView? = null
     private var delListener : OnDeleteItemListener? = null
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ReminderHolder {
@@ -35,11 +33,8 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
 
     override fun onBindViewHolder(holder: ReminderHolder, position: Int) {
         val remind = listRemind[position]
-        holder.tvMessage.text = remind.message
         holder.tvTitle.text = remind.title
-        val textTime = simpleDateFormat.format(remind.timeHour)
-        val textDate = simpleTimeFormat.format(remind.timeDay)
-        holder.tvDateTime.text = textDate
+        val textTime = simpleDateFormat.format(remind.time)
         holder.tvTimeHour.text = textTime
         val myDrawable = TextDrawable.builder().beginConfig()
                 .textColor(Color.WHITE)
@@ -86,12 +81,8 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
 
         @BindView(R.id.imgText)
         lateinit var imgText: ImageView
-        @BindView(R.id.tv_date)
-        lateinit var tvDateTime: TextView
         @BindView(R.id.tvTitle)
         lateinit var tvTitle: TextView
-        @BindView(R.id.tvMessage)
-        lateinit var tvMessage: TextView
         @BindView(R.id.tv_time)
         lateinit var tvTimeHour: TextView
 

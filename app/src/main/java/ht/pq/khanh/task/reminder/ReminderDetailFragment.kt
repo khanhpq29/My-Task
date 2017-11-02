@@ -32,8 +32,6 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
 
     @BindView(R.id.tvDayReminder)
     lateinit var tvDateTime: TextView
-    @BindView(R.id.edMsg)
-    lateinit var edtContent: TextInputEditText
     @BindView(R.id.edTitle)
     lateinit var edtTitle: TextInputEditText
     @BindView(R.id.switch_reminder)
@@ -57,9 +55,7 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
         super.onViewCreated(view, savedInstanceState)
         Realm.init(context)
         edtTitle.setText(item?.title)
-        edtContent.setText(item?.message)
         switchRemind.setOnCheckedChangeListener { _, _ ->
-            context.hideKeyBoard(edtContent)
             context.hideKeyBoard(edtTitle)
         }
     }
@@ -68,15 +64,13 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
     fun saveToData() {
         var remind: Reminder
         val titleRemind = edtTitle.text.toString()
-        val contentRemind = edtContent.text.toString()
         val isAlarm = switchRemind.isChecked
-        val timeAlert = timeReminder.timeInMillis
-        val dateAlert = dateReminder.timeInMillis
+        val timeAlert = timeReminder.timeInMillis + dateReminder.timeInMillis
         val currentId = System.currentTimeMillis()
         remind = if (item!!.id == 0.toLong()) {
-            Reminder(currentId, titleRemind, contentRemind, timeAlert, dateAlert, Common.randomColor(), isAlarm)
+            Reminder(currentId, titleRemind, timeAlert, Common.randomColor(), isAlarm)
         } else {
-            Reminder(item!!.id, titleRemind, contentRemind, timeAlert, dateAlert, Common.randomColor(), isAlarm)
+            Reminder(item!!.id, titleRemind, timeAlert, Common.randomColor(), isAlarm)
         }
         val intentReminder = activity.intent
         intentReminder.putExtra("reminder_result", remind)

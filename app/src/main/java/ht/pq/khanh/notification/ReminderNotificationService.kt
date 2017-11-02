@@ -6,8 +6,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import com.pawegio.kandroid.d
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.task.reminder.ReminderActivity
 import ht.pq.khanh.util.Common
@@ -15,7 +13,7 @@ import ht.pq.khanh.util.Common
 /**
  * Created by khanh on 15/10/2017.
  */
-class ReminderNotificationService : IntentService("reminder notification") {
+class ReminderNotificationService : IntentService("reminder_notification") {
 
     override fun onHandleIntent(intent: Intent) {
         val mTodoText = intent.getStringExtra(Common.TODOTEXT)
@@ -27,7 +25,8 @@ class ReminderNotificationService : IntentService("reminder notification") {
 //        deleteIntent.putExtra(TODOUUID, mTodoUUID)
         val notification = Notification.Builder(this)
                 .setContentTitle(mTodoText)
-                .setSmallIcon(R.drawable.ic_access_alarms_black)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+//                .setSmallIcon(R.drawable.ic_access_alarms_black)
                 .setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_SOUND)
 //                .setDeleteIntent(PendingIntent.getService(this, mTodoUUID!!.hashCode(), deleteIntent, PendingIntent.FLAG_UPDATE_CURRENT))
