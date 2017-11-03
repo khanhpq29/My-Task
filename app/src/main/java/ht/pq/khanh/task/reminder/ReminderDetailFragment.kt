@@ -11,8 +11,8 @@ import android.support.v4.app.NavUtils
 import android.support.v7.widget.SwitchCompat
 import android.text.format.DateFormat
 import android.view.*
-import android.widget.Button
 import android.widget.DatePicker
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.TimePicker
 import butterknife.BindView
@@ -20,8 +20,7 @@ import butterknife.ButterKnife
 import butterknife.OnCheckedChanged
 import butterknife.OnClick
 import com.pawegio.kandroid.d
-import ht.pq.khanh.extension.hideKeyBoard
-import ht.pq.khanh.extension.inflateLayout
+import ht.pq.khanh.extension.*
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.util.Common
@@ -32,7 +31,6 @@ import java.util.*
  * Created by khanhpq on 10/5/17.
  */
 class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
-
     @BindView(R.id.tvDayReminder)
     lateinit var tvDateTime: TextView
     @BindView(R.id.edTitle)
@@ -41,10 +39,10 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
     lateinit var layoutTitle: TextInputLayout
     @BindView(R.id.switch_reminder)
     lateinit var switchRemind: SwitchCompat
-    @BindView(R.id.btnDate)
-    lateinit var btnDate: Button
-    @BindView(R.id.btnTime)
-    lateinit var btnTime: Button
+    @BindView(R.id.edtDate)
+    lateinit var edtDate: EditText
+    @BindView(R.id.edtTime)
+    lateinit var edtTime: EditText
     private val realm: Realm by lazy { Realm.getDefaultInstance() }
     private lateinit var item: Reminder
     private var time: Date? = null
@@ -66,44 +64,22 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Realm.init(context)
-        edtTitle.setText(item.title)
-        switchRemind.isChecked = item.isNotify
-        changeLayoutVisuality(switchRemind.isChecked)
+        initializeData()
     }
 
     @OnCheckedChanged(R.id.switch_reminder)
     fun changeLayoutVisuality(isChecked: Boolean) {
         if (isChecked) {
             context.hideKeyBoard(edtTitle)
-            btnDate.visibility = View.VISIBLE
-            btnTime.visibility = View.VISIBLE
+            edtDate.isShow()
+            edtTime.isShow()
         } else {
-            btnDate.visibility = View.GONE
-            btnTime.visibility = View.GONE
+            edtDate.isHide()
+            edtTime.isHide()
         }
     }
 
-    private fun saveToData() {
-        val titleRemind = edtTitle.text.toString()
-        if (titleRemind.trim().isEmpty()) {
-            layoutTitle.error = getString(R.string.title_empty)
-            return
-        }
-        var remind: Reminder
-        val isAlarm = switchRemind.isChecked
-        val currentId = System.currentTimeMillis()
-        remind = if (item.id == 0.toLong()) {
-            Reminder(currentId, titleRemind, time, Common.randomColor(), isAlarm)
-        } else {
-            Reminder(item.id, titleRemind, time, item.color, isAlarm)
-        }
-        val intentReminder = activity.intent
-        intentReminder.putExtra("reminder_result", remind)
-        activity.setResult(Activity.RESULT_OK, intentReminder)
-        activity.finish()
-    }
-
-    @OnClick(R.id.btnDate)
+    @OnClick(R.id.edtDate)
     fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val day = calendar.get(Calendar.DAY_OF_MONTH)
@@ -113,7 +89,7 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
         datePicker.show()
     }
 
-    @OnClick(R.id.btnTime)
+    @OnClick(R.id.edtTime)
     fun showTimePickerDialog() {
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -129,6 +105,7 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
         }
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
+        edtDate.setText("${month + 1}/$dayOfMonth/$year")
         dateReminder.set(year, month, dayOfMonth, hour, minute, 0)
         time = dateReminder.time
         tvDateTime.text = "${month + 1}, $dayOfMonth $year, $hour : $minute "
@@ -142,6 +119,7 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
+        edtTime.setText("$hourOfDay : $minute")
         timeReminder.set(year, month, day, hourOfDay, minute, 0)
         time = timeReminder.time
         tvDateTime.text = "${month + 1}, $day $year, $hourOfDay : $minute "
@@ -164,6 +142,43 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
         super.onDestroyView()
         d("destroy")
         realm.close()
+    }
+
+    private fun initializeData() {
+        edtTitle.setText(item.title)
+        switchRemind.isChecked = item.isNotify
+        val calendar = Calendar.getInstance()
+        if (item.dateTime != null) {
+            calendar.time = item.dateTime
+            edtDate.setText("${calendar.get(Calendar.MONTH)}/${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.YEAR)}")
+            edtTime.setText("${calendar.get(Calendar.HOUR_OF_DAY)} : ${calendar.get(Calendar.MINUTE)}")
+        }
+        changeLayoutVisuality(switchRemind.isChecked)
+    }
+
+    private fun saveToData() {
+        val titleRemind = edtTitle.text.toString()
+        if (titleRemind.trim().isEmpty()) {
+            layoutTitle.error = getString(R.string.title_empty)
+            return
+        }
+        if (time != null) {
+            if (time!!.before(Date())) {
+                context.showToast(getString(R.string.time_error))
+                return
+            }
+            val isAlarm = switchRemind.isChecked
+            val currentId = System.currentTimeMillis()
+            var remind = if (item.id == 0.toLong()) {
+                Reminder(currentId, titleRemind, time, Common.randomColor(), isAlarm)
+            } else {
+                Reminder(item.id, titleRemind, time, item.color, isAlarm)
+            }
+            val intentReminder = activity.intent
+            intentReminder.putExtra("reminder_result", remind)
+            activity.setResult(Activity.RESULT_OK, intentReminder)
+            activity.finish()
+        }
     }
 
     companion object {

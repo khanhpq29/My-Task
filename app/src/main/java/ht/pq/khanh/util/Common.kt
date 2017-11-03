@@ -33,9 +33,11 @@ object Common {
     //location
     val LOCATION_PREFERENCE = "location_pref"
     //notification
-
     val TODOTEXT = "notification.content"
     val TODOUUID = "notification.id"
+    //snooze
+    val DEFAULT_SNOOZE = 5
+
     fun randomColor(): Int {
         return ColorGenerator.MATERIAL.randomColor
     }

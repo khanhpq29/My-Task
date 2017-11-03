@@ -100,4 +100,5 @@
     <string name="alarm_hint">Name</string>
     <string name="title_empty">Title cannot be empty</string>
     <string name="hint_title">Title</string>
+    <string name="time_error">Cannot set up reminder in past</string>
 </resources>

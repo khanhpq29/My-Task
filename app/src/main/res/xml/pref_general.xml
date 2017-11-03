@@ -23,6 +23,12 @@
             android:summaryOn="°C"
             android:summaryOff="°F"
             android:defaultValue="true"/>
+        <android.support.v7.preference.EditTextPreference
+            android:key="snoozePreference"
+            android:title="Snooze time"
+            android:summary="Time"
+            android:dialogMessage="Enter Number"
+            android:dialogLayout="@layout/pref_dialog_number" />
 
     </android.support.v7.preference.PreferenceCategory>
 

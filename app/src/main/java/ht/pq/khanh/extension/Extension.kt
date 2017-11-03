@@ -1,8 +1,11 @@
 package ht.pq.khanh.extension
 
 import android.app.AlarmManager
+import android.app.DatePickerDialog
 import android.app.Fragment
+import android.app.TimePickerDialog
 import android.content.Context
+import android.text.format.DateFormat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +16,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import ht.pq.khanh.multitask.R
+import java.util.*
 
 /**
  * Created by khanhpq on 9/25/17.
@@ -41,3 +45,11 @@ fun Context.hideKeyBoard(et: EditText) {
 }
 
 fun Context.getAlarmManager(): AlarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+fun View.isHide() {
+    this.visibility = View.GONE
+}
+
+fun View.isShow() {
+    this.visibility = View.VISIBLE
+}

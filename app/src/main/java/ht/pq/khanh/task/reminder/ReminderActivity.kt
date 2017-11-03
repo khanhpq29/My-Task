@@ -5,30 +5,36 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnClick
 import ht.pq.khanh.multitask.R
+import ht.pq.khanh.util.Common
 
 class ReminderActivity : AppCompatActivity() {
-    @BindView(R.id.btnRemove)
-    lateinit var btnRemove: Button
+    @BindView(R.id.txtContent)
+    lateinit var tvContent : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reminder)
         ButterKnife.bind(this)
-        btnRemove.setOnClickListener { moveToReminderList() }
+        val title = intent.getStringExtra(Common.TODOTEXT)
+        tvContent.text = title
+    }
+
+    @OnClick(R.id.btnRemove)
+    fun removeReminder(){
+        moveToReminderList()
+    }
+
+    @OnClick(R.id.btnSnooze)
+    fun snoozeMore(){
+
     }
 
     private fun moveToReminderList(){
 
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return super.onOptionsItemSelected(item)
     }
 }

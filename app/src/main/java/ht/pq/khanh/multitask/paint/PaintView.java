@@ -14,6 +14,8 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.glidebitmappool.GlideBitmapPool;
+
 import java.util.ArrayList;
 
 public class PaintView extends View {
@@ -61,7 +63,7 @@ public class PaintView extends View {
         int height = metrics.heightPixels;
         int width = metrics.widthPixels;
 
-        mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        mBitmap = GlideBitmapPool.getBitmap(width, height, Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
 
         currentColor = DEFAULT_COLOR;
@@ -91,6 +93,7 @@ public class PaintView extends View {
 
     public void clear() {
         backgroundColor = DEFAULT_BG_COLOR;
+        GlideBitmapPool.clearMemory();
         paths.clear();
         normal();
         invalidate();

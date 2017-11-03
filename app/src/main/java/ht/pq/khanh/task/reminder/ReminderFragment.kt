@@ -15,7 +15,6 @@ import android.util.Log
 import android.view.*
 import butterknife.BindView
 import butterknife.ButterKnife
-import butterknife.OnCheckedChanged
 import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
 import com.pawegio.kandroid.d
@@ -26,6 +25,7 @@ import ht.pq.khanh.multitask.R
 import ht.pq.khanh.notification.ReminderNotificationService
 import ht.pq.khanh.util.Common
 import io.realm.Realm
+import java.util.*
 
 class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, ReminderAdapter.OnDeleteItemListener {
     private val REQUEST_CODE_CREATE = 117
@@ -33,7 +33,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
     @BindView(R.id.list_reminder)
     lateinit var recyclerRemind: RecyclerView
 
-    private var remindAdapter: ReminderAdapter? = null
+    private lateinit var remindAdapter: ReminderAdapter
     private var listReminder: MutableList<Reminder> = arrayListOf()
     private lateinit var realm: Realm
     private lateinit var reminder: Reminder
@@ -61,14 +61,14 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         super.onViewCreated(view, savedInstanceState)
         listReminder = realm.copyFromRealm(realm.findAllRemind())
         remindAdapter = ReminderAdapter(listReminder)
-        remindAdapter?.setHasStableIds(true)
+        remindAdapter.setHasStableIds(true)
         initialRecyclerView()
         registerForContextMenu(recyclerRemind)
-        val callback = SimpleItemTouchHelperCallBack(remindAdapter!!)
+        val callback = SimpleItemTouchHelperCallBack(remindAdapter)
         simpleTouch = ItemTouchHelper(callback)
         simpleTouch.attachToRecyclerView(recyclerRemind)
-        remindAdapter?.setOnChangeItem(this)
-        remindAdapter?.setOnDeleteItemListener(this)
+        remindAdapter.setOnChangeItem(this)
+        remindAdapter.setOnDeleteItemListener(this)
     }
 
     override fun onStart() {
@@ -91,7 +91,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
                     addNotification(reminder)
                     listReminder.add(reminder)
                     realm.insertRemind(reminder)
-                    remindAdapter?.notifyDataSetChanged()
+                    remindAdapter.notifyDataSetChanged()
                 }
             } else if (requestCode == REQUEST_UPDATE) {
                 data?.let {
@@ -99,7 +99,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
                     listReminder.removeAt(selectedPosition)
                     listReminder.add(selectedPosition, reminder)
                     realm.updateReminder(reminder)
-                    remindAdapter?.notifyDataSetChanged()
+                    remindAdapter.notifyDataSetChanged()
                 }
             }
         }
@@ -124,7 +124,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         selectedPosition = position
         var itemSelected = listReminder[position]
         listReminder.removeAt(position)
-        remindAdapter?.notifyItemRemoved(position)
+        remindAdapter.notifyItemRemoved(position)
         val intent = IntentFor<ReminderNotificationService>(activity)
         deleteAlarm(intent, itemSelected.id.hashCode())
         realm.deleteRemind(itemSelected)
@@ -132,7 +132,8 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
                 .setAction("Undo", {
                     listReminder.add(selectedPosition, itemSelected)
                     realm.insertRemind(itemSelected)
-                    remindAdapter?.notifyDataSetChanged()
+                    deleteAlarm(intent, itemSelected.id.hashCode())
+                    remindAdapter.notifyDataSetChanged()
                 }).show()
     }
 
@@ -184,11 +185,15 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
 
     private fun setNotification() {
         for (item in listReminder) {
-            if (item.isNotify && item.time != null) {
+            if (item.isNotify && item.dateTime != null) {
+                if (item.dateTime!!.before(Date())){
+                    item.dateTime = null
+                    continue
+                }
                 val intent = IntentFor<ReminderNotificationService>(activity)
                 intent.putExtra(Common.TODOTEXT, item.title)
                 intent.putExtra(Common.TODOUUID, item.id)
-                setAlarmManager(intent, item.id.hashCode(), item.time?.time!!)
+                setAlarmManager(intent, item.id.hashCode(), item.dateTime?.time!!)
             }
         }
     }
@@ -209,16 +214,15 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
             val pi = PendingIntent.getService(context, requestCode, i, PendingIntent.FLAG_NO_CREATE)
             pi.cancel()
             context.getAlarmManager().cancel(pi)
-            Log.d("OskarSchindler", "PI Cancelled " + doesPendingIntentExist(i, requestCode))
         }
     }
 
     private fun addNotification(reminder: Reminder) {
-        if (reminder.time != null) {
+        if (reminder.dateTime != null) {
             val intent = IntentFor<ReminderNotificationService>(activity)
             intent.putExtra(Common.TODOUUID, reminder.id.hashCode())
             intent.putExtra(Common.TODOTEXT, reminder.title)
-            setAlarmManager(intent, reminder.id.hashCode(), reminder.time!!.time)
+            setAlarmManager(intent, reminder.id.hashCode(), reminder.dateTime!!.time)
         }
     }
 

@@ -2,12 +2,10 @@ package ht.pq.khanh.task.alarm
 
 import android.app.Activity
 import android.app.TimePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Vibrator
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
@@ -27,7 +25,7 @@ import ht.pq.khanh.extension.*
 import ht.pq.khanh.model.Alarm
 import ht.pq.khanh.multitask.R
 import io.realm.Realm
-import java.util.Calendar
+import java.util.*
 
 /**
  * Created by khanhpq on 9/25/17.
@@ -126,7 +124,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         time.set(Calendar.HOUR_OF_DAY, hourOfDay)
         time.set(Calendar.MINUTE, minute)
 
-//        val alarm = AlarmJ(time.timeInMillis, time.timeInMillis, "alarm", false, true)
+//        val alarm = AlarmJ(dateTime.timeInMillis, dateTime.timeInMillis, "alarm", false, true)
 //        alarms.add(alarm)
 //        alarmAdapter.addChange(alarms)
 //        Log.d("alarm size", "${alarms.size}")

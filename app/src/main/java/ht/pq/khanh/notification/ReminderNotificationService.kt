@@ -21,6 +21,7 @@ class ReminderNotificationService : IntentService("reminder_notification") {
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val i = Intent(this, ReminderActivity::class.java)
         i.putExtra(Common.TODOUUID, mTodoUUID)
+        i.putExtra(Common.TODOTEXT, mTodoText)
 //        val deleteIntent = Intent(this, DeleteNotificationService::class.java)
 //        deleteIntent.putExtra(TODOUUID, mTodoUUID)
         val notification = Notification.Builder(this)

@@ -34,8 +34,8 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     override fun onBindViewHolder(holder: ReminderHolder, position: Int) {
         val remind = listRemind[position]
         holder.tvTitle.text = remind.title
-        if (remind.time != null) {
-            val textTime = simpleDateFormat.format(remind.time)
+        if (remind.dateTime != null) {
+            val textTime = simpleDateFormat.format(remind.dateTime)
             holder.tvTimeHour.text = textTime
         }
         val myDrawable = TextDrawable.builder().beginConfig()
