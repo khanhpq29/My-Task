@@ -5,6 +5,7 @@ import android.os.Parcelable
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
+import java.util.*
 
 /**
  * Created by khanhpq on 9/29/17.
@@ -12,14 +13,13 @@ import io.realm.annotations.RealmClass
 @RealmClass
 open class Reminder(@PrimaryKey open var id: Long = 0,
                     var title: String = "",
-                    var time: Long? = null,
+                    var time: Date? = null,
                     var color: Int = 0,
                     var isNotify: Boolean = false) : RealmObject(), Parcelable {
-
     constructor(source: Parcel) : this(
             source.readLong(),
             source.readString(),
-            source.readValue(Long::class.java.classLoader) as Long?,
+            source.readSerializable() as Date?,
             source.readInt(),
             1 == source.readInt()
     )
@@ -29,27 +29,9 @@ open class Reminder(@PrimaryKey open var id: Long = 0,
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeLong(id)
         writeString(title)
-        writeValue(time)
+        writeSerializable(time)
         writeInt(color)
         writeInt((if (isNotify) 1 else 0))
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Reminder
-
-        if (id != other.id) return false
-        if (title != other.title) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = id.hashCode()
-        result = 31 * result + title.hashCode()
-        return result
     }
 
     companion object {

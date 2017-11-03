@@ -15,6 +15,7 @@ import android.util.Log
 import android.view.*
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnCheckedChanged
 import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
 import com.pawegio.kandroid.d
@@ -187,7 +188,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
                 val intent = IntentFor<ReminderNotificationService>(activity)
                 intent.putExtra(Common.TODOTEXT, item.title)
                 intent.putExtra(Common.TODOUUID, item.id)
-                setAlarmManager(intent, item.id.hashCode(), item.time!!)
+                setAlarmManager(intent, item.id.hashCode(), item.time?.time!!)
             }
         }
     }
@@ -213,10 +214,12 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
     }
 
     private fun addNotification(reminder: Reminder) {
-        val intent = IntentFor<ReminderNotificationService>(activity)
-        intent.putExtra(Common.TODOUUID, reminder.id.hashCode())
-        intent.putExtra(Common.TODOTEXT, reminder.title)
-        setAlarmManager(intent, reminder.id.hashCode(), reminder.time!!)
+        if (reminder.time != null) {
+            val intent = IntentFor<ReminderNotificationService>(activity)
+            intent.putExtra(Common.TODOUUID, reminder.id.hashCode())
+            intent.putExtra(Common.TODOTEXT, reminder.title)
+            setAlarmManager(intent, reminder.id.hashCode(), reminder.time!!.time)
+        }
     }
 
 }

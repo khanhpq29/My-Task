@@ -23,7 +23,7 @@ import java.util.*
  */
 class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerView.Adapter<ReminderAdapter.ReminderHolder>(), ItemTouchHelperAdapter {
     private val simpleDateFormat by lazy { SimpleDateFormat(DATE_FORMAT) }
-    private val DATE_FORMAT = "MMM, dd yyyy hh:mm a"
+    private val DATE_FORMAT = "MMM, dd yyyy, hh:mm a"
     private var listener: OnAlterItemRecyclerView? = null
     private var delListener : OnDeleteItemListener? = null
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ReminderHolder {
@@ -34,8 +34,10 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     override fun onBindViewHolder(holder: ReminderHolder, position: Int) {
         val remind = listRemind[position]
         holder.tvTitle.text = remind.title
-        val textTime = simpleDateFormat.format(remind.time)
-        holder.tvTimeHour.text = textTime
+        if (remind.time != null) {
+            val textTime = simpleDateFormat.format(remind.time)
+            holder.tvTimeHour.text = textTime
+        }
         val myDrawable = TextDrawable.builder().beginConfig()
                 .textColor(Color.WHITE)
                 .useFont(Typeface.DEFAULT)
