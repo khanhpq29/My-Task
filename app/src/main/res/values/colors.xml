@@ -49,4 +49,6 @@
     <color name="textlight">#546e7a</color>
     <color name="textlight30">#4d6b8d9c</color>
     <color name="border">#e7e7e7</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

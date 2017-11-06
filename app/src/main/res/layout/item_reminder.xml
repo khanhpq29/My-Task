@@ -30,7 +30,6 @@
             android:gravity="start|bottom"
             android:lines="1"
             android:text="Clean your room"
-            android:textColor="@color/secondary_text"
             android:textSize="16sp"
             tools:ignore="MissingPrefix" />
 
