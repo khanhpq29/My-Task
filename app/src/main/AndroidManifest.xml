@@ -32,7 +32,7 @@
         <activity
             android:name=".weather.WeatherDetailActivity"
             android:label="Weather detail"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.LightTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MenuActivity" />
@@ -40,7 +40,7 @@
         <activity
             android:name="ht.pq.khanh.task.reminder.ReminderEditActivity"
             android:label="EditActivity"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme.LightTheme"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -56,7 +56,7 @@
         </activity>
         <activity
             android:name="ht.pq.khanh.task.reminder.ReminderActivity"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme.LightTheme"
             android:label="Reminder" />
         <!-- <service -->
         <!-- android:name="" -->

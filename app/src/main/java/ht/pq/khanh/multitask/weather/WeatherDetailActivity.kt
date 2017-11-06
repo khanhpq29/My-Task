@@ -3,13 +3,18 @@ package ht.pq.khanh.multitask.weather
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import ht.pq.khanh.extension.setUpTheme
 import ht.pq.khanh.multitask.R
+import kotlinx.android.synthetic.main.activity_alarm_edit.*
 
 class WeatherDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        this.setUpTheme()
         setContentView(R.layout.activity_weather_detail)
+        toolbar.title = "Detail"
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val weatherFragment = WeatherFragment()
         val bundle = Bundle()

@@ -38,7 +38,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
     private lateinit var alarmAdapter: AlarmAdapter
     private var alarms: MutableList<Alarm> = arrayListOf()
     private val REQUEST_CODE = 116
-    private var ringToneUri : String? = null
+    private var ringToneUri: String? = null
     private val RQS_RINGTONEPICKER = 111
     private var selectedPosition = 0
     private lateinit var realm: Realm
@@ -67,6 +67,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         super.onResume()
         realm = Realm.getDefaultInstance()
     }
+
     @OnClick(R.id.fab_set_alarm)
     fun showTimeDialog() {
         val intent = IntentFor<AlarmEditActivity>(activity)
@@ -80,7 +81,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
             val alarm = data?.getParcelableExtra<Alarm>("Alarm_parcel")
             if (alarm != null) alarms.add(alarm)
             alarmAdapter.notifyDataSetChanged()
-        }else if (requestCode == RQS_RINGTONEPICKER && resultCode == android.app.Activity.RESULT_OK) {
+        } else if (requestCode == RQS_RINGTONEPICKER && resultCode == android.app.Activity.RESULT_OK) {
             val uri = data?.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
             ringToneUri = uri?.toString()
             val alrmItem = alarms[selectedPosition]

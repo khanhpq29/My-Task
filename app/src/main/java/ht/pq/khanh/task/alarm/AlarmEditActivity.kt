@@ -5,7 +5,6 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -16,6 +15,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import ht.pq.khanh.extension.insertAlarm
+import ht.pq.khanh.extension.setUpTheme
 import ht.pq.khanh.model.Alarm
 import ht.pq.khanh.multitask.R
 import io.realm.Realm
@@ -49,6 +49,7 @@ class AlarmEditActivity : AppCompatActivity() {
     private var idAlarm : Long = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        this.setUpTheme()
         setContentView(R.layout.activity_alarm_edit)
         ButterKnife.bind(this)
         Realm.init(applicationContext)

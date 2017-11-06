@@ -1,14 +1,8 @@
 package ht.pq.khanh.multitask
 
-import android.app.AlarmManager
-import android.app.Notification
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.os.SystemClock
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -23,15 +17,14 @@ import butterknife.ButterKnife
 import com.pawegio.kandroid.d
 import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.broadcast.ConnectivityReceiver
+import ht.pq.khanh.extension.setUpTheme
 import ht.pq.khanh.multitask.forecast.ForecastFragment
 import ht.pq.khanh.multitask.paint.PaintFragment
 import ht.pq.khanh.multitask.radio.RadioFragment
 import ht.pq.khanh.setting.SettingFragment
 import ht.pq.khanh.task.alarm.AlarmFragment
-import ht.pq.khanh.task.reminder.ReminderActivity
 import ht.pq.khanh.task.reminder.ReminderFragment
 import ht.pq.khanh.task.sleepawake.AwakeFragment
-import ht.pq.khanh.util.Common
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.toolbar)
@@ -41,13 +34,10 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     @BindView(R.id.nav_view)
     lateinit var navigationView: NavigationView
     private lateinit var title: String
-    private var theme = "name_of_the_theme"
-    private val RECREATE_ACTIVITY = "recreate_theme"
-    private var themeStyle = -1
     private var currentId = R.id.nav_reminder
-    private lateinit var connectingReceiver : ConnectivityReceiver
+    private lateinit var connectingReceiver: ConnectivityReceiver
     override fun onCreate(savedInstanceState: Bundle?) {
-        setUpTheme()
+        this.setUpTheme()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
         ButterKnife.bind(this)
@@ -123,33 +113,19 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onResume()
         d("onresume")
         registerReceiver(connectingReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
-        if (getSharedPreferences(Common.THEME_PREFERENCES, Context.MODE_PRIVATE).getBoolean(RECREATE_ACTIVITY, false)) {
-            val editor = getSharedPreferences(Common.THEME_PREFERENCES, Context.MODE_PRIVATE).edit()
-            editor.putBoolean(RECREATE_ACTIVITY, false)
-            editor.apply()
-            recreate()
-        }
     }
 
     override fun onPause() {
         super.onPause()
         unregisterReceiver(connectingReceiver)
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        val ref = TaskApplication().getRefWatcher(this)
-        ref.watch(ref)
+        d("onPause")
     }
 
-    private fun setUpTheme() {
-        val preference = getSharedPreferences(Common.THEME_PREFERENCES, Context.MODE_PRIVATE)
-        theme = preference.getString(Common.THEME_SAVED, Common.LIGHTTHEME)
-        themeStyle = if (theme == Common.DARKTHEME) {
-            R.style.AppTheme_DarkTheme
-        } else {
-            R.style.AppTheme_LightTheme
-        }
-        setTheme(themeStyle)
+    override fun onDestroy() {
+        super.onDestroy()
+        d("onDestroy")
+        val ref = TaskApplication().getRefWatcher(this)
+        ref.watch(ref)
     }
 
     private fun navigateToFragment(fragmentManager: FragmentManager, fragment: Fragment) {
@@ -158,23 +134,4 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         transaction.commit()
     }
 
-    private fun scheduleNotification(notification: Notification, delay: Int) {
-
-        val notificationIntent = Intent(this, ReminderActivity::class.java)
-        notificationIntent.putExtra("notification-id", 1)
-        notificationIntent.putExtra("notification", notification)
-        val pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        val futureInMillis = SystemClock.elapsedRealtime() + delay
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent)
-    }
-
-    private fun getNotification(content: String): Notification {
-        val builder = Notification.Builder(this)
-        builder.setContentTitle("Scheduled Notification")
-        builder.setContentText(content)
-        builder.setSmallIcon(R.mipmap.ic_launcher)
-        return builder.build()
-    }
 }

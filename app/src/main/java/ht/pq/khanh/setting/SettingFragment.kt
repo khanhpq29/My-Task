@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v7.preference.CheckBoxPreference
 import android.support.v7.preference.EditTextPreference
 import android.support.v7.preference.PreferenceFragmentCompat
-import android.support.v7.preference.SwitchPreferenceCompat
 import android.view.View
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.util.Common
@@ -26,19 +25,20 @@ class SettingFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPr
         val location = findPreference(resources.getString(R.string.location_preference)) as EditTextPreference
         location.summary = locationValue
     }
+
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
             Common.NIGHT_PREFERENCE_KEY -> {
                 val sharedPreference = activity.getSharedPreferences(Common.THEME_PREFERENCES, Context.MODE_PRIVATE)
                 val themeEditor = sharedPreference.edit()
                 themeEditor.putBoolean(Common.RECREATE_ACTIVITY, true)
-                val switchMode = findPreference(Common.NIGHT_PREFERENCE_KEY) as SwitchPreferenceCompat
-                if (switchMode.isEnabled) {
+                val switchMode = findPreference(Common.NIGHT_PREFERENCE_KEY) as CheckBoxPreference
+                if (switchMode.isChecked) {
                     themeEditor.putString(Common.THEME_SAVED, Common.DARKTHEME)
                 } else {
                     themeEditor.putString(Common.THEME_SAVED, Common.LIGHTTHEME)
                 }
-                themeEditor.commit()
+                themeEditor.apply()
                 activity.recreate()
             }
             Common.TEMP_PREFERENCE_KEY -> {

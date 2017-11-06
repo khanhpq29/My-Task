@@ -4,7 +4,7 @@
     <android.support.v7.preference.PreferenceCategory
         android:title="Setting">
 
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <android.support.v7.preference.CheckBoxPreference
             android:key="@string/night_mode_pref_key"
             android:title="Night mode"
             android:summaryOn="Night mode is on"

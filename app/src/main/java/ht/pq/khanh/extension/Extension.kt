@@ -1,11 +1,8 @@
 package ht.pq.khanh.extension
 
 import android.app.AlarmManager
-import android.app.DatePickerDialog
 import android.app.Fragment
-import android.app.TimePickerDialog
 import android.content.Context
-import android.text.format.DateFormat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +13,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import ht.pq.khanh.multitask.R
-import java.util.*
+import ht.pq.khanh.util.Common
 
 /**
  * Created by khanhpq on 9/25/17.
@@ -52,4 +49,15 @@ fun View.isHide() {
 
 fun View.isShow() {
     this.visibility = View.VISIBLE
+}
+
+fun Context.setUpTheme() {
+    val preference = getSharedPreferences(Common.THEME_PREFERENCES, Context.MODE_PRIVATE)
+    val theme = preference.getString(Common.THEME_SAVED, Common.LIGHTTHEME)
+    val themeStyle = if (theme == Common.DARKTHEME) {
+        R.style.AppTheme_DarkTheme
+    } else {
+        R.style.AppTheme_LightTheme
+    }
+    setTheme(themeStyle)
 }

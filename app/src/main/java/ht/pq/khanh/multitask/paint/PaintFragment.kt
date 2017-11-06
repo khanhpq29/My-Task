@@ -26,10 +26,6 @@ import ht.pq.khanh.multitask.R
 import java.io.*
 
 class PaintFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallback, ColorPickerSwatch.OnColorSelectedListener {
-    override fun onColorSelected(color: Int) {
-        paint.setColorPaint(color)
-    }
-
     @BindView(R.id.paint)
     lateinit var paint: PaintView
     private val REQUEST_STORAGE = 0
@@ -69,6 +65,10 @@ class PaintFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallb
                 save()
         }
         return true
+    }
+
+    override fun onColorSelected(color: Int) {
+        paint.setColorPaint(color)
     }
 
     private fun setColor() {
