@@ -1,10 +1,14 @@
 package ht.pq.khanh.multitask.radio
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import butterknife.ButterKnife
+import butterknife.OnClick
+import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.multitask.R
 
 class RadioFragment : Fragment() {
@@ -16,18 +20,16 @@ class RadioFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_radio, container, false)
+        val view =  container!!.inflateLayout(R.layout.fragment_radio)
+        ButterKnife.bind(this, view)
+        return view
     }
 
-//    companion object {
-//        fun newInstance(param1: String, param2: String): RadioFragment {
-//            val fragment = RadioFragment()
-//            val args = Bundle()
-//            args.putString(ARG_PARAM1, param1)
-//            args.putString(ARG_PARAM2, param2)
-//            fragment.arguments = args
-//            return fragment
-//        }
-//    }fragment
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+    @OnClick(R.id.btnRadio)
+    fun lock(){
+//        activity.startService(IntentFor<LogScreenService>(activity))
+    }
 }

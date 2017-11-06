@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name="ht.pq.khanh.TaskApplication"
@@ -23,8 +23,7 @@
         <activity
             android:name=".MenuActivity"
             android:label="@string/title_activity_menu"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name="ht.pq.khanh.task.alarm.AlarmChangeActivity" />
         <activity
             android:name=".weather.WeatherDetailActivity"
@@ -68,7 +67,12 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name="ht.pq.khanh.service.ScreenReceiver"/>
+        <receiver android:name="ht.pq.khanh.service.ScreenReceiver">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.SCREEN_OFF" />-->
+                <!--<action android:name="android.intent.action.SCREEN_ON" />-->
+            <!--</intent-filter>-->
+        </receiver>
         <service android:name="ht.pq.khanh.notification.ReminderNotificationService" />
 
         <activity
@@ -76,13 +80,13 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_splash"
             android:theme="@style/FullscreenTheme">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="ht.pq.khanh.task.alarm.AlarmNotificationActivity"></activity>
     </application>
 
 </manifest>

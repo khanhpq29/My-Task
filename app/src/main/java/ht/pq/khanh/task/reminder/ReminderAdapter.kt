@@ -11,6 +11,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.amulyakhare.textdrawable.TextDrawable
 import ht.pq.khanh.extension.inflateLayout
+import ht.pq.khanh.extension.isHide
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.helper.ItemTouchHelperAdapter
@@ -25,7 +26,7 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     private val simpleDateFormat by lazy { SimpleDateFormat(DATE_FORMAT) }
     private val DATE_FORMAT = "MMM, dd yyyy, hh:mm a"
     private var listener: OnAlterItemRecyclerView? = null
-    private var delListener : OnDeleteItemListener? = null
+    private var delListener: OnDeleteItemListener? = null
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ReminderHolder {
         val view = parent!!.inflateLayout(R.layout.item_reminder)
         return ReminderHolder(view)
@@ -37,6 +38,8 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
         if (remind.dateTime != null) {
             val textTime = simpleDateFormat.format(remind.dateTime)
             holder.tvTimeHour.text = textTime
+        } else {
+            holder.tvTimeHour.isHide()
         }
         val myDrawable = TextDrawable.builder().beginConfig()
                 .textColor(Color.WHITE)
@@ -69,9 +72,11 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     fun setOnChangeItem(callback: OnAlterItemRecyclerView?) {
         listener = callback
     }
-    fun setOnDeleteItemListener(callback: OnDeleteItemListener){
+
+    fun setOnDeleteItemListener(callback: OnDeleteItemListener) {
         this.delListener = callback
     }
+
     inner class ReminderHolder(itemView: View) : RecyclerView.ViewHolder(itemView), ItemTouchViewholder {
         override fun onItemSelect() {
             itemView.setBackgroundColor(Color.LTGRAY)
@@ -100,7 +105,8 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     interface OnAlterItemRecyclerView {
         fun onChangeItem(position: Int)
     }
-    interface OnDeleteItemListener{
+
+    interface OnDeleteItemListener {
         fun onDeleteItem(position: Int)
     }
 }

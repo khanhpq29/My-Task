@@ -34,6 +34,6 @@ class ReminderActivity : AppCompatActivity() {
     }
 
     private fun moveToReminderList(){
-
+        finish()
     }
 }
