@@ -13,7 +13,7 @@ import ht.pq.khanh.bus.RxBus
 class ConnectivityReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         val networkEvent = NetworkEvent(isConnected(context))
-        RxBus.getInstance().send(networkEvent)
+        RxBus.instance.send(networkEvent)
     }
 
     private fun isConnected(context: Context): Boolean {

@@ -76,7 +76,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:11.4.2'
     implementation 'com.google.firebase:firebase-core:11.4.2'
     implementation 'com.amitshekhar.android:glide-bitmap-pool:0.0.1'
-
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.2"
     testCompile 'junit:junit:4.12'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     kapt 'com.jakewharton:butterknife-compiler:8.8.1'
@@ -88,6 +88,10 @@ repositories {
         url 'http://dl.bintray.com/amulyakhare/maven'
     }
 }
-
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
+}
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'

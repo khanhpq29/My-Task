@@ -105,7 +105,7 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
     }
 
     override fun changeNetworkState() {
-        disposal.add(RxBus.getInstance().toObservable(NetworkEvent::class.java)
+        disposal.add(RxBus.instance.toObservable(NetworkEvent::class.java)
                 .subscribe({ event: NetworkEvent ->
                     if (event.isConnected) {
                         onRefresh()
