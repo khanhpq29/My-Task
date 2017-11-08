@@ -3,7 +3,6 @@ package ht.pq.khanh.multitask
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.os.PowerManager
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -21,14 +20,11 @@ import ht.pq.khanh.broadcast.ConnectivityReceiver
 import ht.pq.khanh.extension.setUpTheme
 import ht.pq.khanh.multitask.forecast.ForecastFragment
 import ht.pq.khanh.multitask.paint.PaintFragment
-import ht.pq.khanh.multitask.radio.RadioFragment
-import ht.pq.khanh.service.ScreenReceiver
 import ht.pq.khanh.setting.SettingFragment
 import ht.pq.khanh.task.alarm.AlarmFragment
 import ht.pq.khanh.task.reminder.ReminderFragment
 import ht.pq.khanh.task.sleepawake.AwakeFragment
 import android.content.Intent
-import ht.pq.khanh.notification.Example
 
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -41,7 +37,6 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var title: String
     private var currentId = R.id.nav_reminder
     private lateinit var connectingReceiver: ConnectivityReceiver
-    private lateinit var screenReceiver: ScreenReceiver
     override fun onCreate(savedInstanceState: Bundle?) {
         this.setUpTheme()
         super.onCreate(savedInstanceState)
@@ -49,7 +44,6 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         ButterKnife.bind(this)
         setSupportActionBar(toolbar)
         connectingReceiver = ConnectivityReceiver()
-        screenReceiver = ScreenReceiver()
         supportFragmentManager.beginTransaction().replace(R.id.container, ReminderFragment()).commit()
         val toggle = ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -93,7 +87,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_alarm -> {
                 navigateToFragment(fragmentManager, AlarmFragment())
-                title = "AlarmJ"
+                title = "Alarm"
             }
             R.id.nav_about -> {
                 navigateToFragment(fragmentManager, Example())
@@ -119,16 +113,11 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onResume()
         d("on resume")
         registerReceiver(connectingReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
-        val screenStateFilter = IntentFilter()
-        screenStateFilter.addAction(Intent.ACTION_SCREEN_ON)
-        screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF)
-        registerReceiver(screenReceiver, screenStateFilter)
     }
 
     override fun onPause() {
         super.onPause()
         unregisterReceiver(connectingReceiver)
-        unregisterReceiver(screenReceiver)
         d("onPause")
     }
 

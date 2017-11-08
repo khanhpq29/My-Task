@@ -1,14 +1,16 @@
-package ht.pq.khanh.service;
+package ht.pq.khanh.broadcast;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import ht.pq.khanh.helper.NotificationHelper;
+
 /**
  * Created by khanhpq on 11/8/17.
  */
 
-class AlarmBootReceiver extends BroadcastReceiver{
+public class AlarmBootReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {

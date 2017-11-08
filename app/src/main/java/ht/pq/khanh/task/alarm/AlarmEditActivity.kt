@@ -16,11 +16,19 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import ht.pq.khanh.extension.insertAlarm
 import ht.pq.khanh.extension.setUpTheme
+import ht.pq.khanh.helper.NotificationHelper
 import ht.pq.khanh.model.Alarm
 import ht.pq.khanh.multitask.R
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_alarm_edit.*
 import java.util.*
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Context.ALARM_SERVICE
+import com.pawegio.kandroid.IntentFor
+import ht.pq.khanh.broadcast.AlarmReceiver
+
 
 class AlarmEditActivity : AppCompatActivity() {
     @BindView(R.id.timeAlarm)
@@ -79,6 +87,7 @@ class AlarmEditActivity : AppCompatActivity() {
         val alarmId = System.currentTimeMillis()
         val alarm = Alarm(alarmId, time.timeInMillis, "alarm", true, isVibration, ringToneUri)
         realm.insertAlarm(alarm)
+        startAt(time.timeInMillis)
         intent.putExtra("Alarm_parcel", alarm)
         setResult(Activity.RESULT_OK, intent)
         finish()
@@ -96,7 +105,7 @@ class AlarmEditActivity : AppCompatActivity() {
             val uri = data?.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
             val ringTone = RingtoneManager.getRingtone(applicationContext, uri)
             ringToneUri = uri?.toString()
-            tvRingtone.text = ringTone.getTitle(this@AlarmEditActivity)
+            tvRingtone.text = ringTone.getTitle(this)
         }
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -110,4 +119,16 @@ class AlarmEditActivity : AppCompatActivity() {
         super.onDestroy()
         realm.close()
     }
+
+    private fun startAt(time : Long) {
+        val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val interval = 1000 * 60 * 20
+
+        /* Repeating on every 20 minutes interval */
+        val alarmIntent = IntentFor<AlarmReceiver>(this)
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0)
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, time,
+                interval.toLong(), pendingIntent)
+    }
+
 }

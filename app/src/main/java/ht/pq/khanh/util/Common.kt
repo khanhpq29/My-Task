@@ -83,7 +83,7 @@ object Common {
         }
     }
 
-    fun getDayName(dateInMillis: Long): String {
+    private fun getDayName(dateInMillis: Long): String {
         // If the date is today, return the localized version of "Today" instead of the actual
         // day name.
 
@@ -104,7 +104,7 @@ object Common {
         }
     }
 
-    fun getFormattedMonthDay(dateInMillis: Long): String {
+    private fun getFormattedMonthDay(dateInMillis: Long): String {
         val time = Time()
         time.setToNow()
         val dbDateFormat = SimpleDateFormat(DATE_FORMAT)

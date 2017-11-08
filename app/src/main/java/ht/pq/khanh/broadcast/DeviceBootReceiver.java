@@ -1,4 +1,4 @@
-package ht.pq.khanh.service;
+package ht.pq.khanh.broadcast;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

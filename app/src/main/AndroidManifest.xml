@@ -67,12 +67,14 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name="ht.pq.khanh.service.ScreenReceiver">
+        <receiver android:name="ht.pq.khanh.broadcast.ScreenReceiver">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.SCREEN_OFF" />-->
                 <!--<action android:name="android.intent.action.SCREEN_ON" />-->
             <!--</intent-filter>-->
         </receiver>
+        <receiver android:name="ht.pq.khanh.broadcast.AlarmBootReceiver"/>
+        <receiver android:name="ht.pq.khanh.broadcast.AlarmReceiver"/>
         <service android:name="ht.pq.khanh.notification.ReminderNotificationService" />
 
         <activity

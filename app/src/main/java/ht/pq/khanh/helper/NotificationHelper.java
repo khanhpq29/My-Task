@@ -1,4 +1,4 @@
-package ht.pq.khanh.service;
+package ht.pq.khanh.helper;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,6 +9,9 @@ import android.content.pm.PackageManager;
 import android.os.SystemClock;
 
 import java.util.Calendar;
+
+import ht.pq.khanh.broadcast.AlarmBootReceiver;
+import ht.pq.khanh.broadcast.AlarmReceiver;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -29,14 +32,12 @@ public class NotificationHelper {
      * This is the real time /wall clock time
      * @param context
      */
-    public static void scheduleRepeatingRTCNotification(Context context, String hour, String min) {
+    public static void scheduleRepeatingRTCNotification(Context context, Long time) {
         //get calendar instance to be able to select what time notification should be scheduled
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         //Setting time of the day (8am here) when notification will be sent every day (default)
-        calendar.set(Calendar.HOUR_OF_DAY,
-                Integer.getInteger(hour, 8),
-                Integer.getInteger(min, 0));
+        calendar.setTimeInMillis(time);
 
         //Setting intent to class where Alarm broadcast message will be handled
         Intent intent = new Intent(context, AlarmReceiver.class);

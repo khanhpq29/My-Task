@@ -33,7 +33,6 @@
             android:id="@+id/toggleButtonRTC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="clickToggleButtonRTC"
             android:textOff="Turn ON Notifications (RTC)"
             android:textOn="TurnOff Notifications (RTC)"
             />
@@ -51,7 +50,6 @@
             android:id="@+id/toggleButtonElapsed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="clickToggleButtonElapsed"
             android:textOff="Turn ON Notifications (Elapsed)"
             android:textOn="TurnOff Notifications (Elapsed)"
             />
@@ -68,7 +66,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cancel Alarms"
-            android:onClick="cancelAlarms"/>
+            android:text="Cancel Alarms"/>
     </LinearLayout>
 </RelativeLayout>
