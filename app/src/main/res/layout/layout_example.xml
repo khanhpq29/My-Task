@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/layout_rtc">
+
+        <EditText
+            android:id="@+id/editTextHH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberSigned"
+            android:hint="HH"
+            android:layout_weight=".25"/>
+
+        <EditText
+            android:id="@+id/editTextMM"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberSigned"
+            android:hint="MM"
+            android:layout_weight=".25"/>
+
+        <ToggleButton
+            android:id="@+id/toggleButtonRTC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="clickToggleButtonRTC"
+            android:textOff="Turn ON Notifications (RTC)"
+            android:textOn="TurnOff Notifications (RTC)"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_elapsed"
+        android:layout_below="@id/layout_rtc"
+        android:orientation="horizontal">
+
+        <ToggleButton
+            android:id="@+id/toggleButtonElapsed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="clickToggleButtonElapsed"
+            android:textOff="Turn ON Notifications (Elapsed)"
+            android:textOn="TurnOff Notifications (Elapsed)"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_cancel"
+        android:layout_below="@id/layout_elapsed"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/cancel_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel Alarms"
+            android:onClick="cancelAlarms"/>
+    </LinearLayout>
+</RelativeLayout>

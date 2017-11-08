@@ -32,6 +32,7 @@ class RadioFragment : Fragment() {
     lateinit var emailWrapper : TextInputLayout
     @BindView(R.id.passwordWrapper)
     lateinit var passwordWrapper : TextInputLayout
+
     private inline fun retryWhenError(crossinline onError: (ex: Throwable) -> Unit): ObservableTransformer<String, String> = ObservableTransformer { observable ->
         observable.retryWhen { errors ->
             errors.flatMap {

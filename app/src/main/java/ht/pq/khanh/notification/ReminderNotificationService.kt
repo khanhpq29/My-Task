@@ -23,7 +23,7 @@ class ReminderNotificationService : IntentService("reminder_notification") {
         i.putExtra(Common.TODOUUID, mTodoUUID)
         i.putExtra(Common.TODOTEXT, mTodoText)
 //        val deleteIntent = Intent(this, DeleteNotificationService::class.java)
-//        deleteIntent.putExtra(TODOUUID, mTodoUUID)
+//        deleteIntent.putExtra(Common.TODOUUID, mTodoUUID)
         val notification = Notification.Builder(this)
                 .setContentTitle(mTodoText)
                 .setSmallIcon(R.mipmap.ic_launcher_round)
