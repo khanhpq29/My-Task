@@ -15,7 +15,7 @@ open class Alarm(@PrimaryKey open var id: Long = 0,
                  var label: String = "",
                  var isActive: Boolean = false,
                  var isVibrate: Boolean = false,
-                 var ringtoneUri: String? = null) : RealmObject(), Parcelable {
+                 var ringtoneUri: String? = null) : RealmObject(), Parcelable{
     constructor(source: Parcel) : this(
             source.readLong(),
             source.readLong(),

@@ -84,16 +84,22 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         } else if (requestCode == RQS_RINGTONEPICKER && resultCode == android.app.Activity.RESULT_OK) {
             val uri = data?.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
             ringToneUri = uri?.toString()
-            val alrmItem = alarms[selectedPosition]
-            alrmItem.ringtoneUri = ringToneUri
-            realm.updateAlarm(alrmItem)
+            val alarmItem = alarms[selectedPosition]
+            alarmItem.ringtoneUri = ringToneUri
+            DatabaseHelper.update(realm, alarmItem)
             alarmAdapter.notifyItemChanged(selectedPosition)
         }
     }
 
     override fun onChangeTime(position: Int) {
         selectedPosition = position
-        val timePicker = TimePickerDialog(activity, onTimeSet, 3, 5, DateFormat.is24HourFormat(activity))
+        val alarm = alarms[position]
+        val time = alarm.time
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = time
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+        val timePicker = TimePickerDialog(activity, onTimeSet, hour, minute, DateFormat.is24HourFormat(activity))
         timePicker.show()
     }
 
@@ -101,7 +107,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         selectedPosition = position
         val alarm = alarms[selectedPosition]
         alarm.isActive = isActivation
-        realm.updateAlarm(alarm)
+        DatabaseHelper.update(realm, alarm)
         alarmAdapter.notifyDataSetChanged()
     }
 
@@ -111,12 +117,12 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         val alarm = alarms[position]
         alarms.removeAt(position)
         alarmAdapter.notifyDataSetChanged()
-        realm.deleteAlarm(alarm)
+        DatabaseHelper.deleteAlarm(realm, alarm)
         Snackbar.make(recyclerAlarm, "delete on item", Snackbar.LENGTH_LONG)
                 .setAction("Undo", {
                     alarms.add(selectedPosition, alarm)
                     alarmAdapter.notifyDataSetChanged()
-                    realm.insertAlarm(alarm)
+                    realm.insert(alarm)
                 }).show()
     }
 
@@ -124,15 +130,9 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         val time = Calendar.getInstance()
         time.set(Calendar.HOUR_OF_DAY, hourOfDay)
         time.set(Calendar.MINUTE, minute)
-
-//        val alarm = AlarmJ(dateTime.timeInMillis, dateTime.timeInMillis, "alarm", false, true)
-//        alarms.add(alarm)
-//        alarmAdapter.addChange(alarms)
-//        Log.d("alarm size", "${alarms.size}")
-//        realm.insertAlarm(alarm)
         val alarm = alarms[selectedPosition]
         alarm.time = time.timeInMillis
-        realm.updateAlarm(alarm)
+        DatabaseHelper.update(realm, alarm)
         alarmAdapter.notifyItemChanged(selectedPosition)
     }
 
@@ -147,7 +147,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         activity.showToast("vibrate")
         val alarm = alarms[selectedPosition]
         alarm.isVibrate = isVibrate
-        realm.updateAlarm(alarm)
+        DatabaseHelper.update(realm, alarm)
         alarmAdapter.notifyDataSetChanged()
     }
 
@@ -157,7 +157,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
 
     private fun initData() {
         presenter = AlarmPresenter()
-        alarms = realm.copyFromRealm(realm.findAllAlarm())
+        alarms = realm.copyFromRealm(DatabaseHelper.findAll(realm))
         val decorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         alarmAdapter = AlarmAdapter(context, alarms)
         recyclerAlarm.apply {

@@ -6,7 +6,7 @@ import ht.pq.khanh.model.Reminder
 /**
  * Created by khanh on 30/09/2017.
  */
-class ReminderDiffUtil(val oldList : MutableList<Reminder>, val newList : MutableList<Reminder>) : DiffUtil.Callback(){
+class ReminderDiffUtil(private val oldList : MutableList<Reminder>, private val newList : MutableList<Reminder>) : DiffUtil.Callback(){
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = oldList[oldItemPosition].title == newList[newItemPosition].title
 
     override fun getOldListSize(): Int = oldList.size

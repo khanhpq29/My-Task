@@ -11,19 +11,24 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log
 import android.view.*
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
 import com.pawegio.kandroid.d
+import ht.pq.khanh.bus.RxBus
+import ht.pq.khanh.bus.event.TodoEvent
 import ht.pq.khanh.extension.*
 import ht.pq.khanh.helper.SimpleItemTouchHelperCallBack
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.notification.ReminderNotificationService
 import ht.pq.khanh.util.Common
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import java.util.*
 
@@ -39,7 +44,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
     private lateinit var reminder: Reminder
     private var selectedPosition = 0
     private lateinit var simpleTouch: ItemTouchHelper
-
+    private val subscription : CompositeDisposable by lazy { CompositeDisposable() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
@@ -59,7 +64,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listReminder = realm.copyFromRealm(realm.findAllRemind())
+        listReminder = realm.copyFromRealm(DatabaseHelper.findAll(realm))
         remindAdapter = ReminderAdapter(listReminder)
         remindAdapter.setHasStableIds(true)
         initialRecyclerView()
@@ -69,6 +74,12 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         simpleTouch.attachToRecyclerView(recyclerRemind)
         remindAdapter.setOnChangeItem(this)
         remindAdapter.setOnDeleteItemListener(this)
+        subscription.add(RxBus.instance.toObservable(TodoEvent::class.java)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ remindAdapter.loadChangeList(listReminder)},
+                        { error -> error.printStackTrace()}
+                ))
     }
 
     override fun onStart() {
@@ -90,7 +101,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
                     reminder = data.getParcelableExtra("reminder_result")
                     addNotification(reminder)
                     listReminder.add(reminder)
-                    realm.insertRemind(reminder)
+                    DatabaseHelper.insert(realm, reminder)
                     remindAdapter.notifyDataSetChanged()
                 }
             } else if (requestCode == REQUEST_UPDATE) {
@@ -98,7 +109,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
                     reminder = data.getParcelableExtra("reminder_result")
                     listReminder.removeAt(selectedPosition)
                     listReminder.add(selectedPosition, reminder)
-                    realm.updateReminder(reminder)
+                    DatabaseHelper.update(realm, reminder)
                     remindAdapter.notifyDataSetChanged()
                 }
             }
@@ -127,11 +138,11 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         remindAdapter.notifyItemRemoved(position)
         val intent = IntentFor<ReminderNotificationService>(activity)
         deleteAlarm(intent, itemSelected.id.hashCode())
-        realm.deleteRemind(itemSelected)
+        DatabaseHelper.deleteRemind(realm, itemSelected)
         Snackbar.make(recyclerRemind, "delete on item", Snackbar.LENGTH_LONG)
                 .setAction("Undo", {
                     listReminder.add(selectedPosition, itemSelected)
-                    realm.insertRemind(itemSelected)
+                    realm.insert(itemSelected)
                     deleteAlarm(intent, itemSelected.id.hashCode())
                     remindAdapter.notifyDataSetChanged()
                 }).show()
@@ -139,7 +150,6 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
 
     override fun onPause() {
         super.onPause()
-        realm.close()
         d("on pause")
 
     }
@@ -147,12 +157,14 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
     override fun onDestroyView() {
         super.onDestroyView()
         d("ondestroyview")
+        subscription.clear()
         realm.close()
     }
 
     override fun onStop() {
         super.onStop()
         d("onstop")
+        realm.close()
     }
 
     override fun onResume() {

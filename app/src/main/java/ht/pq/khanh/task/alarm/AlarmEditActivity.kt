@@ -14,7 +14,7 @@ import android.widget.TimePicker
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
-import ht.pq.khanh.extension.insertAlarm
+import ht.pq.khanh.extension.DatabaseHelper
 import ht.pq.khanh.extension.setUpTheme
 import ht.pq.khanh.helper.NotificationHelper
 import ht.pq.khanh.model.Alarm
@@ -22,13 +22,6 @@ import ht.pq.khanh.multitask.R
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_alarm_edit.*
 import java.util.*
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Context.ALARM_SERVICE
-import com.pawegio.kandroid.IntentFor
-import ht.pq.khanh.broadcast.AlarmReceiver
-
 
 class AlarmEditActivity : AppCompatActivity() {
     @BindView(R.id.timeAlarm)
@@ -54,7 +47,7 @@ class AlarmEditActivity : AppCompatActivity() {
     private val realm by lazy { Realm.getDefaultInstance() }
     private var ringToneUri: String? = null
     private val RQS_RINGTONEPICKER = 111
-    private var idAlarm : Long = 1
+    private var idAlarm: Long = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.setUpTheme()
@@ -86,8 +79,9 @@ class AlarmEditActivity : AppCompatActivity() {
         val isVibration = cbVibrate.isChecked
         val alarmId = System.currentTimeMillis()
         val alarm = Alarm(alarmId, time.timeInMillis, "alarm", true, isVibration, ringToneUri)
-        realm.insertAlarm(alarm)
-        startAt(time.timeInMillis)
+        DatabaseHelper.insert(realm, alarm)
+        NotificationHelper.scheduleRepeatingRTCNotification(this, time.time.time)
+        NotificationHelper.enableBootReceiver(this)
         intent.putExtra("Alarm_parcel", alarm)
         setResult(Activity.RESULT_OK, intent)
         finish()
@@ -108,6 +102,7 @@ class AlarmEditActivity : AppCompatActivity() {
             tvRingtone.text = ringTone.getTitle(this)
         }
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             finish()
@@ -115,20 +110,9 @@ class AlarmEditActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
     override fun onDestroy() {
         super.onDestroy()
         realm.close()
     }
-
-    private fun startAt(time : Long) {
-        val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val interval = 1000 * 60 * 20
-
-        /* Repeating on every 20 minutes interval */
-        val alarmIntent = IntentFor<AlarmReceiver>(this)
-        val pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0)
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, time,
-                interval.toLong(), pendingIntent)
-    }
-
 }

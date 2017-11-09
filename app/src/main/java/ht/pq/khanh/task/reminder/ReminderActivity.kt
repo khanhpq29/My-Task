@@ -6,9 +6,10 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
-import ht.pq.khanh.extension.findAllRemind
+import ht.pq.khanh.bus.RxBus
+import ht.pq.khanh.bus.event.TodoEvent
+import ht.pq.khanh.extension.DatabaseHelper
 import ht.pq.khanh.extension.setUpTheme
-import ht.pq.khanh.extension.updateReminder
 import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.util.Common
@@ -27,12 +28,12 @@ class ReminderActivity : AppCompatActivity() {
         this.setUpTheme()
         setContentView(R.layout.activity_reminder)
         ButterKnife.bind(this)
-        realm = Realm.getDefaultInstance()
         Realm.init(this)
+        realm = Realm.getDefaultInstance()
         val title = intent.getStringExtra(Common.TODOTEXT)
         val todoId = intent.getLongExtra(Common.TODOUUID, 0)
         tvContent.text = title
-        val items = realm.findAllRemind()
+        val items = DatabaseHelper.findAll<Reminder>(realm)
         for(item in items){
             if (item.id == todoId){
                 todoItem = item
@@ -64,6 +65,7 @@ class ReminderActivity : AppCompatActivity() {
         todoItem.dateTime = timeSnooze
         todoItem.isNotify = true
         realm.copyToRealmOrUpdate(todoItem)
+        RxBus.instance.send(TodoEvent::class)
         realm.commitTransaction()
     }
 

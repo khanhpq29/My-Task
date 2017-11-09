@@ -2,6 +2,7 @@ package ht.pq.khanh.task.reminder
 
 import android.graphics.Color
 import android.graphics.Typeface
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.helper.ItemTouchHelperAdapter
 import ht.pq.khanh.helper.ItemTouchViewholder
+import ht.pq.khanh.util.ReminderDiffUtil
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -61,13 +63,13 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     override fun onItemDissmiss(position: Int) {
         delListener?.onDeleteItem(position)
     }
-//    fun loadChangeList(reminders: MutableList<Reminder>) {
-//        val remindDiff = ReminderDiffUtil(listRemind, reminders)
-//        val diffResult = DiffUtil.calculateDiff(remindDiff)
-//        listRemind.clear()
-//        listRemind.addAll(reminders)
-//        diffResult.dispatchUpdatesTo(this)
-//    }
+    fun loadChangeList(reminders: MutableList<Reminder>) {
+        val remindDiff = ReminderDiffUtil(listRemind, reminders)
+        val diffResult = DiffUtil.calculateDiff(remindDiff)
+        listRemind.clear()
+        listRemind.addAll(reminders)
+        diffResult.dispatchUpdatesTo(this)
+    }
 
     fun setOnChangeItem(callback: OnAlterItemRecyclerView?) {
         listener = callback
