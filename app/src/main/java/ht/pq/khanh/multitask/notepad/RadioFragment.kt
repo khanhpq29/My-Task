@@ -1,8 +1,6 @@
-package ht.pq.khanh.multitask.radio
+package ht.pq.khanh.multitask.notepad
 
-import android.content.Context
 import android.os.Bundle
-import android.os.PowerManager
 import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
 import android.util.Patterns
@@ -10,10 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import butterknife.ButterKnife
-import butterknife.OnClick
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.multitask.R
-import android.view.WindowManager
 import android.widget.EditText
 import butterknife.BindView
 import com.jakewharton.rxbinding2.widget.RxTextView

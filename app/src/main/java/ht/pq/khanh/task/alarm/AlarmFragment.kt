@@ -21,10 +21,16 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
 import com.pawegio.kandroid.d
-import ht.pq.khanh.extension.*
-import ht.pq.khanh.model.Alarm
+import ht.pq.khanh.TaskApplication
+import ht.pq.khanh.extension.inflateLayout
+import ht.pq.khanh.extension.showToast
+import ht.pq.khanh.model.alarm.Alarm
 import ht.pq.khanh.multitask.R
-import io.realm.Realm
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 /**
@@ -41,17 +47,15 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
     private var ringToneUri: String? = null
     private val RQS_RINGTONEPICKER = 111
     private var selectedPosition = 0
-    private lateinit var realm: Realm
+    private val disposal : CompositeDisposable by lazy { CompositeDisposable() }
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = container!!.inflateLayout(R.layout.fragment_alarm)
         ButterKnife.bind(this, view)
-        Realm.init(context)
         return view
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        realm = Realm.getDefaultInstance()
         initData()
         alarmAdapter.setOnChangeDate(this)
         alarmAdapter.handleListener(this)
@@ -59,13 +63,11 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
 
     override fun onPause() {
         super.onPause()
-        realm.close()
 
     }
 
     override fun onResume() {
         super.onResume()
-        realm = Realm.getDefaultInstance()
     }
 
     @OnClick(R.id.fab_set_alarm)
@@ -86,7 +88,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
             ringToneUri = uri?.toString()
             val alarmItem = alarms[selectedPosition]
             alarmItem.ringtoneUri = ringToneUri
-            DatabaseHelper.update(realm, alarmItem)
+            disposal.add(updateAlarm(alarmItem))
             alarmAdapter.notifyItemChanged(selectedPosition)
         }
     }
@@ -107,7 +109,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         selectedPosition = position
         val alarm = alarms[selectedPosition]
         alarm.isActive = isActivation
-        DatabaseHelper.update(realm, alarm)
+        disposal.add(updateAlarm(alarm))
         alarmAdapter.notifyDataSetChanged()
     }
 
@@ -117,12 +119,12 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         val alarm = alarms[position]
         alarms.removeAt(position)
         alarmAdapter.notifyDataSetChanged()
-        DatabaseHelper.deleteAlarm(realm, alarm)
+        disposal.add(deleteAlarm(alarm))
         Snackbar.make(recyclerAlarm, "delete on item", Snackbar.LENGTH_LONG)
                 .setAction("Undo", {
                     alarms.add(selectedPosition, alarm)
                     alarmAdapter.notifyDataSetChanged()
-                    realm.insert(alarm)
+                    disposal.add(insertAlarm(alarm))
                 }).show()
     }
 
@@ -132,7 +134,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         time.set(Calendar.MINUTE, minute)
         val alarm = alarms[selectedPosition]
         alarm.time = time.timeInMillis
-        DatabaseHelper.update(realm, alarm)
+        disposal.add(updateAlarm(alarm))
         alarmAdapter.notifyItemChanged(selectedPosition)
     }
 
@@ -147,7 +149,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         activity.showToast("vibrate")
         val alarm = alarms[selectedPosition]
         alarm.isVibrate = isVibrate
-        DatabaseHelper.update(realm, alarm)
+        disposal.add(updateAlarm(alarm))
         alarmAdapter.notifyDataSetChanged()
     }
 
@@ -157,7 +159,10 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
 
     private fun initData() {
         presenter = AlarmPresenter()
-        alarms = realm.copyFromRealm(DatabaseHelper.findAll(realm))
+        Single.fromCallable { TaskApplication.db.alarmDao().getAllAlarm() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { alamList -> alarms = alamList }
         val decorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         alarmAdapter = AlarmAdapter(context, alarms)
         recyclerAlarm.apply {
@@ -171,6 +176,26 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
     override fun onDestroyView() {
         super.onDestroyView()
         Log.d("destroy alarm", "destroy")
-        realm.close()
+    }
+
+    private fun updateAlarm(alarm: Alarm) : Disposable{
+        return Single.fromCallable { TaskApplication.db.alarmDao().updateAlarm(alarm) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+    }
+
+    private fun insertAlarm(alarm: Alarm) : Disposable{
+        return Single.fromCallable { TaskApplication.db.alarmDao().insertAlarm(alarm) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+    }
+
+    private fun deleteAlarm(alarm: Alarm) : Disposable {
+        return Single.fromCallable { TaskApplication.db.alarmDao().deleteAlarm(alarm) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
     }
 }

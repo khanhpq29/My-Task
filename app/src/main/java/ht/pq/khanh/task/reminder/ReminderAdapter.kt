@@ -13,10 +13,10 @@ import butterknife.ButterKnife
 import com.amulyakhare.textdrawable.TextDrawable
 import ht.pq.khanh.extension.inflateLayout
 import ht.pq.khanh.extension.isHide
-import ht.pq.khanh.model.Reminder
-import ht.pq.khanh.multitask.R
 import ht.pq.khanh.helper.ItemTouchHelperAdapter
 import ht.pq.khanh.helper.ItemTouchViewholder
+import ht.pq.khanh.model.reminder.Reminder
+import ht.pq.khanh.multitask.R
 import ht.pq.khanh.util.ReminderDiffUtil
 import java.text.SimpleDateFormat
 import java.util.*
@@ -63,6 +63,7 @@ class ReminderAdapter(private val listRemind: MutableList<Reminder>) : RecyclerV
     override fun onItemDissmiss(position: Int) {
         delListener?.onDeleteItem(position)
     }
+
     fun loadChangeList(reminders: MutableList<Reminder>) {
         val remindDiff = ReminderDiffUtil(listRemind, reminders)
         val diffResult = DiffUtil.calculateDiff(remindDiff)

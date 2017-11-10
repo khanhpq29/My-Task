@@ -6,54 +6,59 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import com.pawegio.kandroid.IntentFor
+import com.pawegio.kandroid.d
+import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.bus.RxBus
 import ht.pq.khanh.bus.event.TodoEvent
-import ht.pq.khanh.extension.DatabaseHelper
 import ht.pq.khanh.extension.setUpTheme
-import ht.pq.khanh.model.Reminder
+import ht.pq.khanh.model.reminder.Reminder
+import ht.pq.khanh.multitask.MenuActivity
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.util.Common
-import io.realm.Realm
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class ReminderActivity : AppCompatActivity() {
     @BindView(R.id.txtContent)
-    lateinit var tvContent : TextView
+    lateinit var tvContent: TextView
 
-    private lateinit var todoItem : Reminder
-    private lateinit var realm : Realm
-
+    private lateinit var todoItem: Reminder
+    private lateinit var items : MutableList<Reminder>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.setUpTheme()
         setContentView(R.layout.activity_reminder)
         ButterKnife.bind(this)
-        Realm.init(this)
-        realm = Realm.getDefaultInstance()
         val title = intent.getStringExtra(Common.TODOTEXT)
         val todoId = intent.getLongExtra(Common.TODOUUID, 0)
         tvContent.text = title
-        val items = DatabaseHelper.findAll<Reminder>(realm)
-        for(item in items){
-            if (item.id == todoId){
+        Single.fromCallable { TaskApplication.db.reminderDao().getAllReminder() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { itemList -> items = itemList }
+        for (item in items) {
+            if (item.id == todoId) {
                 todoItem = item
                 break
             }
         }
+        d("todoitem ${todoItem.dateTime}")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        realm.close()
     }
 
     @OnClick(R.id.btnRemove)
-    fun removeReminder(){
+    fun removeReminder() {
         moveToReminderList()
     }
 
     @OnClick(R.id.btnSnooze)
-    fun snoozeMore(){
+    fun snoozeMore() {
         saveItem()
         finish()
     }
@@ -61,22 +66,34 @@ class ReminderActivity : AppCompatActivity() {
     private fun saveItem() {
         val snoozeTime = 3
         val timeSnooze = addDate(snoozeTime)
-        realm.beginTransaction()
         todoItem.dateTime = timeSnooze
         todoItem.isNotify = true
-        realm.copyToRealmOrUpdate(todoItem)
+        Single.fromCallable { TaskApplication.db.reminderDao().updateReminder(todoItem) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+        d("todoitem ${todoItem.dateTime}")
         RxBus.instance.send(TodoEvent::class)
-        realm.commitTransaction()
+        val intent = IntentFor<MenuActivity>(this)
+        startActivity(intent)
     }
 
-    private fun addDate(snoozeTime : Int) : Date{
+    private fun addDate(snoozeTime: Int): Date {
         val date = Date()
         val calendar = Calendar.getInstance()
         calendar.time = date
-        calendar.set(Calendar.MINUTE, snoozeTime)
+        calendar.add(Calendar.MINUTE, snoozeTime)
         return calendar.time
     }
-    private fun moveToReminderList(){
+
+    private fun moveToReminderList() {
+        Single.fromCallable { TaskApplication.db.reminderDao().deleteReminder(todoItem) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+        val intent = IntentFor<MenuActivity>(this)
+        startActivity(intent)
+        RxBus.instance.send(TodoEvent::class)
         finish()
     }
 }

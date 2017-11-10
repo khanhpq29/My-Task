@@ -18,7 +18,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.amulyakhare.textdrawable.TextDrawable
 import ht.pq.khanh.extension.inflateLayout
-import ht.pq.khanh.model.Alarm
+import ht.pq.khanh.model.alarm.Alarm
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.util.AlarmDiffUtil
 import java.text.SimpleDateFormat
