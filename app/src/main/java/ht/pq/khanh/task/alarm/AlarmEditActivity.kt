@@ -14,14 +14,12 @@ import android.widget.TimePicker
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
-import ht.pq.khanh.TaskApplication
+import ht.pq.khanh.extension.DatabaseHelper
 import ht.pq.khanh.extension.setUpTheme
 import ht.pq.khanh.helper.NotificationHelper
-import ht.pq.khanh.model.alarm.Alarm
+import ht.pq.khanh.model.Alarm
 import ht.pq.khanh.multitask.R
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_alarm_edit.*
 import java.util.*
 
@@ -46,6 +44,7 @@ class AlarmEditActivity : AppCompatActivity() {
     lateinit var tvRingtone: TextView
     @BindView(R.id.cbVib)
     lateinit var cbVibrate: CheckBox
+    private val realm by lazy { Realm.getDefaultInstance() }
     private var ringToneUri: String? = null
     private val RQS_RINGTONEPICKER = 111
     private var idAlarm: Long = 1
@@ -54,6 +53,7 @@ class AlarmEditActivity : AppCompatActivity() {
         this.setUpTheme()
         setContentView(R.layout.activity_alarm_edit)
         ButterKnife.bind(this)
+        Realm.init(applicationContext)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
@@ -79,10 +79,7 @@ class AlarmEditActivity : AppCompatActivity() {
         val isVibration = cbVibrate.isChecked
         val alarmId = System.currentTimeMillis()
         val alarm = Alarm(alarmId, time.timeInMillis, "alarm", true, isVibration, ringToneUri)
-        Single.fromCallable { TaskApplication.db.alarmDao().insertAlarm(alarm) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
+        DatabaseHelper.insert(realm, alarm)
         NotificationHelper.scheduleRepeatingRTCNotification(this, time.time.time)
         NotificationHelper.enableBootReceiver(this)
         intent.putExtra("Alarm_parcel", alarm)
@@ -116,5 +113,6 @@ class AlarmEditActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        realm.close()
     }
 }

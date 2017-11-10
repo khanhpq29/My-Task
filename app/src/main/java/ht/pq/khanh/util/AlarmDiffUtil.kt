@@ -1,7 +1,7 @@
 package ht.pq.khanh.util
 
 import android.support.v7.util.DiffUtil
-import ht.pq.khanh.model.alarm.Alarm
+import ht.pq.khanh.model.Alarm
 
 /**
  * Created by khanhpq on 10/3/17.

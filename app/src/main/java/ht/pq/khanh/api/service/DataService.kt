@@ -1,6 +1,6 @@
 package ht.pq.khanh.api.service
 
-import ht.pq.khanh.model.reminder.Reminder
+import ht.pq.khanh.model.Reminder
 import io.reactivex.Observable
 
 /**

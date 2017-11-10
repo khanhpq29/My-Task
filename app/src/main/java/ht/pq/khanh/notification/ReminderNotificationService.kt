@@ -34,7 +34,7 @@ class ReminderNotificationService : IntentService("reminder_notification") {
                 .setContentIntent(PendingIntent.getActivity(this, mTodoUUID.hashCode(), i, PendingIntent.FLAG_UPDATE_CURRENT))
                 .build()
 
-        manager.notify(mTodoUUID.hashCode(), notification)
+        manager.notify(100, notification)
     }
 
 

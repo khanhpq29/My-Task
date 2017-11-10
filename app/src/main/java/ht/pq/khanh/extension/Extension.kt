@@ -61,5 +61,3 @@ fun Context.setUpTheme() {
     }
     setTheme(themeStyle)
 }
-
-fun getId(): Long = Math.random().toLong()

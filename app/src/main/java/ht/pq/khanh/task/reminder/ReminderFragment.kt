@@ -17,20 +17,19 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.pawegio.kandroid.IntentFor
 import com.pawegio.kandroid.d
-import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.bus.RxBus
 import ht.pq.khanh.bus.event.TodoEvent
-import ht.pq.khanh.extension.getAlarmManager
-import ht.pq.khanh.extension.inflateLayout
+import ht.pq.khanh.extension.*
 import ht.pq.khanh.helper.SimpleItemTouchHelperCallBack
-import ht.pq.khanh.model.reminder.Reminder
+import ht.pq.khanh.model.Reminder
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.notification.ReminderNotificationService
 import ht.pq.khanh.util.Common
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.realm.Realm
 import java.util.*
 
 class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, ReminderAdapter.OnDeleteItemListener {
@@ -41,45 +40,46 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
 
     private lateinit var remindAdapter: ReminderAdapter
     private var listReminder: MutableList<Reminder> = arrayListOf()
+    private lateinit var realm: Realm
     private lateinit var reminder: Reminder
     private var selectedPosition = 0
     private lateinit var simpleTouch: ItemTouchHelper
-    private val subscription: CompositeDisposable by lazy { CompositeDisposable() }
+    private val subscription : CompositeDisposable by lazy { CompositeDisposable() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments != null) {
         }
+        setNotification()
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = container!!.inflateLayout(R.layout.reminder_fragment)
         ButterKnife.bind(this, view)
+        Realm.init(context)
+        realm = Realm.getDefaultInstance()
         setHasOptionsMenu(true)
         return view
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        d("onviewcreated")
-        setNotification()
-        Single.fromCallable { TaskApplication.db.reminderDao().getAllReminder() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { reminders -> listReminder = reminders }
+        listReminder = realm.copyFromRealm(DatabaseHelper.findAll(realm))
         remindAdapter = ReminderAdapter(listReminder)
         remindAdapter.setHasStableIds(true)
-        remindAdapter.setOnChangeItem(this)
-        remindAdapter.setOnDeleteItemListener(this)
         initialRecyclerView()
-        setUpTouch()
-        listenReminderNotification()
-    }
-
-    private fun setUpTouch() {
+        registerForContextMenu(recyclerRemind)
         val callback = SimpleItemTouchHelperCallBack(remindAdapter)
         simpleTouch = ItemTouchHelper(callback)
         simpleTouch.attachToRecyclerView(recyclerRemind)
+        remindAdapter.setOnChangeItem(this)
+        remindAdapter.setOnDeleteItemListener(this)
+        subscription.add(RxBus.instance.toObservable(TodoEvent::class.java)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ remindAdapter.loadChangeList(listReminder)},
+                        { error -> error.printStackTrace()}
+                ))
     }
 
     override fun onStart() {
@@ -97,9 +97,21 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         d("on activity result")
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_CREATE) {
-                addReminder(data)
+                data?.let {
+                    reminder = data.getParcelableExtra("reminder_result")
+                    addNotification(reminder)
+                    listReminder.add(reminder)
+                    DatabaseHelper.insert(realm, reminder)
+                    remindAdapter.notifyDataSetChanged()
+                }
             } else if (requestCode == REQUEST_UPDATE) {
-                updateReminder(data)
+                data?.let {
+                    reminder = data.getParcelableExtra("reminder_result")
+                    listReminder.removeAt(selectedPosition)
+                    listReminder.add(selectedPosition, reminder)
+                    DatabaseHelper.update(realm, reminder)
+                    remindAdapter.notifyDataSetChanged()
+                }
             }
         }
     }
@@ -126,17 +138,11 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         remindAdapter.notifyItemRemoved(position)
         val intent = IntentFor<ReminderNotificationService>(activity)
         deleteAlarm(intent, itemSelected.id.hashCode())
-        Single.fromCallable { TaskApplication.db.reminderDao().deleteReminder(itemSelected) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
+        DatabaseHelper.deleteRemind(realm, itemSelected)
         Snackbar.make(recyclerRemind, "delete on item", Snackbar.LENGTH_LONG)
                 .setAction("Undo", {
                     listReminder.add(selectedPosition, itemSelected)
-                    Single.fromCallable { TaskApplication.db.reminderDao().insertReminder(itemSelected) }
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe()
+                    realm.insert(itemSelected)
                     deleteAlarm(intent, itemSelected.id.hashCode())
                     remindAdapter.notifyDataSetChanged()
                 }).show()
@@ -145,21 +151,25 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
     override fun onPause() {
         super.onPause()
         d("on pause")
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         d("ondestroyview")
         subscription.clear()
+        realm.close()
     }
 
     override fun onStop() {
         super.onStop()
         d("onstop")
+        realm.close()
     }
 
     override fun onResume() {
         super.onResume()
+        realm = Realm.getDefaultInstance()
         d("onResume")
         d("size", "${listReminder.size}")
     }
@@ -188,7 +198,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
     private fun setNotification() {
         for (item in listReminder) {
             if (item.isNotify && item.dateTime != null) {
-                if (item.dateTime!!.before(Date())) {
+                if (item.dateTime!!.before(Date())){
                     item.dateTime = null
                     continue
                 }
@@ -228,42 +238,4 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
         }
     }
 
-    private fun updateReminder(data: Intent?) {
-        data?.let {
-            reminder = data.getParcelableExtra("reminder_result")
-            listReminder.removeAt(selectedPosition)
-            listReminder.add(selectedPosition, reminder)
-            Single.fromCallable { TaskApplication.db.reminderDao().updateReminder(reminder) }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe()
-            remindAdapter.notifyDataSetChanged()
-        }
-    }
-
-    private fun addReminder(data: Intent?) {
-        data?.let {
-            reminder = data.getParcelableExtra("reminder_result")
-            addNotification(reminder)
-            listReminder.add(reminder)
-            Single.fromCallable { TaskApplication.db.reminderDao().insertReminder(reminder) }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe()
-            remindAdapter.notifyDataSetChanged()
-        }
-    }
-
-    private fun listenReminderNotification() {
-        subscription.add(RxBus.instance.toObservable(TodoEvent::class.java)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    Single.fromCallable { TaskApplication.db.reminderDao().getAllReminder() }
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe { reminders -> listReminder = reminders }
-                    remindAdapter.notifyDataSetChanged()
-                }, { error -> error.printStackTrace() }))
-    }
 }
