@@ -4,9 +4,6 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
 
-import io.reactivex.Flowable
-import retrofit2.http.Query
-
 /**
  * Created by khanhpq on 11/10/17.
  */
