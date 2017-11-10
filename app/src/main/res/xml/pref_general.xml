@@ -9,7 +9,7 @@
             android:title="Night mode"
             android:summaryOn="Night mode is on"
             android:summaryOff="Night mode is off"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
 
         <android.support.v7.preference.EditTextPreference
             android:key="@string/location_preference"

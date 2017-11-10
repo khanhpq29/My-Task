@@ -21,10 +21,9 @@ import butterknife.OnCheckedChanged
 import butterknife.OnClick
 import com.pawegio.kandroid.d
 import ht.pq.khanh.extension.*
-import ht.pq.khanh.model.Reminder
+import ht.pq.khanh.model.reminder.Reminder
 import ht.pq.khanh.multitask.R
 import ht.pq.khanh.util.Common
-import io.realm.Realm
 import java.util.*
 
 /**
@@ -43,7 +42,6 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
     lateinit var edtDate: EditText
     @BindView(R.id.edtTime)
     lateinit var edtTime: EditText
-    private val realm: Realm by lazy { Realm.getDefaultInstance() }
     private lateinit var item: Reminder
     private var time: Date? = null
     private val timeReminder: Calendar by lazy { Calendar.getInstance() }
@@ -63,7 +61,6 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Realm.init(context)
         initializeData()
     }
 
@@ -141,7 +138,6 @@ class ReminderDetailFragment : Fragment(), TimePickerDialog.OnTimeSetListener, D
     override fun onDestroyView() {
         super.onDestroyView()
         d("destroy")
-        realm.close()
     }
 
     private fun initializeData() {

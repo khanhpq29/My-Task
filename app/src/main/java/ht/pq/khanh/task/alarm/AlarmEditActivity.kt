@@ -14,11 +14,14 @@ import android.widget.TimePicker
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
-import ht.pq.khanh.extension.insertAlarm
+import ht.pq.khanh.TaskApplication
 import ht.pq.khanh.extension.setUpTheme
-import ht.pq.khanh.model.Alarm
+import ht.pq.khanh.helper.NotificationHelper
+import ht.pq.khanh.model.alarm.Alarm
 import ht.pq.khanh.multitask.R
-import io.realm.Realm
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_alarm_edit.*
 import java.util.*
 
@@ -43,16 +46,14 @@ class AlarmEditActivity : AppCompatActivity() {
     lateinit var tvRingtone: TextView
     @BindView(R.id.cbVib)
     lateinit var cbVibrate: CheckBox
-    private val realm by lazy { Realm.getDefaultInstance() }
     private var ringToneUri: String? = null
     private val RQS_RINGTONEPICKER = 111
-    private var idAlarm : Long = 1
+    private var idAlarm: Long = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.setUpTheme()
         setContentView(R.layout.activity_alarm_edit)
         ButterKnife.bind(this)
-        Realm.init(applicationContext)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
@@ -78,7 +79,12 @@ class AlarmEditActivity : AppCompatActivity() {
         val isVibration = cbVibrate.isChecked
         val alarmId = System.currentTimeMillis()
         val alarm = Alarm(alarmId, time.timeInMillis, "alarm", true, isVibration, ringToneUri)
-        realm.insertAlarm(alarm)
+        Single.fromCallable { TaskApplication.db.alarmDao().insertAlarm(alarm) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+        NotificationHelper.scheduleRepeatingRTCNotification(this, time.time.time)
+        NotificationHelper.enableBootReceiver(this)
         intent.putExtra("Alarm_parcel", alarm)
         setResult(Activity.RESULT_OK, intent)
         finish()
@@ -96,9 +102,10 @@ class AlarmEditActivity : AppCompatActivity() {
             val uri = data?.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
             val ringTone = RingtoneManager.getRingtone(applicationContext, uri)
             ringToneUri = uri?.toString()
-            tvRingtone.text = ringTone.getTitle(this@AlarmEditActivity)
+            tvRingtone.text = ringTone.getTitle(this)
         }
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             finish()
@@ -106,8 +113,8 @@ class AlarmEditActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        realm.close()
     }
 }
