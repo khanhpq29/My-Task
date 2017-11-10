@@ -27,7 +27,6 @@ import ht.pq.khanh.notification.ReminderNotificationService
 import ht.pq.khanh.util.Common
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import java.util.*
@@ -110,6 +109,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
                     listReminder.removeAt(selectedPosition)
                     listReminder.add(selectedPosition, reminder)
                     DatabaseHelper.update(realm, reminder)
+                    addNotification(reminder)
                     remindAdapter.notifyDataSetChanged()
                 }
             }
@@ -119,7 +119,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) = inflater.inflate(R.menu.menu_reminder, menu)
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.mSort) {
+        if (item.itemId == R.id.mSearch) {
             return true
         }
         return super.onOptionsItemSelected(item)
