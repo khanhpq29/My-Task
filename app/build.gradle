@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 def VERSION_CODE = 10
 def VERSION_NAME = "1.0.2"
@@ -40,21 +41,11 @@ android {
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
     }
-
     aaptOptions {
         cruncherEnabled false
     }
-
-    splits {
-        abi {
-            enable false
-        }
-        density {
-            enable false
-        }
-    }
 }
-//
+
 //kapt {
 //    generateStubs = true
 //}
@@ -66,8 +57,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.squareup.okhttp3:okhttp:3.9.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support:multidex:1.0.2'
+    implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support:support-v4:26.1.0'
     implementation 'com.android.support:support-vector-drawable:26.1.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
@@ -83,6 +74,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     implementation 'com.android.support:gridlayout-v7:26.1.0'
+    implementation 'com.pawegio.kandroid:kandroid:0.8.4@aar'
     implementation 'com.android.support:preference-v7:26.1.0'
     implementation 'com.google.firebase:firebase-messaging:11.4.2'
     implementation 'com.google.firebase:firebase-core:11.4.2'
