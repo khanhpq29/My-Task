@@ -25,6 +25,7 @@ import ht.pq.khanh.task.alarm.AlarmFragment
 import ht.pq.khanh.task.reminder.ReminderFragment
 import ht.pq.khanh.task.sleepawake.AwakeFragment
 import android.content.Intent
+import ht.pq.khanh.multitask.radio.RadioFragment
 
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -90,7 +91,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 title = "Alarm"
             }
             R.id.nav_about -> {
-                navigateToFragment(fragmentManager, Example())
+                navigateToFragment(fragmentManager, RadioFragment())
                 title = "Radio"
 //                scheduleNotification(getNotification("30 second delay"), 30000)
             }
