@@ -32,7 +32,7 @@ class PaintFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallb
     private val PERMISSIONS_CONTACT = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = container!!.inflateLayout(R.layout.activity_paint)
+        val view = container.inflateLayout(R.layout.activity_paint)
         ButterKnife.bind(this, view)
         setHasOptionsMenu(true)
         return view

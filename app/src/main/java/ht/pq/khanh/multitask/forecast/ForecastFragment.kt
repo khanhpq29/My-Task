@@ -44,7 +44,7 @@ class ForecastFragment : Fragment(), ForecastContract.View, ForecastAdapter.OnWe
     private val disposal: CompositeDisposable by lazy { CompositeDisposable() }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = container!!.inflateLayout(R.layout.fragment_forecast)
+        val view = container.inflateLayout(R.layout.fragment_forecast)
         ButterKnife.bind(this, view)
         return view
     }

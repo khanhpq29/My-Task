@@ -54,7 +54,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = container!!.inflateLayout(R.layout.reminder_fragment)
+        val view = container.inflateLayout(R.layout.reminder_fragment)
         ButterKnife.bind(this, view)
         Realm.init(context)
         realm = Realm.getDefaultInstance()
@@ -205,7 +205,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
                 val intent = IntentFor<ReminderNotificationService>(activity)
                 intent.putExtra(Common.TODOTEXT, item.title)
                 intent.putExtra(Common.TODOUUID, item.id)
-                setAlarmManager(intent, item.id.hashCode(), item.dateTime?.time!!)
+                setAlarmManager(intent, item.id.hashCode(), item.dateTime?.time ?: return)
             }
         }
     }
@@ -234,7 +234,7 @@ class ReminderFragment : Fragment(), ReminderAdapter.OnAlterItemRecyclerView, Re
             val intent = IntentFor<ReminderNotificationService>(activity)
             intent.putExtra(Common.TODOUUID, reminder.id.hashCode())
             intent.putExtra(Common.TODOTEXT, reminder.title)
-            setAlarmManager(intent, reminder.id.hashCode(), reminder.dateTime!!.time)
+            setAlarmManager(intent, reminder.id.hashCode(), reminder.dateTime?.time ?: return)
         }
     }
 

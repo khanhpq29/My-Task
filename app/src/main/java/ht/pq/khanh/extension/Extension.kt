@@ -18,8 +18,8 @@ import ht.pq.khanh.util.Common
 /**
  * Created by khanhpq on 9/25/17.
  */
-fun ViewGroup.inflateLayout(layoutId: Int, attachToRoot: Boolean = false): View
-        = LayoutInflater.from(context).inflate(layoutId, this, attachToRoot)
+fun ViewGroup?.inflateLayout(layoutId: Int, attachToRoot: Boolean = false): View
+        = LayoutInflater.from(this?.context).inflate(layoutId, this, attachToRoot)
 
 fun ImageView.loadImage(url: String) {
     Glide.with(context)

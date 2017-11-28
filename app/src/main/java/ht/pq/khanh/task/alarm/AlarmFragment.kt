@@ -43,7 +43,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
     private var selectedPosition = 0
     private lateinit var realm: Realm
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = container!!.inflateLayout(R.layout.fragment_alarm)
+        val view = container.inflateLayout(R.layout.fragment_alarm)
         ButterKnife.bind(this, view)
         Realm.init(context)
         return view
@@ -79,7 +79,7 @@ class AlarmFragment : Fragment(), AlarmContract.View, AlarmCallback {
         d("on activity result")
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
             val alarm = data?.getParcelableExtra<Alarm>("Alarm_parcel")
-            if (alarm != null) alarms.add(alarm)
+            alarms.add(alarm ?: return)
             alarmAdapter.notifyDataSetChanged()
         } else if (requestCode == RQS_RINGTONEPICKER && resultCode == android.app.Activity.RESULT_OK) {
             val uri = data?.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)

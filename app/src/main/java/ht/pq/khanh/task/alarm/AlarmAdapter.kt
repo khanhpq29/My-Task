@@ -63,7 +63,7 @@ class AlarmAdapter(private val context: Context, private val alarmList: MutableL
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AlarmHolder {
-        val view = parent!!.inflateLayout(R.layout.item_alarm)
+        val view = parent.inflateLayout(R.layout.item_alarm)
         return AlarmHolder(view)
     }
 

@@ -27,12 +27,12 @@ class SimpleItemTouchHelperCallBack(private var itemTouchHelperAdapter: ItemTouc
         if (source?.itemViewType != target?.itemViewType) {
             return false
         }
-        itemTouchHelperAdapter.onItemMove(source?.adapterPosition!!, target?.adapterPosition!!)
+        itemTouchHelperAdapter.onItemMove(source?.adapterPosition ?: -1 , target?.adapterPosition ?: -1)
         return true
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {
-        itemTouchHelperAdapter.onItemDissmiss(viewHolder?.adapterPosition!!)
+        itemTouchHelperAdapter.onItemDissmiss(viewHolder?.adapterPosition ?: -1)
     }
 
     override fun onChildDraw(c: Canvas?, recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {

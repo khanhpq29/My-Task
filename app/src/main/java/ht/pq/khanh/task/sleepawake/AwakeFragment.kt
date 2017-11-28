@@ -32,7 +32,7 @@ class AwakeFragment : Fragment(), TimePickerDialog.OnTimeSetListener {
     private val simpleTimeFormat by lazy { SimpleDateFormat(TIME_FORMAT) }
     private val timeReminder: Calendar by lazy { Calendar.getInstance() }
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = container!!.inflateLayout(R.layout.fragment_awake)
+        val view = container.inflateLayout(R.layout.fragment_awake)
         ButterKnife.bind(this, view)
         return view
     }

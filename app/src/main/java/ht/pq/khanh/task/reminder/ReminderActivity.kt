@@ -18,10 +18,10 @@ import java.util.*
 
 class ReminderActivity : AppCompatActivity() {
     @BindView(R.id.txtContent)
-    lateinit var tvContent : TextView
+    lateinit var tvContent: TextView
 
-    private lateinit var todoItem : Reminder
-    private lateinit var realm : Realm
+    private lateinit var todoItem: Reminder
+    private lateinit var realm: Realm
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +34,8 @@ class ReminderActivity : AppCompatActivity() {
         val todoId = intent.getLongExtra(Common.TODOUUID, 0)
         tvContent.text = title
         val items = DatabaseHelper.findAll<Reminder>(realm)
-        for(item in items){
-            if (item.id == todoId){
+        for (item in items) {
+            if (item.id == todoId) {
                 todoItem = item
                 break
             }
@@ -48,12 +48,12 @@ class ReminderActivity : AppCompatActivity() {
     }
 
     @OnClick(R.id.btnRemove)
-    fun removeReminder(){
+    fun removeReminder() {
         moveToReminderList()
     }
 
     @OnClick(R.id.btnSnooze)
-    fun snoozeMore(){
+    fun snoozeMore() {
         saveItem()
         finish()
     }
@@ -69,14 +69,15 @@ class ReminderActivity : AppCompatActivity() {
         realm.commitTransaction()
     }
 
-    private fun addDate(snoozeTime : Int) : Date{
+    private fun addDate(snoozeTime: Int): Date {
         val date = Date()
         val calendar = Calendar.getInstance()
         calendar.time = date
         calendar.set(Calendar.MINUTE, snoozeTime)
         return calendar.time
     }
-    private fun moveToReminderList(){
+
+    private fun moveToReminderList() {
         finish()
     }
 }

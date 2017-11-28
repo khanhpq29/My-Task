@@ -36,7 +36,7 @@ class ForecastAdapter(private val context : Context, private val forecast: Mutab
     override fun getItemCount(): Int = forecast.size
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ForecastHolder {
-        val view = parent!!.inflateLayout(R.layout.item_weather)
+        val view = parent.inflateLayout(R.layout.item_weather)
         return ForecastHolder(view)
     }
 

@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
  */
 class ForecastPresenter(private val view: ForecastContract.View, private val disposal: CompositeDisposable) : ForecastContract.Presenter {
     private val repository: ForecastRepository by lazy { ForecastRepository() }
-    
+
     override fun networkChange() {
         view.changeNetworkState()
     }
